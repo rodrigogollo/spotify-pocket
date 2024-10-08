@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
@@ -11,6 +11,10 @@ function App() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     setGreetMsg(await invoke("request_test", { artist }));
   }
+
+  // useEffect(() => {
+  //   greet() 
+  // }, [])
 
   return (
     <div className="container">

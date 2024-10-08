@@ -9,6 +9,64 @@
 
   <body>
     <div id="root"></div>
+    <button id="togglePlay">Toggle Play</button>
+
     <script type="module" src="/src/main.tsx"></script>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        const token = 'BQCHRSJ7I0vs2lgbPIgX2_ly2uUMZ-fV2rf651G1FHOaY0TX5a6QcTbCCOqQyEu0T0soeKralKe0YSKaqXS8r69JPmVm2APs7VxB9iZTNRIsaBluQg04Qr7bWNl2by2t7TKjZQLWTRojkmBfULA1JIDxfGdf-cmJhFg0Nw_yP6uab6ItpCL20wCtvN7cBLEv9NGSKrqoRd0vkw';
+        const player = new Spotify.Player({
+          name: 'Spotify-Lite Gollo',
+          getOAuthToken: cb => { cb(token); },
+          volume: 0.5
+        });
+      
+        // Ready
+        player.addListener('ready', ({ device_id }) => {
+          console.log('Ready with Device ID', device_id);
+        });
+
+        // Not Ready
+        player.addListener('not_ready', ({ device_id }) => {
+          console.log('Device ID has gone offline', device_id);
+        });
+        player.addListener('initialization_error', ({ message }) => {
+            console.error(message);
+        });
+
+        player.addListener('authentication_error', ({ message }) => {
+            console.error(message);
+        });
+
+        player.addListener('account_error', ({ message }) => {
+            console.error(message);
+        });
+
+        player.connect().then(success => {
+          if (success) {
+            console.log('The Web Playback SDK successfully connected to Spotify!');
+            
+          }
+        }) 
+
+        document.getElementById('togglePlay').onclick = function() {
+          player.togglePlay();
+          player.getCurrentState().then(state => {
+            if (!state) {
+              console.error('User is not playing music through the Web Playback SDK');
+              return;
+            }
+
+            var current_track = state.track_window.current_track;
+            var next_track = state.track_window.next_tracks[0];
+            var track = `${current_track.artists[0].name} - ${current_track.name}`;
+
+            console.log('Current', current_track);
+            console.log('Currently Playing', track);
+          });
+        };
+      }
+    </script>
   </body>
 </html>

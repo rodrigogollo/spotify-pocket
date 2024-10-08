@@ -12,7 +12,7 @@ pub fn request_test() -> String{
   let client_secret = env::var("SPOTIFY_CLIENT_SECRET").expect("SPOTIFY_CLIENT_SECRET not found in .env");
 
   let token = access_token(&client_id, &client_secret);
-  // println!("{}", token);
+  println!("{}", token);
   let artist= get_artist(token);
   println!("{}", artist);
   artist

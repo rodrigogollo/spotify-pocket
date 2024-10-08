@@ -14,8 +14,9 @@
       {
         "title": "Spotify Lite",
         "width": 480,
-        "height": 640
-        
+        "height": 640,
+        "resizable": false,
+        "transparent": true
       }
     ],
     "security": {

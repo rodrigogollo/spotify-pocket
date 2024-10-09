@@ -6,7 +6,7 @@ use tauri::command;
 
 
 #[tauri::command]
-pub fn request_test() -> String{
+pub fn request_test() -> String {
   dotenv().ok();
   let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
   let client_secret = env::var("SPOTIFY_CLIENT_SECRET").expect("SPOTIFY_CLIENT_SECRET not found in .env");

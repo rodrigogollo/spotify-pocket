@@ -15,12 +15,11 @@
         "title": "Spotify Lite",
         "width": 480,
         "height": 640,
-        "resizable": false,
-        "transparent": true
+        "resizable": false
       }
     ],
-    "security": {
-      "csp": null
+   "security": {
+      "csp": "default-src 'self'; connect-src 'self' https://api.spotify.com https://accounts.spotify.com; script-src 'self' https://sdk.scdn.co 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
     }
   },
   "bundle": {

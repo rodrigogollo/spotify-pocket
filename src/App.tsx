@@ -1,12 +1,38 @@
+import { useEffect, useState } from "react";
 import "./App.css";
 import { useSpotifyWebPlaybackSdk } from "./hooks/useSpotifyWebPlaybackSDK";
+import { invoke } from '@tauri-apps/api/core';
 
-const token = 'BQB2_WVsqpS5ZgyBE-5NdlEMfceYHXr7uFA7jfrm3q0IuRlgXfHt4LhG4EjI6W42m9g1lTQbJKzROWhPzUkhRIJeZHwoU8zQtZg3ALevvxnAPUUaizGdUEthSR6M-4C8X7lsSBjpfLxJj66x3JM2HfJWAMTI0Cl9ZfUKHeA0BskYTyPuOvGNy1H9dM2nXcom-KH4yP8zYoTNLQ';
- 
+async function getToken() {
+  try {
+    const token: string = await invoke('get_token')
+    console.log('Token:', token)
+    return token;
+  } catch (error) {
+    console.error('Error fetching token:', error)
+  }
+}
+
+// const token = 'BQCAEf_UMT2hf-n28AhK8vBJFkTNv0sGUgMIzo4KWO5WlgJFpmj0KjhGdsazH5GzwQwEXXZLpArFzHVoRRb0axqW3BRjZdEpveyJHhMXVl2117NAEdo-cKMMB7XfsAdGnR9NqCSGiJlMheoUSOqYGgeb6Y97tSM11hpOpbwq24SfDt4Vv7LfuvX-YdUw1LOc2mjuUUbZYeX4OQ';
+
 function App() {
+  const [token, setToken] = useState<string>("");
+
+  useEffect(() => {
+    if (token == "") {
+      const fetchToken = async ():Promise<any> =>  {
+        const data = getToken();
+        return data;
+      }
+      fetchToken()
+        .then((data: string) => setToken(data))
+        .catch(console.error);
+    }
+  }, []);
+
   const { player, isReady } = useSpotifyWebPlaybackSdk({
     name: 'Spotify-Lite Gollo',
-    getOAuthToken: async () => token,
+    getOAuthToken: async () => await getToken(),
     onReady: (deviceId) => console.log('Ready with Device ID', deviceId),
     accountError: (e) => console.error('Account error', e),
     onPlayerStateChanged: (state: any) => console.log('Player state changed', state),

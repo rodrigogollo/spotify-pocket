@@ -2,6 +2,19 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useSpotifyWebPlaybackSdk } from "./hooks/useSpotifyWebPlaybackSDK";
 import { invoke } from '@tauri-apps/api/core';
+import { once } from '@tauri-apps/api/event';
+
+interface LoadedPayload {
+  loggedIn: boolean,
+  token: string
+}
+
+let token: string = "";
+const unlisten = await once<LoadedPayload>('loaded', (event) => {
+  console.log(`app is loaded, loggedIn: ${event.payload.loggedIn}, token ${event.payload.token}`);
+  token = event.payload.token;
+});
+unlisten();
 
 async function getToken() {
   try {
@@ -13,7 +26,16 @@ async function getToken() {
   }
 }
 
-// const token = 'BQCAEf_UMT2hf-n28AhK8vBJFkTNv0sGUgMIzo4KWO5WlgJFpmj0KjhGdsazH5GzwQwEXXZLpArFzHVoRRb0axqW3BRjZdEpveyJHhMXVl2117NAEdo-cKMMB7XfsAdGnR9NqCSGiJlMheoUSOqYGgeb6Y97tSM11hpOpbwq24SfDt4Vv7LfuvX-YdUw1LOc2mjuUUbZYeX4OQ';
+async function loginSpotify() {
+  invoke("initiate_spotify_auth")
+    .then((code) => {
+      console.log("spotify login initiated.");
+      console.log("code", code);
+    })
+    .catch((error) => {
+      console.log("failed to initiate spotify login", error);
+    })
+}
 
 function App() {
   const [token, setToken] = useState<string>("");
@@ -73,6 +95,7 @@ function App() {
     <div className="container">
       <p>Test Rodrigo</p>
       <button id="togglePlay" onClick={handleToggle}>Toggle Play</button>
+      <button id="login" onClick={loginSpotify}>Login</button>
     </div>
   );
 }

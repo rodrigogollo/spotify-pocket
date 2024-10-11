@@ -2,34 +2,25 @@ use reqwest::blocking::Client;
 use serde_json::Value;
 use dotenvy::dotenv;
 use std::env;
-use tauri::command;
+use tauri::AppHandle;
 use rand::Rng;
+use tauri_plugin_shell::ShellExt; 
 use rand::distributions::Alphanumeric;
-use tauri_plugin_shell::open;
 
 #[tauri::command]
-pub fn initiate_spotify_auth() {
+pub fn initiate_spotify_auth(app_handle: AppHandle) {
+  dotenv().ok();
   let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
-  let client_secret = env::var("SPOTIFY_CLIENT_SECRET").expect("SPOTIFY_CLIENT_SECRET not found in .env");
-  let redirect_uri = "https://localhost:5000/redirect";
+  let redirect_uri = "http://localhost:3000/callback";
   let state = generate_random_state();
-
-  let params = [
-    ("client_id", client_id),
-    ("client_secret", client_secret),
-    ("response-type", "code".to_string()),
-    ("redirect_uri", redirect_uri.to_string()),
-    ("scope", "user-read-private user-read-email user-modify-playback-state".to_string()),
-    ("state", state.clone()),
-  ];
+  let scope = "user-read-private user-read-email user-modify-playback-state";
 
   let auth_url = format!(
       "https://accounts.spotify.com/authorize?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}",
       client_id, redirect_uri, scope, state
   );
 
-    // Launch the authorization URL in the user's default browser
-    shell::open(&auth_url).expect("Failed to open authorization URL");
+    app_handle.shell().open(&auth_url, None).expect("Failed to open authorization URL");
 }
 
 fn generate_random_state() -> String {

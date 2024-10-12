@@ -29,6 +29,7 @@ export function useSpotifyWebPlaybackSdk({
   const playerRef = React.useRef<Spotify.SpotifyPlayer | null>(null);
 
   React.useEffect(() => {
+    console.log("useSpotify render");
     if (window.Spotify) {
       playerRef.current = new window.Spotify.Player({
         name,

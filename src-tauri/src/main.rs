@@ -6,5 +6,4 @@ mod routes;
 
 fn main() {
     spotify_lite_lib::run()
-    // spotify::request_test();    
 }

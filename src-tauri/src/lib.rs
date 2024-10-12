@@ -9,16 +9,16 @@ pub fn run() {
         .setup(|app| {
             let app_handle = Arc::new(app.handle().clone());
             tauri::async_runtime::spawn(async move {
-                let app_handle = Arc::clone(&app_handle);
-                if let Err(e) = routes::backend_server(app_handle).await {
+                let app = Arc::clone(&app_handle);
+                if let Err(e) = routes::backend_server(app).await {
                     eprintln!("failed to run backend server: {}", e);
                 }
             });
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            spotify::request_test, 
-            spotify::get_token, 
+            // spotify::request_test, 
+            // spotify::get_token, 
             spotify::initiate_spotify_auth
         ])
         .run(tauri::generate_context!())

@@ -3176,6 +3176,7 @@ name = "spotify-lite"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "base64 0.22.1",
  "dotenvy",
  "rand 0.8.5",
  "reqwest",

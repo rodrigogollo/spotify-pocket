@@ -2,7 +2,7 @@ use reqwest::Client;
 use serde_json::Value;
 use dotenvy::dotenv;
 use std::env;
-use tauri::AppHandle;
+use tauri::{ AppHandle, Emitter, Manager, WindowEvent};
 use rand::Rng;
 use tauri_plugin_shell::ShellExt; 
 use rand::distributions::Alphanumeric;
@@ -10,8 +10,8 @@ use axum::extract::Query;
 use std::collections::HashMap;
 use std::sync::Arc;
 use axum::extract::State;
-use tauri::Emitter;
 use base64::{engine::general_purpose, Engine as _};
+use serde_json::json;
 
 #[tauri::command]
 pub fn initiate_spotify_auth(app_handle: AppHandle) {
@@ -26,7 +26,7 @@ pub fn initiate_spotify_auth(app_handle: AppHandle) {
       client_id, redirect_uri, scope, state
   );
 
-    app_handle.shell().open(&auth_url, None).expect("Failed to open authorization URL");
+   app_handle.shell().open(&auth_url, None).expect("Failed to open authorization URL");
 }
 
 #[derive(Clone, serde::Serialize)]
@@ -78,6 +78,8 @@ pub async fn handle_spotify_callback(
       let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
       println!("Json: {:?}", json);
 
+      
+
 
       // emit event to frontend
       if let Err(e) = app_handle.emit("loaded", 
@@ -89,13 +91,42 @@ pub async fn handle_spotify_callback(
          eprint!("failed to emit event: {}", e)
       }
 
-      "Authorized"
+      "Authorized, you can close this window."
 
     } else {
       println!("Authorization failed. No code found.");
       "Authorization failed. No code found."
     }
 }
+
+#[tauri::command]
+pub async fn transfer_playback(access_token: String, device_id: String) {
+  println!("token: {}, device: {}", access_token, device_id);
+   
+  let url = "https://api.spotify.com/v1/me/player";
+  let authorization = format!("Bearer {}", access_token);
+
+  let payload = json!({
+    "device_ids": [device_id]
+  });
+
+  let http_client = Client::new();    
+  let response = http_client
+    .put(url) 
+    .header("Authorization", authorization)
+    .header("Content-Type", "application/json")
+    .json(&payload)
+    .send()
+    .await
+    .unwrap()
+    .text()
+    .await
+    .unwrap();
+
+  println!("{}", response);
+}
+
+
 
 pub async fn handle_spotify_token() -> &'static str {
   println!("handle token");

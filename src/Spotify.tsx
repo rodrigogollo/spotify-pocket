@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import { useSpotifyWebPlaybackSdk } from "./hooks/useSpotifyWebPlaybackSDK";
-// import { invoke } from '@tauri-apps/api/core';
+import { invoke } from '@tauri-apps/api/core';
 
 // async function getToken() {
 //   try {
@@ -41,11 +41,17 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
   //   }
   //   throw new Error('Token não disponível no momento.');
   // };
+  
+  const onDeviceReady = async (deviceId: string) => {
+    console.log('Ready with Device ID', deviceId);
+    console.log('token', token);
+    await invoke('transfer_playback', { accessToken: token, deviceId: deviceId });
+  }
 
   const { player } = useSpotifyWebPlaybackSdk({
     name: 'Spotify-Lite Gollo',
     getOAuthToken: () => Promise.resolve(token),
-    onReady: (deviceId) => console.log('Ready with Device ID', deviceId),
+    onReady: (deviceId) => onDeviceReady(deviceId),
     accountError: (e) => console.error('Account error', e),
     onPlayerStateChanged: (state: any) => console.log('Player state changed', state),
   });

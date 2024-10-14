@@ -19,7 +19,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             // spotify::request_test, 
             // spotify::get_token, 
-            spotify::initiate_spotify_auth
+            spotify::initiate_spotify_auth,
+            spotify::transfer_playback
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application")

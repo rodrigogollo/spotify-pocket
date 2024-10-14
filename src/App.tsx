@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     const unlisten = listen<LoadedPayload>('loaded', (event) => {
-      console.log(`app is loaded, loggedIn: ${event.payload.logged}, token ${event.payload.access_token}`);
+      console.log(`app is loaded, loggedIn: ${event.payload.logged}, token: ${event.payload.access_token}`);
       setToken(event.payload.access_token);
       localStorage.setItem("token", event.payload.access_token);
     });

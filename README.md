@@ -1,7 +1,20 @@
-# Tauri + React + Typescript
+# Spotify-lite (Winamp alike)
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+## Tools:
+- Tauri 
+- React 
+- Typescript
+- Spotify API
+- Spotify SDK
 
-## Recommended IDE Setup
+## TODOS:
+[X] - Spotify Authentication (API).
+[X] - Spotify Player (SDK).
+[X] - Spotify auto connect to device.
+[ ] - Spotify Auto refresh token.
+[ ] - Frontend loading screen (wait for Auth + Connect Device).
+[ ] - Get Liked Songs.
+[ ] - List Liked Songs.
+[ ] - Play/Pause/Next/Prev buttons.
+[ ] - Volume slider.
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)

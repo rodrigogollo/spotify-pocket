@@ -1,5 +1,4 @@
 use reqwest::Client;
-use serde_json::Value;
 use dotenvy::dotenv;
 use std::env;
 use tauri::{ AppHandle, Emitter, Manager, WindowEvent};
@@ -11,7 +10,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use axum::extract::State;
 use base64::{engine::general_purpose, Engine as _};
-use serde_json::json;
+use serde_json::{Value, json};
 
 #[tauri::command]
 pub fn initiate_spotify_auth(app_handle: AppHandle) {
@@ -32,11 +31,10 @@ pub fn initiate_spotify_auth(app_handle: AppHandle) {
 #[derive(Clone, serde::Serialize)]
 struct Payload {
     logged: bool,
-    access_token: String,
-    refresh_token: String,
+    access_token: String
 }
 
-pub async fn handle_spotify_callback(
+pub async fn handle_spotify_callback (
     State(app_handle): State<Arc<AppHandle>>,
     Query(params): Query<HashMap<String, String>>
 ) -> &'static str {
@@ -77,16 +75,12 @@ pub async fn handle_spotify_callback(
 
       let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
       println!("Json: {:?}", json);
-
-      
-
-
+    
       // emit event to frontend
       if let Err(e) = app_handle.emit("loaded", 
         Payload { 
           logged: true, 
           access_token: json["access_token"].as_str().unwrap_or("").to_string(), // get the raw string
-          refresh_token: json["refresh_token"].as_str().unwrap_or("").to_string(),  
         }) {
          eprint!("failed to emit event: {}", e)
       }
@@ -100,7 +94,7 @@ pub async fn handle_spotify_callback(
 }
 
 #[tauri::command]
-pub async fn transfer_playback(access_token: String, device_id: String) {
+pub async fn transfer_playback(access_token: String, device_id: String) -> bool {
   println!("token: {}, device: {}", access_token, device_id);
    
   let url = "https://api.spotify.com/v1/me/player";
@@ -109,8 +103,7 @@ pub async fn transfer_playback(access_token: String, device_id: String) {
   let payload = json!({
     "device_ids": [device_id]
   });
-
-  let http_client = Client::new();    
+let http_client = Client::new();    
   let response = http_client
     .put(url) 
     .header("Authorization", authorization)
@@ -118,15 +111,49 @@ pub async fn transfer_playback(access_token: String, device_id: String) {
     .json(&payload)
     .send()
     .await
-    .unwrap()
-    .text()
-    .await
     .unwrap();
 
-  println!("{}", response);
+  match response.error_for_status() {
+    Ok(_response) => {
+      println!("Device successfully transfered");
+      true
+    },
+    Err(err) => {
+      println!("Error transfering device {}: {}", device_id, err);
+      false
+    }
+  }
 }
 
-
+// #[tauri::command]
+// pub async fn refresh_token() {
+//   let expired_refresh_token = env::var("REFRESH_TOKEN").expect("REFRESH_TOKEN not found in .env");
+//   println!("Refresh token {}", expired_refresh_token);
+//
+//   let url = "https://accounts.spotify.com/api/token".to_owned();
+//   let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
+//
+//   let mut params = HashMap::new();
+//   params.insert("grant_type", "refresh_token");
+//   params.insert("refresh_token", &expired_refresh_token);
+//   params.insert("client_id", client_id.as_str());
+//
+//   let http_client = Client::new();    
+//   let response = http_client
+//     .post(url) 
+//     .header("Content-Type", "application/x-www-form-urlencoded")
+//     .form(&params)
+//     .send()
+//     .await
+//     .unwrap()
+//     .text()
+//     .await
+//     .unwrap();
+//
+//   let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+//   println!("Refreshed Json: {:?}", json);
+//   // return json["access_token"];
+// }
 
 pub async fn handle_spotify_token() -> &'static str {
   println!("handle token");

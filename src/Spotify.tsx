@@ -18,6 +18,7 @@ interface SpotifyPlayerProps {
 function SpotifyPlayer({ token }: SpotifyPlayerProps) {
   const playerRef = useRef<Spotify.Player | null>(null);
   const [currentTrack, setCurrentTrack] = useState("");
+  const [isDeviceConnected, setIsDeviceConnected] = useState(false);
 
   // useEffect(() => {
   //   if (token == "") {
@@ -45,7 +46,8 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
   const onDeviceReady = async (deviceId: string) => {
     console.log('Ready with Device ID', deviceId);
     console.log('token', token);
-    await invoke('transfer_playback', { accessToken: token, deviceId: deviceId });
+    let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: deviceId });
+    setIsDeviceConnected(isDeviceTransfered);
   }
 
   const { player } = useSpotifyWebPlaybackSdk({
@@ -98,8 +100,12 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
 
   return (
     <div className="container">
-      <button id="togglePlay" onClick={handleToggle}>Toggle Play</button>
-      <p>Track: {currentTrack}</p>
+      {
+        isDeviceConnected && <>
+          <button id="togglePlay" onClick={handleToggle}>Toggle Play</button>
+          <p>Track: {currentTrack}</p>
+        </>
+      }
     </div>
   );
 }

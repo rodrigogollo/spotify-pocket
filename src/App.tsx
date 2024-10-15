@@ -6,8 +6,7 @@ import SpotifyPlayer from "./Spotify";
 
 interface LoadedPayload {
   logged: boolean,
-  access_token: string,
-  refresh_token: string,
+  access_token: string
 }
 
 async function loginSpotify() {
@@ -18,12 +17,25 @@ async function loginSpotify() {
 
 function App() {
   const [token, setToken] = useState<string>("");
+  const [isUserLogged, setIsUserLogged] = useState(() => {
+    let token = localStorage.getItem("token");
+    return token != null; 
+  });
+
+  // useEffect(() => {
+  //   let token = localStorage.getItem("token");
+  //   console.log("get token local storage", token);
+  //   if (token != null) {
+  //     setToken(token);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const unlisten = listen<LoadedPayload>('loaded', (event) => {
       console.log(`app is loaded, loggedIn: ${event.payload.logged}, token: ${event.payload.access_token}`);
       setToken(event.payload.access_token);
       localStorage.setItem("token", event.payload.access_token);
+      setIsUserLogged(true);
     });
 
     return () => {
@@ -33,11 +45,9 @@ function App() {
 
   return (
     <div className="container">
-      <p>Test Rodrigo</p>
-      <button id="login" onClick={loginSpotify}>Login</button>
-      <p>{token}</p>
+      { !isUserLogged && <button id="login" onClick={loginSpotify}>Login</button> }
       {
-        token && 
+        isUserLogged && 
           (<SpotifyPlayer token={token} />)
       }
     </div>

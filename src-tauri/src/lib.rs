@@ -1,13 +1,19 @@
-mod spotify;
 mod routes;
+mod spotify;
 use std::sync::Arc;
+use tauri_plugin_store::StoreExt;
+use tauri::Wry;
+use serde_json::json;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
             let app_handle = Arc::new(app.handle().clone());
+
+
             tauri::async_runtime::spawn(async move {
                 let app = Arc::clone(&app_handle);
                 if let Err(e) = routes::backend_server(app).await {
@@ -17,11 +23,11 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            // spotify::request_test, 
-            // spotify::get_token, 
+            // spotify::request_test,
+            // spotify::get_token,
             spotify::initiate_spotify_auth,
             spotify::transfer_playback,
-            // spotify::refresh_token,
+            spotify::refresh_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application")

@@ -3,6 +3,7 @@ import "./App.css";
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import SpotifyPlayer from "./Spotify";
+// import useAuth from "./hooks/useAuth";
 
 interface LoadedPayload {
   logged: boolean,
@@ -16,7 +17,10 @@ async function loginSpotify() {
 }
 
 function App() {
-  const [token, setToken] = useState<string>("");
+  // const token = useAuth();
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem("token");
+  })
   const [isUserLogged, setIsUserLogged] = useState(() => {
     let token = localStorage.getItem("token");
     return token != null; 
@@ -30,6 +34,25 @@ function App() {
   //   }
   // }, []);
 
+  useEffect(() => {
+    const refreshToken = () => {
+      invoke<string>("refresh_token")
+        .then((newToken: string) => {
+          console.log("new token generated", newToken);
+          setToken(newToken);
+        })
+        .catch((error) => {
+          console.log("failed to refresh token", error)
+          setToken(""); // reset token to show login page
+        })
+    }
+    
+    if (token !== null) {
+      refreshToken()
+    }
+
+  }, [])
+  
   useEffect(() => {
     const unlisten = listen<LoadedPayload>('loaded', (event) => {
       console.log(`app is loaded, loggedIn: ${event.payload.logged}, token: ${event.payload.access_token}`);

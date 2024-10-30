@@ -2,92 +2,74 @@ import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import { invoke } from '@tauri-apps/api/core';
 import { msToTime } from "./utils/utils";
+import Player from "./components/Player/Player";
 
-// async function getToken() {
-//   try {
-//     const token: string = await invoke('get_token')
-//     console.log('Token:', token)
-//     return token;
-//   } catch (error) {
-//     console.error('Error fetching token:', error)
-//   }
-// }
 interface SpotifyPlayerProps {
   token: string | null;
 }
+
 function SpotifyPlayer({ token }: SpotifyPlayerProps) {
+  const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const playerRef = useRef<Spotify.Player | null>(null);
   const [currentTrack, setCurrentTrack] = useState("");
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  // useEffect(() => {
-  //   if (token == "") {
-  //     const fetchToken = async ():Promise<any> =>  {
-  //       const data = getToken();
-  //       return data;
-  //     }
-  //     fetchToken()
-  //       .then((data: string) => setToken(data))
-  //       .catch(console.error);
-  //   }
-  // }, []);
-  //
-
-  // const getOAuthToken = async (): Promise<string> => {
-  //   console.log("rendering player");
-  //   let token = localStorage.getItem("token"); 
-  //   if (token != null) {
-  //     console.log("token recebido getOauth", token);
-  //     return token; 
-  //   }
-  //   throw new Error('Token não disponível no momento.');
-  // };
-  //
   interface IDevice {
     device_id: string
   }
-  
-  const onDeviceReady = async (device: IDevice) => {
-    console.log('Ready with Device ID', device.device_id);
-    console.log('token', token);
-    let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device.device_id });
-    setIsDeviceConnected(isDeviceTransfered);
-  }
 
   useEffect(() => {
-    console.log("rerendering player", token);
-
     const scriptTag = document.createElement('script');
     scriptTag.src = 'https://sdk.scdn.co/spotify-player.js';
     scriptTag.async = true;
+
     document.head!.appendChild(scriptTag);
 
-    if (token) {
-      let player = new window.Spotify.Player({
+    window.onSpotifyWebPlaybackSDKReady = () => {
+
+      const player = new window.Spotify.Player({
         name: "Spotify Custom",
-        getOAuthToken: (cb) => {cb(token)},
+        getOAuthToken: (cb) => { cb(token) },
         volume: 0.6
       });
 
-      player.addListener("ready", onDeviceReady);
-      playerRef.current = player;
-      playerRef.current.connect();
-    }
+      setPlayer(player);
+      // console.log("player", player);
+      // playerRef.current = player;
+
+      player.addListener("ready", async (device:IDevice) => {
+        console.log('Ready with Device ID', device.device_id);
+        let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device.device_id });
+        setIsDeviceConnected(isDeviceTransfered);
+      });
+
+      player.connect().then(success => {
+        if (success) {
+          console.log('The Web Playback SDK successfully connected to Spotify!');
+        }
+      })
+    };
 
     return function cleanup() {
+      player?.disconnect()
       playerRef.current?.disconnect();
+      setPlayer(null);
     }
 
   }, []);
 
   const handleToggle = () => {
-    if (playerRef.current != null) {
-      playerRef.current.togglePlay();
-      playerRef.current.getCurrentState().then((state: any) => {
+    if (player) {
+      player.togglePlay();
+      player.getCurrentState().then((state: any) => {
+        console.log("current state", state)
         if (!state) {
           console.error('User is not playing music through the Web Playback SDK');
+          setIsPlaying(false);
           return;
         }
+        setIsPlaying(state.paused);
 
         const current_track = state.track_window.current_track;
         const time = msToTime(current_track.duration_ms);
@@ -100,16 +82,13 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
     }
   };
 
-
   return (
-    <div className="container">
+    <>
       {
-        isDeviceConnected && <>
-          <button id="togglePlay" onClick={handleToggle}>Toggle Play</button>
-          <p>Track: {currentTrack}</p>
-        </>
+        isDeviceConnected && 
+          <Player handleToggle={handleToggle} isPlaying={isPlaying} currentTrack={currentTrack} />
       }
-    </div>
+    </>
   );
 }
 

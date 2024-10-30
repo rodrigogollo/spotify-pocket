@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
-import { useSpotifyWebPlaybackSdk } from "./hooks/useSpotifyWebPlaybackSDK";
 import { invoke } from '@tauri-apps/api/core';
+import { msToTime } from "./utils/utils";
 
 // async function getToken() {
 //   try {
@@ -13,7 +13,7 @@ import { invoke } from '@tauri-apps/api/core';
 //   }
 // }
 interface SpotifyPlayerProps {
-  token: string;
+  token: string | null;
 }
 function SpotifyPlayer({ token }: SpotifyPlayerProps) {
   const playerRef = useRef<Spotify.Player | null>(null);
@@ -42,29 +42,43 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
   //   }
   //   throw new Error('Token não disponível no momento.');
   // };
+  //
+  interface IDevice {
+    device_id: string
+  }
   
-  const onDeviceReady = async (deviceId: string) => {
-    console.log('Ready with Device ID', deviceId);
+  const onDeviceReady = async (device: IDevice) => {
+    console.log('Ready with Device ID', device.device_id);
     console.log('token', token);
-    let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: deviceId });
+    let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device.device_id });
     setIsDeviceConnected(isDeviceTransfered);
   }
 
-  const { player } = useSpotifyWebPlaybackSdk({
-    name: 'Spotify-Lite Gollo',
-    getOAuthToken: () => Promise.resolve(token),
-    onReady: (deviceId) => onDeviceReady(deviceId),
-    accountError: (e) => console.error('Account error', e),
-    onPlayerStateChanged: (state: any) => console.log('Player state changed', state),
-  });
-
   useEffect(() => {
-    console.log("rerendering player");
-    if (player && token !== null) {
+    console.log("rerendering player", token);
+
+    const scriptTag = document.createElement('script');
+    scriptTag.src = 'https://sdk.scdn.co/spotify-player.js';
+    scriptTag.async = true;
+    document.head!.appendChild(scriptTag);
+
+    if (token) {
+      let player = new window.Spotify.Player({
+        name: "Spotify Custom",
+        getOAuthToken: (cb) => {cb(token)},
+        volume: 0.6
+      });
+
+      player.addListener("ready", onDeviceReady);
       playerRef.current = player;
-      console.log(playerRef);
+      playerRef.current.connect();
     }
-  }, [token, player]);
+
+    return function cleanup() {
+      playerRef.current?.disconnect();
+    }
+
+  }, []);
 
   const handleToggle = () => {
     if (playerRef.current != null) {
@@ -86,17 +100,6 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
     }
   };
 
-  const msToTime = (duration: number) => {
-    let seconds = Math.floor((duration / 1000) % 60);
-    let minutes = Math.floor((duration / (1000 * 60)) % 60);
-    let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-    let hours_str = hours < 10 ? "0" + hours : String(hours);
-    let minutes_str = minutes < 10 ? "0" + minutes : minutes;
-    let seconds_str = seconds < 10 ? "0" + seconds : seconds;
-
-    return hours_str === "00" ? `${minutes_str}:${seconds_str}` : `${hours}:${minutes_str}:${seconds_str}`;
-  }
 
   return (
     <div className="container">

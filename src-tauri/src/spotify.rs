@@ -111,6 +111,7 @@ pub async fn handle_spotify_callback(
 
 #[tauri::command]
 pub async fn refresh_token(app_handle: AppHandle) -> String {
+    dotenv().ok();
     println!("refreshing token");
     let url = "https://accounts.spotify.com/api/token".to_owned();
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");

@@ -24,22 +24,21 @@ function App() {
     return token != null; 
   });
 
-  useEffect(() => {
-    const refreshToken = () => {
-      invoke<string>("refresh_token")
-        .then((newToken: string) => {
-          console.log("new token generated", newToken);
-          setToken(newToken);
-          localStorage.setItem("token", newToken);
-          setIsUserLogged(true);
-        })
-        .catch((error) => {
-          console.log("failed to refresh token", error)
-          setToken(""); // reset token to show login page
-          localStorage.setItem("token", "");
-        })
+  const refreshToken = async () => {
+    try {
+      const newToken = await invoke<string>("refresh_token")
+      console.log("new token generated", newToken);
+      setToken(newToken);
+      localStorage.setItem("token", newToken);
+      setIsUserLogged(true);
+    } catch (err) {
+      console.log("Failed to refresh token", err);
+      setToken(""); // reset token to show login page
+      localStorage.setItem("token", "");
     }
-    
+  }
+
+  useEffect(() => {
     if (token !== null) {
       refreshToken()
     }
@@ -64,7 +63,7 @@ function App() {
     <div>
       { !isUserLogged && <button id="login" onClick={loginSpotify}>Login</button> }
       {
-        isUserLogged && <SpotifyPlayer token={token} />
+        isUserLogged && <SpotifyPlayer refreshToken={refreshToken} token={token} />
       }
     </div>
   );

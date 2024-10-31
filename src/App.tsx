@@ -61,7 +61,7 @@ function App() {
   }, []);
 
   return (
-    <div className="container">
+    <div>
       { !isUserLogged && <button id="login" onClick={loginSpotify}>Login</button> }
       {
         isUserLogged && <SpotifyPlayer token={token} />

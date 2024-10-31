@@ -14,10 +14,35 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
   const [currentTrack, setCurrentTrack] = useState("");
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.55);
+  const [seek, setSeek] = useState(0);
+  const [maxSeek, setMaxSeek] = useState(0);
+  const lastSeek = useRef(seek);
 
   interface IDevice {
     device_id: string
   }
+
+  useEffect(() => {
+    let interval;
+    let isFinished = Number(seek) >= Number(maxSeek);
+    if (isPlaying && !isFinished) {
+      interval = setInterval(() => {
+        setSeek(() => {
+          console.log("last seek", lastSeek.current);
+          const newSeek = Number(lastSeek.current) + 1000;
+          console.log("new seek", newSeek);
+          lastSeek.current = newSeek;
+          return newSeek;
+        });
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+
+  }, [isPlaying]);
 
   useEffect(() => {
     const scriptTag = document.createElement('script');
@@ -31,12 +56,10 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
       const player = new window.Spotify.Player({
         name: "Spotify Custom",
         getOAuthToken: (cb) => { cb(token) },
-        volume: 0.6
+        volume: volume
       });
 
       setPlayer(player);
-      // console.log("player", player);
-      // playerRef.current = player;
 
       player.addListener("ready", async (device:IDevice) => {
         console.log('Ready with Device ID', device.device_id);
@@ -44,7 +67,8 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
         setIsDeviceConnected(isDeviceTransfered);
       });
 
-      player.on('authentication_error', ({ message }) => {
+      // TODO: test/fix
+      player.addListener('authentication_error', ({ message }) => {
         console.error('Failed to authenticate', message);
       });
 
@@ -62,18 +86,30 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
       playerRef.current?.disconnect();
       setPlayer(null);
     }
-
   }, []);
+
 
   const updateState = async (state) => {
     console.log("state updated", state);
     setIsPlaying(!state?.paused);
-    const currentTrack = state.track_window.current_track;
-    if (currentTrack) {
-      const time = msToTime(currentTrack.duration_ms);
-      const track = `${currentTrack.artists[0].name} - ${currentTrack.name} (${time})`;
-      setCurrentTrack(track);
+    const current_track = state.track_window.current_track;
+    let track;
+    if (current_track) {
+      setMaxSeek(current_track.duration_ms);
+      const time = msToTime(current_track.duration_ms);
+      track = `${current_track.artists[0].name} - ${current_track.name} (${time})`;
+      console.log("theres track", track);
+      setCurrentTrack((prevTrack) => {
+        if (prevTrack != track) {
+          setSeek(0);
+          lastSeek.current = 0;
+        }
+        return track;
+      });
     }
+
+    console.log("state track", currentTrack);
+    console.log("track", track);
   }
 
   const handleToggle = () => {
@@ -86,20 +122,43 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
     if (player) {
       try {
         await player?.nextTrack();
+        setSeek(0);
+        lastSeek.current = 0;
       } catch (err) {
         console.log(err);
       }
     }
   }
-    const handlePrev = async () => {
-      if (player) {
-        try {
-          await player?.previousTrack();
-        } catch (err) {
-          console.log(err);
-        }
+
+  const handlePrev = async () => {
+    if (player) {
+      try {
+        await player?.previousTrack();
+        setSeek(0);
+        lastSeek.current = 0;
+      } catch (err) {
+        console.log(err);
       }
     }
+  }
+
+  const handleVolumeChange = (event) => {
+    let vol = event.target.value / 100;
+    console.log("volume to set", vol);
+    player
+      .setVolume(vol)
+      .then(() => console.log("Volume updated!"));
+    setVolume(vol);
+  }
+
+  const handleSeek = (event) => {
+    let seek = event.target.value;
+    lastSeek.current = seek;
+    setSeek(seek);
+    console.log("seek", seek)
+    player.seek(seek)
+      .then(() =>  console.log('Changed position!'));
+  }
 
   return (
     <>
@@ -111,6 +170,11 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
             handleToggle={handleToggle} 
             isPlaying={isPlaying} 
             currentTrack={currentTrack} 
+            volume={volume * 100} 
+            handleVolumeChange={handleVolumeChange} 
+            handleSeek={handleSeek} 
+            max={maxSeek} 
+            seek={seek}
           />
       }
     </>

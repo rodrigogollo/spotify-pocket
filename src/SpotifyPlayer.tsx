@@ -44,6 +44,12 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
         setIsDeviceConnected(isDeviceTransfered);
       });
 
+      player.on('authentication_error', ({ message }) => {
+        console.error('Failed to authenticate', message);
+      });
+
+      player.addListener('player_state_changed', updateState);
+
       player.connect().then(success => {
         if (success) {
           console.log('The Web Playback SDK successfully connected to Spotify!');
@@ -59,34 +65,53 @@ function SpotifyPlayer({ token }: SpotifyPlayerProps) {
 
   }, []);
 
+  const updateState = async (state) => {
+    console.log("state updated", state);
+    setIsPlaying(!state?.paused);
+    const currentTrack = state.track_window.current_track;
+    if (currentTrack) {
+      const time = msToTime(currentTrack.duration_ms);
+      const track = `${currentTrack.artists[0].name} - ${currentTrack.name} (${time})`;
+      setCurrentTrack(track);
+    }
+  }
+
   const handleToggle = () => {
     if (player) {
       player.togglePlay();
-      player.getCurrentState().then((state: any) => {
-        console.log("current state", state)
-        if (!state) {
-          console.error('User is not playing music through the Web Playback SDK');
-          setIsPlaying(false);
-          return;
-        }
-        setIsPlaying(state.paused);
-
-        const current_track = state.track_window.current_track;
-        const time = msToTime(current_track.duration_ms);
-        const track = `${current_track.artists[0].name} - ${current_track.name} (${time})`;
-        setCurrentTrack(track);
-
-        console.log('Current', current_track);
-        console.log('Currently Playing', track);
-      });
     }
   };
+
+  const handleNext = async () => {
+    if (player) {
+      try {
+        await player?.nextTrack();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+    const handlePrev = async () => {
+      if (player) {
+        try {
+          await player?.previousTrack();
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
 
   return (
     <>
       {
         isDeviceConnected && 
-          <Player handleToggle={handleToggle} isPlaying={isPlaying} currentTrack={currentTrack} />
+          <Player 
+            handleNext={handleNext} 
+            handlePrev={handlePrev} 
+            handleToggle={handleToggle} 
+            isPlaying={isPlaying} 
+            currentTrack={currentTrack} 
+          />
       }
     </>
   );

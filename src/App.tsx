@@ -10,10 +10,13 @@ interface LoadedPayload {
   access_token: string
 }
 
-async function loginSpotify() {
-  invoke("initiate_spotify_auth")
-    .then(() => console.log("spotify login initiated."))
-    .catch((error) => console.log("failed to initiate spotify login", error));
+const loginSpotify = async () => {
+  try {
+    await invoke("initiate_spotify_auth");
+    console.log("spotify login initiated.")
+  } catch (err) {
+    console.log("failed to initiate spotify login", err);
+  }
 }
 
 function App() {
@@ -26,7 +29,7 @@ function App() {
 
   const refreshToken = async () => {
     try {
-      const newToken = await invoke<string>("refresh_token")
+      const newToken = await invoke<string>("refresh_token");
       console.log("new token generated", newToken);
       setToken(newToken);
       localStorage.setItem("token", newToken);

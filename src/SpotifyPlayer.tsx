@@ -3,6 +3,7 @@ import "./App.css";
 import { invoke } from '@tauri-apps/api/core';
 import { msToTime } from "./utils/utils";
 import Player from "./components/Player/Player";
+import useLocalStorageState from "./hooks/useLocalStorageState";
 
 interface SpotifyPlayerProps {
   token: string | null;
@@ -15,7 +16,7 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
   const [currentTrack, setCurrentTrack] = useState("");
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.55);
+  const [volume, setVolume] = useLocalStorageState("volume", 0.5);
   const [seek, setSeek] = useState(0);
   const [maxSeek, setMaxSeek] = useState(0);
   const lastSeek = useRef(seek);
@@ -43,19 +44,36 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
 
   }, [isPlaying]);
 
-  useEffect(() => {
-    const setupPlayer = async () => {
 
+  const cleanupSpotifyElements = () => {
+    // Remove any existing iframes
+    const iframes = document.querySelectorAll('iframe[src*="sdk.scdn"]');
+    iframes.forEach(iframe => iframe.remove());
+    
+    // Remove any existing script tags
+    const scripts = document.querySelectorAll('script[src*="spotify-player"]');
+    scripts.forEach(script => script.remove());
+  };
+
+  useEffect(() => {
+    cleanupSpotifyElements()
+
+    const setupPlayer = async () => {
       const scriptTag = document.createElement('script');
       scriptTag.src = 'https://sdk.scdn.co/spotify-player.js';
       scriptTag.async = true;
+
+      scriptTag.onerror = () => {
+        console.error('Failed to load Spotify SDK script');
+      };
+
 
       document.head!.appendChild(scriptTag);
 
       window.onSpotifyWebPlaybackSDKReady = async () => {
 
         const player = new window.Spotify.Player({
-          name: "Spotify Custom",
+          name: "Spotify-Lite Gollo",
           getOAuthToken: (cb) => { cb(token) },
           volume: volume
         });
@@ -80,17 +98,17 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
         // TODO: test/fix
         player.addListener('authentication_error', ({ message }) => {
           console.error('Failed to authenticate', message);
-          refreshToken()
+          refreshToken();
         });
 
         player.addListener('initialization_error', ({ message }) => {
           console.error('Failed to initialize', message);
-          refreshToken()
+          refreshToken();
         });
 
         player.addListener('account_error', ({ message }) => {
-          refreshToken()
           console.error('Failed to validate Spotify account', message);
+          refreshToken();
         });
 
         player.addListener('player_state_changed', updateState);
@@ -113,10 +131,13 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
 
 
   const updateState = async (state) => {
+    console.log("state changed", state);
     setIsPlaying(!state?.paused);
     const current_track = state.track_window.current_track;
     let track;
     if (current_track) {
+      setSeek(state.position);
+      lastSeek.current = state.position;
       setMaxSeek(current_track.duration_ms);
       const time = msToTime(current_track.duration_ms);
       track = `${current_track.artists[0].name} - ${current_track.name} (${time})`;
@@ -130,10 +151,10 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
     }
   }
 
-  const handleToggle = () => {
+  const handleToggle = async () => {
     try {
       if (player) {
-        player.togglePlay();
+        await player.togglePlay();
       }
     } catch (err) {
       console.log("erro toggle", err);

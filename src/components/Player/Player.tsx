@@ -5,30 +5,55 @@ import { faCirclePlay, faCirclePause, faForwardStep, faBackwardStep } from '@for
 import "./Player.css";
 
 type PlayerProps = {
-  handleToggle: any;
   isPlaying: boolean;
   currentTrack: string;
-  handleNext: any;
-  handlePrev: any;
-  handleVolumeChange: any;
-  volume: number;
   handleSeek: any;
   max: number;
   seek: number;
+  player: any;
 }
 
 const Player = ({
-  handleToggle, 
   isPlaying, 
   currentTrack, 
-  handleNext, 
-  handlePrev, 
-  volume = 0.5, 
-  handleVolumeChange,
   handleSeek,
   max,
-  seek
+  seek,
+  player,
 }: PlayerProps) => {
+
+  const handleToggle = async () => {
+    try {
+      if (player) {
+        await player.togglePlay();
+      }
+    } catch (err) {
+      console.log("erro toggle", err);
+    }
+  };
+
+  const handleNext = async () => {
+    if (player) {
+      try {
+        await player?.nextTrack();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const handlePrev = async () => {
+    if (player) {
+      try {
+        await player?.previousTrack();
+        setSeek(0);
+        lastSeek.current = 0;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <>
       <button id="next" onClick={handlePrev}>
@@ -41,7 +66,7 @@ const Player = ({
         <FontAwesomeIcon icon={faForwardStep} />
       </button>
       <p>{currentTrack}</p>
-      <Volume volume={volume} handleVolumeChange={handleVolumeChange} />
+      <Volume player={player} />
       <Seek seek={seek} max={max} handleSeek={handleSeek} />
     </>
   )

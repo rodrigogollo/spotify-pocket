@@ -46,19 +46,19 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
 
 
   const cleanupSpotifyElements = () => {
-    // Remove any existing iframes
+    console.log("cleanup spotify");
     const iframes = document.querySelectorAll('iframe[src*="sdk.scdn"]');
     iframes.forEach(iframe => iframe.remove());
     
-    // Remove any existing script tags
     const scripts = document.querySelectorAll('script[src*="spotify-player"]');
     scripts.forEach(script => script.remove());
   };
 
   useEffect(() => {
-    cleanupSpotifyElements()
+    console.log("setup player");
 
     const setupPlayer = async () => {
+
       const scriptTag = document.createElement('script');
       scriptTag.src = 'https://sdk.scdn.co/spotify-player.js';
       scriptTag.async = true;
@@ -66,15 +66,19 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
       scriptTag.onerror = () => {
         console.error('Failed to load Spotify SDK script');
       };
-
-
       document.head!.appendChild(scriptTag);
 
       window.onSpotifyWebPlaybackSDKReady = async () => {
 
         const player = new window.Spotify.Player({
           name: "Spotify-Lite Gollo",
-          getOAuthToken: (cb) => { cb(token) },
+          getOAuthToken: (cb) => { 
+            try {
+              return cb(token) 
+            } catch (err) {
+              console.log("erro get oauth", err);
+            }
+          },
           volume: volume
         });
 
@@ -126,6 +130,7 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
       player?.disconnect()
       playerRef.current?.disconnect();
       setPlayer(null);
+      cleanupSpotifyElements();
     }
   }, [token]);
 
@@ -151,70 +156,30 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
     }
   }
 
-  const handleToggle = async () => {
-    try {
-      if (player) {
-        await player.togglePlay();
+
+  const handleSeek = async (event) => {
+    if (player) {
+      try {
+        let seek = event.target.value;
+        console.log("seek", seek)
+        lastSeek.current = seek;
+        setSeek(seek);
+        await player.seek(seek);
+        console.log('Changed position!');
+      } catch (err) {
+        console.log("Error changing seek", err);
       }
-    } catch (err) {
-      console.log("erro toggle", err);
     }
   };
-
-  const handleNext = async () => {
-    if (player) {
-      try {
-        await player?.nextTrack();
-        setSeek(0);
-        lastSeek.current = 0;
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
-
-  const handlePrev = async () => {
-    if (player) {
-      try {
-        await player?.previousTrack();
-        setSeek(0);
-        lastSeek.current = 0;
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
-
-  const handleVolumeChange = (event) => {
-    let vol = event.target.value / 100;
-    console.log("volume to set", vol);
-    player
-      .setVolume(vol)
-      .then(() => console.log("Volume updated!"));
-    setVolume(vol);
-  }
-
-  const handleSeek = (event) => {
-    let seek = event.target.value;
-    lastSeek.current = seek;
-    setSeek(seek);
-    console.log("seek", seek)
-    player.seek(seek)
-      .then(() =>  console.log('Changed position!'));
-  }
 
   return (
     <>
       {
         isDeviceConnected && 
           <Player 
-            handleNext={handleNext} 
-            handlePrev={handlePrev} 
-            handleToggle={handleToggle} 
+            player={player}
             isPlaying={isPlaying} 
             currentTrack={currentTrack} 
-            volume={volume * 100} 
-            handleVolumeChange={handleVolumeChange} 
             handleSeek={handleSeek} 
             max={maxSeek} 
             seek={seek}

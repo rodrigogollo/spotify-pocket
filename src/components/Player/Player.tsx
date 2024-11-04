@@ -37,7 +37,7 @@ const Player = ({
       try {
         await player?.nextTrack();
       } catch (err) {
-        console.log(err);
+        console.log("error next", err);
       }
     }
   };

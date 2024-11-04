@@ -8,10 +8,10 @@ import SongList from "./containers/SongList";
 
 interface SpotifyPlayerProps {
   token: string | null;
-  refreshToken: any;
+  handleRefreshToken: any;
 }
 
-function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
+function SpotifyPlayer({ token, handleRefreshToken }: SpotifyPlayerProps) {
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const playerRef = useRef<Spotify.Player | null>(null);
   const [currentTrack, setCurrentTrack] = useState("");
@@ -98,20 +98,24 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
           }
         });
 
-        // TODO: test/fix
         player.addListener('authentication_error', ({ message }) => {
           console.error('Failed to authenticate', message);
-          refreshToken();
+          handleRefreshToken();
         });
 
         player.addListener('initialization_error', ({ message }) => {
           console.error('Failed to initialize', message);
-          refreshToken();
+          handleRefreshToken();
         });
 
         player.addListener('account_error', ({ message }) => {
           console.error('Failed to validate Spotify account', message);
-          refreshToken();
+          handleRefreshToken();
+        });
+
+        player.addListener('playback_error', ({ message }) => {
+          console.error('Failed to perform playback', message);
+          handleRefreshToken();
         });
 
         player.addListener('player_state_changed', updateState);

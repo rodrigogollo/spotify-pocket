@@ -2,6 +2,7 @@
 
 ## Tools:
 - Tauri 
+ - Reqwest
 - React 
 - Typescript
 - Spotify API
@@ -11,10 +12,29 @@
 [X] - Spotify Authentication (API).
 [X] - Spotify Player (SDK).
 [X] - Spotify auto connect to device.
-[ ] - Spotify Auto refresh token.
-[ ] - Frontend loading screen (wait for Auth + Connect Device).
-[ ] - Get Liked Songs.
-[ ] - List Liked Songs.
-[ ] - Play/Pause/Next/Prev buttons.
-[ ] - Volume slider.
+[~] - Spotify Auto refresh token (refresh works but need refactor, not working when token expires).
+[~] - Frontend loading screen (wait for Auth + Connect Device).
+[X] - Get Liked Songs (top 50 working).
+[X] - List Liked Songs (Test showing top 50 working).
+[X] - Play/Pause/Next/Prev buttons.
+[X] - Volume slider.
+[X] - Song timestamp slider.
+[X] - On click set specific song.
+[ ] - Refactor react code (organize in components/containers).
+[ ] - Refactor Player playback to global state (useReducer?).
+[ ] - Refactor Player Controls design.
+[ ] - Refactor List Songs design.
+[ ] - On Scroll down request + 50 songs.
+[ ] - Add repeat button.
+[ ] - Add shuffle button.
+
+
+## Later TODOS:
+[ ] - New Tab (Playlists). 
+[ ] - Search button (search inside liked songs).
+[ ] - Select playlist to play.
+[ ] - Add song to liked/playlist.
+[ ] - Remove song to liked/playlist.
+[ ] - Search albums/songs/playlists/podcasts.
+[ ] - Play specific searched albums/songs/playlists/podcasts.
 

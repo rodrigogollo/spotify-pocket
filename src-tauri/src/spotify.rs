@@ -220,7 +220,7 @@ pub async fn get_user_saved_tracks(access_token: String) -> String {
 }
 
 #[tauri::command]
-pub async fn set_playback(access_token: String, uris: Vec<String>, offset: Number) {
+pub async fn set_playback(access_token: String, uris: Vec<String>, offset: Number) -> bool {
     // context_uri = albums, artists and playlists
     // uris = spotify tracks 
     // offset = where in the context playback should start (album/playlist). Ex: 5
@@ -245,15 +245,25 @@ pub async fn set_playback(access_token: String, uris: Vec<String>, offset: Numbe
         .json(&payload)
         .send()
         .await
-        .unwrap()
-        .text()
-        .await
         .unwrap();
+        // .text()
+        // .await
+        // .unwrap();
 
-    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
-    println!("set playback {}", json);
+    // let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    // println!("set playback {}", json);
     // return json.to_string();
 
+    match response.error_for_status() {
+        Ok(_response) => {
+            println!("Song successfully changed.");
+            true
+        }
+        Err(err) => {
+            println!("Error changing song {}", err);
+            false
+        }
+    }
 }
 
 pub async fn handle_spotify_token() -> &'static str {

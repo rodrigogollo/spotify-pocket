@@ -86,13 +86,15 @@ function App() {
     // }
   }
 
-  const setSong = async () => {
+  const setSong = async (uri) => {
     const uris = songs.map(song => song.uri)
+    const offset = uris.indexOf(uri);
+    console.log(offset);
 
     await invoke<string>("set_playback", {
       accessToken: token, 
       uris: uris,
-      offset: 5,
+      offset: offset,
     });
   }
 
@@ -104,8 +106,8 @@ function App() {
           <button id="login" onClick={loginSpotify}>Login</button>
       }
       <button onClick={getSongs}>Get songs</button>
-      {songs && <SongList songs={songs} /> }
-      <button onClick={setSong}>Teste set song</button>
+      {songs && <SongList songs={songs} setSong={setSong} /> }
+      <button onClick={setSong} uri="spotify:track:0YThXX1dqUpYBLyJNAsF9N">Teste set song</button>
     </div>
   );
 }

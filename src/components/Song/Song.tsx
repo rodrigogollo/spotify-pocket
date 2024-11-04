@@ -6,11 +6,12 @@ interface ISong {
 
 interface SongProps {
   song: ISong
+  handleClick: any
 }
 
-const Song = ({song}:SongProps) => {
+const Song = ({song, handleClick}:SongProps) => {
   return (
-    <p>{song.artist + " - " + song.name}</p>
+    <p onClick={handleClick}>{song.artist + " - " + song.name}</p>
   )
 }
 

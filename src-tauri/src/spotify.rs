@@ -6,6 +6,7 @@ use rand::distributions::Alphanumeric;
 use rand::Rng;
 use reqwest::Client;
 use serde_json::{json, Value};
+use tauri::utils::acl::Number;
 use std::collections::HashMap;
 use std::env;
 use std::sync::Arc;
@@ -19,7 +20,7 @@ pub fn initiate_spotify_auth(app_handle: AppHandle) {
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
     let redirect_uri = "http://localhost:3000/callback";
     let state = generate_random_state();
-    let scope = "user-read-private user-read-email user-modify-playback-state streaming user-read-playback-state";
+    let scope = "user-read-private user-read-email user-modify-playback-state streaming user-read-playback-state user-library-read";
 
     let auth_url = format!(
       "https://accounts.spotify.com/authorize?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}",
@@ -191,6 +192,69 @@ pub async fn transfer_playback(access_token: String, device_id: String) -> bool 
     }
 }
 
+#[tauri::command]
+pub async fn get_user_saved_tracks(access_token: String) -> String {
+    let url = "https://api.spotify.com/v1/me/tracks";
+    let authorization = format!("Bearer {}", access_token);
+
+    let mut params = HashMap::new();
+    // params.insert("market", "ES");
+    params.insert("limit", 50);
+    params.insert("offset", 0);
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
+
+#[tauri::command]
+pub async fn set_playback(access_token: String, uris: Vec<String>, offset: Number) {
+    // context_uri = albums, artists and playlists
+    // uris = spotify tracks 
+    // offset = where in the context playback should start (album/playlist). Ex: 5
+    // position_ms = where song starts.
+
+    let url = "https://api.spotify.com/v1/me/player/play";
+    let authorization = format!("Bearer {}", access_token);
+
+    let payload = json!({
+        "uris": uris,
+        "offset": {
+            "position": offset
+        },
+        "position_ms": 0
+    });
+
+    let http_client = Client::new();
+    let response = http_client
+        .put(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .json(&payload)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    println!("set playback {}", json);
+    // return json.to_string();
+
+}
 
 pub async fn handle_spotify_token() -> &'static str {
     println!("handle token");

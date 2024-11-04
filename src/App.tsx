@@ -4,6 +4,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import SpotifyPlayer from "./SpotifyPlayer";
 import useLocalStorageState from "./hooks/useLocalStorageState";
+import SongList from "./containers/SongList";
 
 interface LoadedPayload {
   logged: boolean,
@@ -21,6 +22,7 @@ const loginSpotify = async () => {
 
 function App() {
   const [token, setToken] = useLocalStorageState("token", null);
+  const [songs, setSongs] = useState(null);
 
   const [isUserLogged, setIsUserLogged] = useState(() => {
     let token = localStorage.getItem("token");
@@ -62,12 +64,48 @@ function App() {
     };
   }, []);
 
+  const getSongs = async () => {
+    const response = await invoke<string>("get_user_saved_tracks", { accessToken: token });
+
+    localStorage.setItem("songs", response);
+
+    const songs = JSON.parse(response);
+    const transformedSongs = songs.items.map((song: any) => {
+      return {
+        id: song.track.id,
+        name: song.track.name,
+        artist: song.track.artists[0].name,
+        uri: song.track.uri
+      }
+    });
+    
+    setSongs(transformedSongs);
+    console.log(songs);
+    // for (let song of songs.items) {
+    //   console.log(song.track.artists[0].name + "-" + song.track.name);
+    // }
+  }
+
+  const setSong = async () => {
+    const uris = songs.map(song => song.uri)
+
+    await invoke<string>("set_playback", {
+      accessToken: token, 
+      uris: uris,
+      offset: 5,
+    });
+  }
+
   return (
     <div>
-      { !isUserLogged && <button id="login" onClick={loginSpotify}>Login</button> }
       {
-        isUserLogged && <SpotifyPlayer refreshToken={refreshToken} token={token} />
+        isUserLogged ? 
+          <SpotifyPlayer refreshToken={refreshToken} token={token} /> : 
+          <button id="login" onClick={loginSpotify}>Login</button>
       }
+      <button onClick={getSongs}>Get songs</button>
+      {songs && <SongList songs={songs} /> }
+      <button onClick={setSong}>Teste set song</button>
     </div>
   );
 }

@@ -29,8 +29,10 @@ const Volume = ({ player }: VolumeProps) => {
       max="100" 
       value={volume * 100} 
       onChange={handleVolumeChange} 
+      name="volume"
     />
-    <p>Volume: {Math.floor(Number(volume * 100))}% </p>
+    <output htmlFor="volume">{Math.floor(Number(volume * 100))}%</output>
+    <p>Volume: {Math.floor(Number(volume * 100))}%</p>
     </>
   )
 }

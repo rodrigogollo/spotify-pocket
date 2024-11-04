@@ -4,6 +4,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { msToTime } from "./utils/utils";
 import Player from "./components/Player/Player";
 import useLocalStorageState from "./hooks/useLocalStorageState";
+import SongList from "./containers/SongList";
 
 interface SpotifyPlayerProps {
   token: string | null;
@@ -63,9 +64,7 @@ function SpotifyPlayer({ token, refreshToken }: SpotifyPlayerProps) {
       scriptTag.src = 'https://sdk.scdn.co/spotify-player.js';
       scriptTag.async = true;
 
-      scriptTag.onerror = () => {
-        console.error('Failed to load Spotify SDK script');
-      };
+      scriptTag.onerror = () => console.error('Failed to load Spotify SDK script');
       document.head!.appendChild(scriptTag);
 
       window.onSpotifyWebPlaybackSDKReady = async () => {

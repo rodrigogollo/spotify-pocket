@@ -9,6 +9,7 @@ type SeekProps = {
 const Seek = ({ max, handleSeek, seek }: SeekProps) => {
   return (
     <>
+      <p>({msToTime(seek)}/{msToTime(max)})</p>
       <input 
         type="range" 
         min="0" 
@@ -16,7 +17,7 @@ const Seek = ({ max, handleSeek, seek }: SeekProps) => {
         onChange={handleSeek} 
         value={seek}
       />
-      <p>Max: {msToTime(max)} Time: {msToTime(seek)} </p>
+      <p>{msToTime(max)}</p>
     </>
   )
 }

@@ -28,6 +28,8 @@ pub fn run() {
             spotify::initiate_spotify_auth,
             spotify::transfer_playback,
             spotify::refresh_token,
+            spotify::get_user_saved_tracks,
+            spotify::set_playback
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application")

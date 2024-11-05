@@ -127,7 +127,9 @@ function SpotifyPlayer({ token, handleRefreshToken }: SpotifyPlayerProps) {
       };
     }
 
-    setupPlayer();
+    if (token) {
+      setupPlayer();
+    }
 
     return function cleanup() {
       player?.disconnect()

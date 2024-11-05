@@ -20,8 +20,9 @@
 [X] - Volume slider.
 [X] - Song timestamp slider.
 [X] - On click set specific song.
+[ ] - Refactor Spotify Playback SDK to global state (useContext).
+[ ] - Refactor get songs to use React Query.
 [ ] - Refactor react code (organize in components/containers).
-[ ] - Refactor Player playback to global state (useReducer?).
 [ ] - Refactor Player Controls design.
 [ ] - Refactor List Songs design.
 [ ] - On Scroll down request + 50 songs.
@@ -30,7 +31,7 @@
 
 
 ## Later TODOS:
-[ ] - New Tab (Playlists). 
+[ ] - New Tab (Playlists) React Router maybe. 
 [ ] - Search button (search inside liked songs).
 [ ] - Select playlist to play.
 [ ] - Add song to liked/playlist.

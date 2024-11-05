@@ -5,6 +5,10 @@ import SpotifyPlayer from "./SpotifyPlayer";
 import SongList from "./containers/SongList";
 import useAuth from "./hooks/useAuth";
 
+// cache for song list (so i wont need to request again the top 50 songs (offset =0) for example
+// use react Query from tanstack
+const localCache = {};
+
 function App() {
   const [songs, setSongs] = useState(null);
 

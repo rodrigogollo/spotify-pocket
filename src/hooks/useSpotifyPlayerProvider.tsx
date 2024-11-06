@@ -1,72 +1,51 @@
-import { useEffect, useState, useRef, useContext } from "react";
-import "./App.css";
-import { invoke } from '@tauri-apps/api/core';
-import { msToTime } from "./utils/utils";
-import Player from "./components/Player/Player";
-import useLocalStorageState from "./hooks/useLocalStorageState";
+import { useEffect, useState, useRef } from "react";
+import useLocalStorageState from "../hooks/useLocalStorageState";
+import useAuth from "./useAuth";
+import { invoke } from "@tauri-apps/api/core";
+import { msToTime } from "../utils/utils";
 
-import { SpotifyPlayerContext } from "./hooks/SpotifyPlayerContext";
-
-interface SpotifyPlayerProps {
-  token: string | null;
-  handleRefreshToken: any;
+interface IDevice {
+  device_id: string
 }
 
-function SpotifyPlayer({ token, handleRefreshToken }: SpotifyPlayerProps) {
+const useSpotifyPlayerProvider = () => {
+
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
-  const playerRef = useRef<Spotify.Player | null>(null);
-  const [currentTrack, setCurrentTrack] = useState("");
+  const [token, isUserLogged, handleLoginSpotify, handleRefreshToken] = useAuth(); 
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useLocalStorageState("volume", 0.5);
+  const [currentTrack, setCurrentTrack] = useState("");
   const [seek, setSeek] = useState(0);
   const [maxSeek, setMaxSeek] = useState(0);
   const lastSeek = useRef(seek);
-
-  interface IDevice {
-    device_id: string
-  }
-
-  useEffect(() => {
-    let interval;
-    let isFinished = Number(seek) >= Number(maxSeek);
-    if (isPlaying && !isFinished) {
-      interval = setInterval(() => {
-        setSeek(() => {
-          const newSeek = Number(lastSeek.current) + 1000;
-          lastSeek.current = newSeek;
-          return newSeek;
-        });
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-
-  }, [isPlaying]);
-
-
-  const cleanupSpotifyElements = () => {
-    console.log("cleanup spotify");
-    const iframes = document.querySelectorAll('iframe[src*="sdk.scdn"]');
-    iframes.forEach(iframe => iframe.remove());
-    
-    const scripts = document.querySelectorAll('script[src*="spotify-player"]');
-    scripts.forEach(script => script.remove());
-  };
+  const [volume, setVolume] = useLocalStorageState("volume", 0.5);
 
   useEffect(() => {
     console.log("setup player");
 
     const setupPlayer = async () => {
 
+      const volume = 0.5;
       const scriptTag = document.createElement('script');
       scriptTag.src = 'https://sdk.scdn.co/spotify-player.js';
       scriptTag.async = true;
 
       scriptTag.onerror = () => console.error('Failed to load Spotify SDK script');
       document.head!.appendChild(scriptTag);
+
+      const transferDevice = async (device: IDevice) => {
+          try {
+            if (!isDeviceConnected) {
+              let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device.device_id });
+              setIsDeviceConnected(isDeviceTransfered);
+              console.log("Device successfully transfered");
+            } else {
+              console.log("Device already transfered");
+            }
+          } catch (err) {
+            console.log("Error transfering device", err);
+          }
+      }
 
       window.onSpotifyWebPlaybackSDKReady = async () => {
 
@@ -84,19 +63,9 @@ function SpotifyPlayer({ token, handleRefreshToken }: SpotifyPlayerProps) {
 
         setPlayer(player);
 
-        player.addListener("ready", async (device:IDevice) => {
+        player.addListener("ready", (device:IDevice) => {
           console.log('Ready with Device ID', device.device_id);
-          try {
-            if (!isDeviceConnected) {
-              let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device.device_id });
-              setIsDeviceConnected(isDeviceTransfered);
-              console.log("Device successfully transfered");
-            } else {
-              console.log("Device already transfered");
-            }
-          } catch (err) {
-            console.log("Error transfering device", err);
-          }
+          transferDevice(device);
         });
 
         player.addListener('authentication_error', ({ message }) => {
@@ -132,14 +101,22 @@ function SpotifyPlayer({ token, handleRefreshToken }: SpotifyPlayerProps) {
       setupPlayer();
     }
 
+    const cleanupSpotifyElements = () => {
+      console.log("cleanup spotify");
+      const iframes = document.querySelectorAll('iframe[src*="sdk.scdn"]');
+      iframes.forEach(iframe => iframe.remove());
+      
+      const scripts = document.querySelectorAll('script[src*="spotify-player"]');
+      scripts.forEach(script => script.remove());
+    };
+
     return function cleanup() {
       player?.disconnect()
-      playerRef.current?.disconnect();
+      // playerRef.current?.disconnect();
       setPlayer(null);
       cleanupSpotifyElements();
     }
   }, [token]);
-
 
   const updateState = async (state) => {
     console.log("state changed", state);
@@ -162,23 +139,16 @@ function SpotifyPlayer({ token, handleRefreshToken }: SpotifyPlayerProps) {
     }
   }
 
-
-
-  return (
-    <>
-      {
-        isDeviceConnected && 
-          <Player 
-            player={player}
-            isPlaying={isPlaying} 
-            currentTrack={currentTrack} 
-            handleSeek={handleSeek} 
-            max={maxSeek} 
-            seek={seek}
-          />
-      }
-    </>
-  );
+  return {
+    isPlaying, 
+    currentTrack, 
+    maxSeek,
+    seek,
+    setSeek,
+    player,
+    volume,
+    setVolume
+  }
 }
 
-export default SpotifyPlayer;
+export default useSpotifyPlayerProvider;

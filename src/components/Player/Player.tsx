@@ -1,26 +1,13 @@
+import { useContext } from 'react';
 import Volume from "../Volume/Volume";
 import Seek from "../Seek/Seek";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlay, faCirclePause, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons'
 import "./Player.css";
+import { SpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 
-type PlayerProps = {
-  isPlaying: boolean;
-  currentTrack: string;
-  handleSeek: any;
-  max: number;
-  seek: number;
-  player: any;
-}
-
-const Player = ({
-  isPlaying, 
-  currentTrack, 
-  handleSeek,
-  max,
-  seek,
-  player,
-}: PlayerProps) => {
+const Player = () => {
+  const { isPlaying,  currentTrack, player, setSeek} = useContext(SpotifyPlayerContext);
 
   const handleToggle = async () => {
     try {
@@ -47,7 +34,6 @@ const Player = ({
       try {
         await player?.previousTrack();
         setSeek(0);
-        lastSeek.current = 0;
       } catch (err) {
         console.log(err);
       }
@@ -66,8 +52,8 @@ const Player = ({
         <FontAwesomeIcon icon={faForwardStep} />
       </button>
       <p>{currentTrack}</p>
-      <Volume player={player} />
-      <Seek seek={seek} max={max} handleSeek={handleSeek} />
+      <Volume />
+      <Seek />
     </>
   )
 }

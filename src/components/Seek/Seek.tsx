@@ -8,11 +8,9 @@ const Seek = () => {
     if (player) {
       try {
         let seek = event.target.value;
-        console.log("seek", seek)
-        // lastSeek.current = seek;
         setSeek(seek);
-        await player?.seek(seek);
-        console.log('Changed position!');
+        await player.seek(seek);
+        console.log('Changed song position!', msToTime(seek));
       } catch (err) {
         console.log("Error changing seek", err);
       }
@@ -29,7 +27,6 @@ const Seek = () => {
         onChange={handleSeek} 
         value={seek}
       />
-      <p>{msToTime(maxSeek)}</p>
     </>
   )
 }

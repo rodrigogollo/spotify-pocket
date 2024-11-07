@@ -13,6 +13,7 @@ const useSpotifyPlayerProvider = () => {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const { token, setToken, tokenRef } = useAuth(); 
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
+  const deviceRef = useRef<String | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState("");
   const [seek, setSeek] = useState(0);
@@ -78,6 +79,7 @@ const useSpotifyPlayerProvider = () => {
 
         player.addListener("ready", (device:IDevice) => {
           console.log('Ready with Device ID', device.device_id);
+          deviceRef.current = device;
           transferDevice(device);
         });
 
@@ -100,6 +102,9 @@ const useSpotifyPlayerProvider = () => {
 
         player.addListener('playback_error', ({ message }) => {
           console.error('Failed to perform playback', message);
+          console.log(deviceRef.current);
+          setIsDeviceConnected(false);
+          transferDevice(deviceRef.current);
         });
 
         player.addListener('player_state_changed', updateState);
@@ -181,6 +186,7 @@ const useSpotifyPlayerProvider = () => {
 
   const transferDevice = async (device: IDevice) => {
       try {
+        console.log(isDeviceConnected);
         if (!isDeviceConnected) {
           console.log("token to transfer", tokenRef.current);
           // const currentToken = localStorage.getItem("token");

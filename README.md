@@ -1,12 +1,16 @@
 # Spotify-lite (Winamp alike)
 
 ## Tools:
-- Tauri 
- - Reqwest
-- React 
-- Typescript
-- Spotify API
-- Spotify SDK
+- Rust (back-end) 
+    - Tauri 2.0
+    - Reqwest
+    - Axum
+    - Tokio
+ 
+- React (front-end)
+    - Typescript
+    - Spotify API
+    - Spotify SDK
 
 ## TODOS:
 [X] - Spotify Authentication (API).
@@ -20,9 +24,10 @@
 [X] - Volume slider.
 [X] - Song timestamp slider.
 [X] - On click set specific song.
-[ ] - Refactor Spotify Playback SDK to global state (useContext).
+[X] - Refactor Spotify Playback SDK to global state (useContext).
+[X] - On token expired refresh token automatically.
 [ ] - Refactor get songs to use React Query.
-[ ] - Refactor react code (organize in components/containers).
+[~] - Refactor react code (organize in components/containers).
 [ ] - Refactor Player Controls design.
 [ ] - Refactor List Songs design.
 [ ] - On Scroll down request + 50 songs.
@@ -34,8 +39,8 @@
 [ ] - New Tab (Playlists) React Router maybe. 
 [ ] - Search button (search inside liked songs).
 [ ] - Select playlist to play.
-[ ] - Add song to liked/playlist.
-[ ] - Remove song to liked/playlist.
 [ ] - Search albums/songs/playlists/podcasts.
 [ ] - Play specific searched albums/songs/playlists/podcasts.
+[ ] - Add song to liked/playlist.
+[ ] - Remove song to liked/playlist.
 

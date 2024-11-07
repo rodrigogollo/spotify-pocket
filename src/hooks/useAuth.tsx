@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import useLocalStorageState from "./useLocalStorageState";
@@ -10,6 +10,7 @@ interface LoadedPayload {
 
 const useAuth = () => {
   const [token, setToken] = useLocalStorageState("token", null);
+  const tokenRef = useRef<String | null>(token);
   const [isUserLogged, setIsUserLogged] = useState(() => {
     let token = localStorage.getItem("token");
     return token != null; 
@@ -19,7 +20,7 @@ const useAuth = () => {
     const unlisten = listen<LoadedPayload>('loaded', (event) => {
       console.log(`app is loaded, loggedIn: ${event.payload.logged}, token: ${event.payload.access_token}`);
       setToken(event.payload.access_token);
-      localStorage.setItem("token", event.payload.access_token);
+      tokenRef.current = event.payload.access_token;
       setIsUserLogged(true);
     });
 
@@ -38,28 +39,13 @@ const useAuth = () => {
     }
   }
 
-  const handleRefreshToken = async () => {
-    try {
-      const newToken = await invoke<string>("refresh_token");
-      console.log("new token generated", newToken);
-      setToken(newToken);
-      localStorage.setItem("token", newToken);
-      setIsUserLogged(true);
-    } catch (err) {
-      console.log("Failed to refresh token", err);
-      setToken(""); // reset token to show login page
-      localStorage.setItem("token", "");
-    }
-  }
-
-  useEffect(() => {
-    if (token !== null) {
-      handleRefreshToken()
-    }
-
-  }, [])
-
-  return [token, isUserLogged, handleLoginSpotify, handleRefreshToken];
+  return {
+    token, 
+    isUserLogged, 
+    handleLoginSpotify, 
+    setToken,
+    tokenRef
+  };
 }
 
 export default useAuth;

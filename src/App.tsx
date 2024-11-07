@@ -11,7 +11,7 @@ import Player from "./components/Player/Player";
 // const localCache = {};
 
 function App() {
-  const [token, isUserLogged, handleLoginSpotify, handleRefreshToken] = useAuth();
+  const { isUserLogged, handleLoginSpotify } = useAuth();
   const playbackPlayerHook = useSpotifyPlayerProvider();
 
   return (

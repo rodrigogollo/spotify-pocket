@@ -1,13 +1,14 @@
-import { useContext } from 'react';
 import Volume from "../Volume/Volume";
 import Seek from "../Seek/Seek";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlay, faCirclePause, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons'
 import "./Player.css";
-import { SpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
+import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
+import useAuth from "../../hooks/useAuth";
 
 const Player = () => {
-  const { isPlaying,  currentTrack, player, setSeek} = useContext(SpotifyPlayerContext);
+  const { isPlaying,  currentTrack, player, setSeek, isPlayerReady} = useSpotifyPlayerContext()
+  const { isUserLogged } = useAuth()
 
   const handleToggle = async () => {
     try {
@@ -41,6 +42,7 @@ const Player = () => {
   };
 
   return (
+    isPlayerReady &&
     <>
       <button id="next" onClick={handlePrev}>
         <FontAwesomeIcon icon={faBackwardStep} />

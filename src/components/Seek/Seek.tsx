@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { SpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
+import { SpotifyPlayerContext, useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { msToTime } from "../../utils/utils";
 
 const Seek = () => {
-  const { player, maxSeek, setSeek, seek }  = useContext(SpotifyPlayerContext);
+  const { player, maxSeek, setSeek, seek } = useSpotifyPlayerContext();
 
   const handleSeek = async (event) => {
     if (player) {

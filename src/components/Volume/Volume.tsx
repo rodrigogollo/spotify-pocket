@@ -1,14 +1,7 @@
-import { useContext } from "react";
-import useLocalStorageState from "../../hooks/useLocalStorageState";
-import { SpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
-// type VolumeProps = {
-//   volume: number;
-//   handleVolumeChange: any;
-//   player: any;
-// }
+import { SpotifyPlayerContext, useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 
 const Volume = () => {
-  const { player, volume, setVolume }  = useContext(SpotifyPlayerContext);
+  const { player, volume, setVolume } = useSpotifyPlayerContext();
   // const [volume, setVolume] = useLocalStorageState("volume", 0.5);
 
   const handleVolumeChange = async (event) => {

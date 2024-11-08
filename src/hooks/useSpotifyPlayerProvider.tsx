@@ -20,6 +20,7 @@ const useSpotifyPlayerProvider = () => {
   const [maxSeek, setMaxSeek] = useState(0);
   const lastSeek = useRef(seek);
   const [volume, setVolume] = useLocalStorageState("volume", 0.5);
+  const [shuffle, setShuffle] = useLocalStorageState("shuffle", false);
 
   useEffect(() => {
     let interval;
@@ -219,6 +220,7 @@ const useSpotifyPlayerProvider = () => {
     console.log("state changed", state);
     setIsPlayerReady(!state.loading);
     setIsPlaying(!state?.paused);
+    setShuffle(state.shuffle);
 
     const current_track = state.track_window.current_track;
     let track;
@@ -248,7 +250,9 @@ const useSpotifyPlayerProvider = () => {
     player: playerRef.current,
     volume,
     setVolume,
-    isPlayerReady
+    isPlayerReady,
+    device: deviceRef.current,
+    shuffle
   }
 }
 

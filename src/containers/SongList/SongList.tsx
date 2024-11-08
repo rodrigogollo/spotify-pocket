@@ -24,7 +24,7 @@ const SongList = () => {
   const {isFetchingNextPage, data, error, status, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 
     queryFn: fetchSongs,
-    initialPageParam: 0,
+    initialPageParam: "https://api.spotify.com/v1/me/tracks?offset=0&limit=50",
     getNextPageParam: (lastPage)  => lastPage.next
   });
 
@@ -36,7 +36,6 @@ const SongList = () => {
     }
   }, [fetchNextPage, inView]);
 
-  console.log(isFetchingNextPage)
   if (status === "pending") {
     return <>Loading...</>
   } else if (status === "error") {

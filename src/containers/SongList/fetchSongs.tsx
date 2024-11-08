@@ -2,13 +2,8 @@ import { invoke } from '@tauri-apps/api/core';
 
 const fetchSongs = async ({ queryKey, pageParam }) => {
   const token = queryKey[1];
-  let offset;
-  if (pageParam == 0){
-    offset = 0;
-  } else {
-    const url = new URL(pageParam)
-    offset = parseInt(url.searchParams.get("offset") || 0);
-  }
+  const url = new URL(pageParam)
+  const offset = parseInt(url.searchParams.get("offset") || 0);
   const apiRes = await invoke("get_user_saved_tracks", 
     {
       accessToken: token,

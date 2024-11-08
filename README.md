@@ -26,11 +26,11 @@
 [X] - On click set specific song.
 [X] - Refactor Spotify Playback SDK to global state (useContext).
 [X] - On token expired refresh token automatically.
-[ ] - Refactor get songs to use React Query.
+[X] - Refactor get songs to use React Query.
 [~] - Refactor react code (organize in components/containers).
 [ ] - Refactor Player Controls design.
 [ ] - Refactor List Songs design.
-[ ] - On Scroll down request + 50 songs.
+[X] - On Scroll down request + 50 songs.
 [ ] - Add repeat button.
 [ ] - Add shuffle button.
 

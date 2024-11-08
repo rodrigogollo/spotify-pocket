@@ -1,26 +1,19 @@
-interface ISong {
-  id: string,
-  name: string,
-  artist: string,
-}
+import useAuth from "../../hooks/useAuth"
+import { invoke } from '@tauri-apps/api/core';
 
-interface SongProps {
-  song: ISong
-  handleClick: any
-}
+const Song = ({song, songs}) => {
+  const { token } = useAuth();
 
-const Song = ({song, handleClick}:SongProps) => {
-
-  const setSong = async (uri) => {
-    const uris = songs.map(song => song.uri)
+  const setSong = async (uri: string) => {
+    const uris = songs.map(song => song.track.uri)
     const offset = uris.indexOf(uri);
-    console.log(offset);
 
     const isChanged = await invoke<string>("set_playback", {
       accessToken: token, 
       uris: uris,
       offset: offset,
     });
+
     if (isChanged) {
       console.log("song changed");
     } else {
@@ -28,12 +21,12 @@ const Song = ({song, handleClick}:SongProps) => {
     }
   }
 
-  // const handleClick = () => {
-  //   
-  // }
+  const handleClick = (uri: string) => {
+    setSong(uri);
+  }
 
   return (
-    <p onClick={handleClick}>{song.artist + " - " + song.name}</p>
+    <p onClick={() => handleClick(song.track.uri)}>{song.track.artists[0].name + " - " + song.track.name}</p>
   )
 }
 

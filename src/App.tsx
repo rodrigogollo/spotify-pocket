@@ -33,5 +33,3 @@ const App = () => {
 }
 
 export default App;
-// <SpotifyPlayer handleRefreshToken={handleRefreshToken} token={token} />  
-// <SongList /> 

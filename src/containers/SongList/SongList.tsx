@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import fetchSongs from "./fetchSongs";
 import Song from "../../components/Song/Song";
 import useAuth from "../../hooks/useAuth";
-import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 
 type SongListParams = {
   songs: ISong[];
@@ -18,7 +17,6 @@ interface ISong {
   artist: string,
   uri: string
 }
-
 
 const SongList = () => {
   const { token } = useAuth();

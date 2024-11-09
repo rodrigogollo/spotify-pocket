@@ -16,7 +16,7 @@
 [X] - Spotify Authentication (API).
 [X] - Spotify Player (SDK).
 [X] - Spotify auto connect to device.
-[~] - Spotify Auto refresh token (refresh works but need refactor, not working when token expires).
+[X] - Spotify Auto refresh token.
 [~] - Frontend loading screen (wait for Auth + Connect Device).
 [X] - Get Liked Songs (top 50 working).
 [X] - List Liked Songs (Test showing top 50 working).
@@ -33,7 +33,7 @@
 [X] - On Scroll down request + 50 songs.
 [X] - Add repeat button.
 [X] - Add shuffle button.
-
+[ ] - Make proper Loading component for multiple uses (animation spinning);
 
 ## Later TODOS:
 [ ] - New Tab (Playlists) React Router maybe. 

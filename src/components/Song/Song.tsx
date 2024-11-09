@@ -3,6 +3,7 @@ import useAuth from "../../hooks/useAuth"
 import { invoke } from '@tauri-apps/api/core';
 import { msToTime } from "../../utils/utils";
 import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
+import { useEffect } from "react";
 
 const Song = ({idx, song, songs}) => {
   const { token } = useAuth();
@@ -28,7 +29,6 @@ const Song = ({idx, song, songs}) => {
   const handleClick = (uri: string) => {
     setSong(uri);
   }
-  console.log(currentUri, song.track.uri)
 
   const classes = `song ${currentUri == song.track.uri ? "current": ""}`
 

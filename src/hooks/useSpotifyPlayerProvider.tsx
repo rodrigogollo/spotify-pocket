@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import useLocalStorageState from "../hooks/useLocalStorageState";
 import useAuth from "./useAuth";
 import { invoke } from "@tauri-apps/api/core";
@@ -10,6 +11,7 @@ interface IDevice {
 const useSpotifyPlayerProvider = () => {
   const playerRef = useRef<Spotify.Player | null>(null);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const isPlayerReadyRef = useRef<boolean>(false);
   const { setToken, tokenRef } = useAuth(); 
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
   const deviceRef = useRef<String | null>(null);
@@ -70,11 +72,14 @@ const useSpotifyPlayerProvider = () => {
           console.log('Ready with Device ID', device.device_id);
           deviceRef.current = device;
           transferDevice(device);
+          setIsPlayerReady(true);
+          isPlayerReadyRef.current = true;
         });
 
         player.addListener('not_ready', ({ device_id }) => {
           console.log('Device ID is not ready for playback', device_id);
           setIsPlayerReady(false);
+          isPlayerReadyRef.current = false;
         });
 
         player.addListener('authentication_error', ({ message }) => {
@@ -153,10 +158,11 @@ const useSpotifyPlayerProvider = () => {
   }
 
   const updateState = async (state) => {
+    console.log("updated state", state)
     setSeek(state.position);
     lastSeek.current = state.position;
 
-    if (isPlayerReady != state.loading){
+    if (state.loading && isPlayerReadyRef.current != state.loading){
       setIsPlayerReady(!state.loading)
     }
     if (isPlayingRef.current != !state?.paused) {
@@ -177,6 +183,9 @@ const useSpotifyPlayerProvider = () => {
     if (stateTrack && currentUriRef.current != stateUri) {
       setMaxSeek(stateTrack.duration_ms);
       currentUriRef.current = stateTrack.uri;
+
+      // const likedSongsData = queryClient.getQueryData(["liked-songs", tokenRef.current]);
+      // console.log("likedSongsData", likedSongsData)
 
       const newTrack = `${stateTrack.artists[0].name} - ${stateTrack.name}`;
       
@@ -219,23 +228,6 @@ const useSpotifyPlayerProvider = () => {
       currentUriRef,
       repeat
   ]);
-  
-  // return {
-  //   isPlaying: isPlayingRef.current, 
-  //   currentTrack, 
-  //   maxSeek,
-  //   seek,
-  //   setSeek,
-  //   player: playerRef.current,
-  //   volume,
-  //   setVolume,
-  //   isPlayerReady,
-  //   device: deviceRef.current,
-  //   shuffle,
-  //   currentUri: currentUriRef.current,
-  //   repeat
-  // }
-
 }
 
 export default useSpotifyPlayerProvider;

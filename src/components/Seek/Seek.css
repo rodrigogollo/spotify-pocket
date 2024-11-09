@@ -1,9 +1,10 @@
 .seek {
 	display: flex;
 	flex-direction: row;
-	padding: 8px;
+	padding: 8px 4px;
 	justify-content: space-around;
-	width: 65vw;
+	width: 75vw;
+	align-items: center;
 }
 
 .seek > input {

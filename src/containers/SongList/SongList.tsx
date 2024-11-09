@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import fetchSongs from "./fetchSongs";
 import Song from "../../components/Song/Song";
 import useAuth from "../../hooks/useAuth";
+import Loading from "../../components/Loading/Loading";
 
 type SongListParams = {
   songs: ISong[];
@@ -36,7 +37,7 @@ const SongList = () => {
   }, [fetchNextPage, inView]);
 
   if (status === "pending" || !data) {
-    return <>Loading...</>
+    return <Loading />
   } else if (status === "error") {
     return <>{error.message}</>
   } else {
@@ -52,7 +53,7 @@ const SongList = () => {
             })
           }
           <div ref={ref}></div>
-          {isFetchingNextPage ? <p>Loading...</p> : null} 
+          {isFetchingNextPage ? <Loading /> : null} 
         </div>
     );
   }

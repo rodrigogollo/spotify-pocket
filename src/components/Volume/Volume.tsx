@@ -29,8 +29,8 @@ const Volume = () => {
 
   const bubble: CSSProperties = {
     position: "absolute",
-    top: "30px",
-    left: `${315 + bubblePosition}px`,
+    top: "40px",
+    left: `${365 + bubblePosition}px`,
     width: "30px",
     padding: "2px",
     // height: "20px",
@@ -45,7 +45,6 @@ const Volume = () => {
 
   return (
     <div className="volume">
-    <div id="bubble" style={bubble}>{Math.floor(Number(volume * 100))}%</div>
     <input 
       type="range" 
       min="0" 
@@ -54,6 +53,7 @@ const Volume = () => {
       onChange={handleVolumeChange} 
       name="volume"
     />
+      <div id="bubble" style={bubble}>{Math.floor(Number(volume * 100))}%</div>
     </div>
   )
 }

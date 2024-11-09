@@ -6,6 +6,7 @@ import useAuth from "./hooks/useAuth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./containers/LoginPage";
 import HomePage from "./containers/HomePage/HomePage";
+import Loading from "./components/Loading/Loading";
 
 const queryClient = new QueryClient({
   defaultOptions: {

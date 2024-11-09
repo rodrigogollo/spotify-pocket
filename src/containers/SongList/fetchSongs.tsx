@@ -13,7 +13,7 @@ const fetchSongs = async ({ queryKey, pageParam }) => {
 
   const songs =  JSON.parse(apiRes);
 
-  if (!songs.items.length) {
+  if (!songs) {
     throw new Error(`Liked songs offset : ${offset} not ok`);
   }
 

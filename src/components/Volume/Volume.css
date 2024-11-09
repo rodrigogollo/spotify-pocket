@@ -1,0 +1,9 @@
+.volume {
+	display: flex;
+	flex-direction: row;
+	width: 30vw;
+}
+
+.volume > input {
+	margin: 0 2px 0 4px;
+}

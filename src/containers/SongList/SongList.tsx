@@ -1,9 +1,11 @@
+import "./SongList.css";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import fetchSongs from "./fetchSongs";
 import Song from "../../components/Song/Song";
 import useAuth from "../../hooks/useAuth";
+import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 
 type SongListParams = {
   songs: ISong[];
@@ -20,7 +22,6 @@ interface ISong {
 
 const SongList = () => {
   const { token } = useAuth();
-  const [offset, setOffset] = useState(1);
   const {isFetchingNextPage, data, error, status, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 
     queryFn: fetchSongs,
@@ -36,25 +37,25 @@ const SongList = () => {
     }
   }, [fetchNextPage, inView]);
 
-  if (status === "pending") {
+  if (status === "pending" || !data) {
     return <>Loading...</>
   } else if (status === "error") {
     return <>{error.message}</>
   } else {
      return (
-        <>
+        <div className="song-list">
           {data.pages.map((page) => {
             return <div key={page.offset}>
               {
-              page.items.map((song: ISong) => (
-                 <Song key={song.id} song={song} songs={page.items} />
+              page.items.map((song: ISong, idx:number) => (
+                 <Song idx={1 + page.offset + idx}key={song.id} song={song} songs={page.items} />
               ))}
             </div>
             })
           }
           <div ref={ref}></div>
           {isFetchingNextPage ? <p>Loading...</p> : null} 
-        </>
+        </div>
     );
   }
 }

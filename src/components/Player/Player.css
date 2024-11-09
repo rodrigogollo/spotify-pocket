@@ -1,3 +1,46 @@
-button {
-	display: inline;
+.player {
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: var(--color-dark);
+	border-bottom: 5px solid var(--color-middle);
+}
+
+.controls {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width: 100vw;
+}
+
+.track {
+	width: 100vw;	
+	padding: 10px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.controls > button {
+	padding: 8px;
+	margin: .5px;
+	border: none;
+	background: none;
+	color: var(--color-light);
+}
+
+.controls > button:hover {
+	cursor: pointer;
+	color: var(--color-middle);
+}
+
+.controls .active {
+	color: var(--color-green);
+	background: none;
+}
+
+.times {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100vw;
 }

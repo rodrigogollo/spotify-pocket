@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'circular-black';
+    src: url('/font/circular-black.ttf');
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'circular-black', sans-serif;
+
+	--color-darkest: rgb(18, 18, 18);
+	--color-dark: rgb(33, 33, 33);
+	--color-middle: rgb(83, 83, 83);
+	--color-light: rgb(179, 179, 179);
+	--color-green: rgb(29, 185, 84);
+}
+
+body {
+	background: var(--color-dark);
+	color: var(--color-light);
+}

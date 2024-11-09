@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import useLocalStorageState from "../hooks/useLocalStorageState";
 import useAuth from "./useAuth";
 import { invoke } from "@tauri-apps/api/core";
-import { msToTime } from "../utils/utils";
 
 interface IDevice {
   device_id: string
@@ -11,21 +10,25 @@ interface IDevice {
 const useSpotifyPlayerProvider = () => {
   const playerRef = useRef<Spotify.Player | null>(null);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const { token, setToken, tokenRef } = useAuth(); 
+  const { setToken, tokenRef } = useAuth(); 
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
   const deviceRef = useRef<String | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const isPlayingRef = useRef<boolean>(false);
   const [currentTrack, setCurrentTrack] = useState("");
   const [seek, setSeek] = useState(0);
   const [maxSeek, setMaxSeek] = useState(0);
   const lastSeek = useRef(seek);
   const [volume, setVolume] = useLocalStorageState("volume", 0.5);
   const [shuffle, setShuffle] = useLocalStorageState("shuffle", false);
+  const [repeat, setRepeat] = useLocalStorageState("repeat", false);
+  const currentUriRef = useRef();
 
   useEffect(() => {
-    let interval;
+    let interval: any;
     let isFinished = Number(seek) >= Number(maxSeek);
-    if (isPlaying && !isFinished) {
+
+    if (isPlayingRef.current && !isFinished) {
       interval = setInterval(() => {
         setSeek(() => {
           const newSeek = Number(lastSeek.current) + 1000;
@@ -39,21 +42,7 @@ const useSpotifyPlayerProvider = () => {
 
     return () => clearInterval(interval);
 
-  }, [isPlaying]);
-
-
-  // useEffect(() => {
-  //   console.log("state", {
-  //     player: playerRef.current,
-  //     isPlayerReady,
-  //     token,
-  //     isDeviceConnected,
-  //     isPlaying,
-  //     currentTrack,
-  //     seek,
-  //     volume
-  //   })
-  // }, [playerRef.current, isPlayerReady, token, isDeviceConnected, isPlaying, currentTrack, seek, volume])
+  }, [isPlaying, seek, maxSeek]);
 
   useEffect(() => {
     const setupPlayer = async () => {
@@ -64,7 +53,6 @@ const useSpotifyPlayerProvider = () => {
 
       scriptTag.onerror = () => console.error('Failed to load Spotify SDK script');
       document.head!.appendChild(scriptTag);
-
 
       window.onSpotifyWebPlaybackSDKReady = async () => {
 
@@ -103,7 +91,6 @@ const useSpotifyPlayerProvider = () => {
 
         player.addListener('playback_error', ({ message }) => {
           console.error('Failed to perform playback', message);
-          console.log(deviceRef.current);
           setIsDeviceConnected(false);
           transferDevice(deviceRef.current);
         });
@@ -119,12 +106,6 @@ const useSpotifyPlayerProvider = () => {
     }
 
     setupPlayer()
-
-    // if (token) {
-    //   setupPlayer();
-    // } else {
-    //   console.log("no token, no render")
-    // }
 
     const cleanupSpotifyElements = () => {
       console.log("cleanup spotify");
@@ -143,55 +124,10 @@ const useSpotifyPlayerProvider = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   const player = playerRef.current;
-  //   if (player) {
-  //     player.addListener("ready", (device:IDevice) => {
-  //       console.log('Ready with Device ID', device.device_id);
-  //       transferDevice(device);
-  //     });
-  //
-  //     player.addListener('authentication_error', ({ message }) => {
-  //       console.error('Failed to authenticate', message);
-  //     });
-  //
-  //     player.addListener('initialization_error', ({ message }) => {
-  //       console.error('Failed to initialize', message);
-  //     });
-  //
-  //     player.addListener('account_error', ({ message }) => {
-  //       console.error('Failed to validate Spotify account', message);
-  //     });
-  //
-  //     player.addListener('playback_error', ({ message }) => {
-  //       console.error('Failed to perform playback', message);
-  //     });
-  //
-  //     player.addListener('player_state_changed', updateState);
-  //   }
-  //
-  // }, [])
-
-   // useEffect(() => {
-   //    if (isPlayerReady) {
-   //      console.log("player ready, connecting")
-   //      const player = playerRef.current;
-   //      player.connect().then(success => {
-   //        if (success) {
-   //          console.log('The Web Playback SDK successfully connected to Spotify!');
-   //        }
-   //      })
-   //    }
-   //  }, [isPlayerReady]);
-
-
   const transferDevice = async (device: IDevice) => {
       try {
-        console.log(isDeviceConnected);
         if (!isDeviceConnected) {
           console.log("token to transfer", tokenRef.current);
-          // const currentToken = localStorage.getItem("token");
-          // console.log("token storage", currentToken);
           let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: tokenRef.current, deviceId: device.device_id });
           setIsDeviceConnected(isDeviceTransfered);
           console.log("Device successfully transfered");
@@ -217,32 +153,46 @@ const useSpotifyPlayerProvider = () => {
   }
 
   const updateState = async (state) => {
-    console.log("state changed", state);
-    setIsPlayerReady(!state.loading);
-    setIsPlaying(!state?.paused);
-    setShuffle(state.shuffle);
+    setSeek(state.position);
+    lastSeek.current = state.position;
 
-    const current_track = state.track_window.current_track;
-    let track;
-    if (current_track) {
-      setSeek(state.position);
-      lastSeek.current = state.position;
-      setMaxSeek(current_track.duration_ms);
+    if (isPlayerReady != state.loading){
+      setIsPlayerReady(!state.loading)
+    }
+    if (isPlayingRef.current != !state?.paused) {
+      setIsPlaying(!state?.paused);
+      isPlayingRef.current = !state?.paused;
+    }
 
-      const time = msToTime(current_track.duration_ms);
-      track = `${current_track.artists[0].name} - ${current_track.name} (${time})`;
+    if (shuffle !== state.shuffle) {
+      setShuffle(state.shuffle);
+    }
+    if (repeat !== state.repeat_mode) {
+      setRepeat(state.repeat_mode);
+    }
+
+    const stateTrack = state?.track_window?.current_track;
+    const stateUri = stateTrack?.uri;
+
+    if (stateTrack && currentUriRef.current != stateUri) {
+      setMaxSeek(stateTrack.duration_ms);
+      currentUriRef.current = stateTrack.uri;
+
+      const newTrack = `${stateTrack.artists[0].name} - ${stateTrack.name}`;
+      
       setCurrentTrack((prevTrack) => {
-        if (prevTrack != track) {
+        if (prevTrack !== newTrack) {
           setSeek(0);
           lastSeek.current = 0;
+          return newTrack;
         }
-        return track;
+        return prevTrack;
       });
     }
   }
 
-  return {
-    isPlaying, 
+  return useMemo(() => ({
+    isPlaying: isPlayingRef.current, 
     currentTrack, 
     maxSeek,
     seek,
@@ -252,8 +202,40 @@ const useSpotifyPlayerProvider = () => {
     setVolume,
     isPlayerReady,
     device: deviceRef.current,
-    shuffle
-  }
+    shuffle,
+    currentUri: currentUriRef.current,
+    repeat
+  }), [
+      isPlaying, 
+      currentTrack,
+      maxSeek,
+      seek,
+      volume,
+      playerRef,
+      volume,
+      isPlayerReady,
+      deviceRef,
+      shuffle,
+      currentUriRef,
+      repeat
+  ]);
+  
+  // return {
+  //   isPlaying: isPlayingRef.current, 
+  //   currentTrack, 
+  //   maxSeek,
+  //   seek,
+  //   setSeek,
+  //   player: playerRef.current,
+  //   volume,
+  //   setVolume,
+  //   isPlayerReady,
+  //   device: deviceRef.current,
+  //   shuffle,
+  //   currentUri: currentUriRef.current,
+  //   repeat
+  // }
+
 }
 
 export default useSpotifyPlayerProvider;

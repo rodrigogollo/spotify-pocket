@@ -13,7 +13,6 @@ pub fn run() {
         .setup(|app| {
             let app_handle = Arc::new(app.handle().clone());
 
-
             tauri::async_runtime::spawn(async move {
                 let app = Arc::clone(&app_handle);
                 if let Err(e) = routes::backend_server(app).await {
@@ -23,14 +22,13 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            // spotify::request_test,
-            // spotify::get_token,
             spotify::initiate_spotify_auth,
             spotify::transfer_playback,
             spotify::refresh_token,
             spotify::get_user_saved_tracks,
             spotify::set_playback,
-            spotify::toggle_shuffle
+            spotify::toggle_shuffle,
+            spotify::toggle_repeat
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application")

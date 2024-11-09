@@ -1,0 +1,12 @@
+.song-list {
+	display: flex;
+	flex-direction: column;
+	margin-top: 130px;
+	background-color: var(--color-dark);
+	color: var(--color-light);
+	padding: 0 8px;
+}
+
+.song-list > div > p {
+	padding: 8px;	
+}

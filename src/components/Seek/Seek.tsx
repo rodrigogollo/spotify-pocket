@@ -1,3 +1,4 @@
+import "./Seek.css";
 import { SpotifyPlayerContext, useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { msToTime } from "../../utils/utils";
 
@@ -18,8 +19,8 @@ const Seek = () => {
   };
 
   return (
-    <>
-      <p>({msToTime(seek)}/{msToTime(maxSeek)})</p>
+    <div className="seek">
+      <p>{msToTime(seek)}</p>
       <input 
         type="range" 
         min="0" 
@@ -27,7 +28,8 @@ const Seek = () => {
         onChange={handleSeek} 
         value={seek}
       />
-    </>
+      <p>{msToTime(maxSeek)}</p>
+    </div>
   )
 }
 

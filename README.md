@@ -28,11 +28,11 @@
 [X] - On token expired refresh token automatically.
 [X] - Refactor get songs to use React Query.
 [~] - Refactor react code (organize in components/containers).
-[ ] - Refactor Player Controls design.
-[ ] - Refactor List Songs design.
+[X] - Refactor Player Controls design.
+[X] - Refactor List Songs design.
 [X] - On Scroll down request + 50 songs.
-[ ] - Add repeat button.
-[ ] - Add shuffle button.
+[X] - Add repeat button.
+[X] - Add shuffle button.
 
 
 ## Later TODOS:

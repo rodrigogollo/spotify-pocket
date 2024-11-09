@@ -230,6 +230,43 @@ pub async fn toggle_shuffle(access_token: String, state: bool) -> bool {
 }
 
 #[tauri::command]
+pub async fn toggle_repeat(access_token: String, state: i32) -> bool {
+    println!("token: {}, repeat: {}", access_token, state);
+    
+    let options: [&str; 3] = ["off", "context", "track"];
+    print!("{}", options[state as usize]);
+
+    let url = format!("https://api.spotify.com/v1/me/player/repeat");
+    let authorization = format!("Bearer {}", access_token);
+
+    let mut params = HashMap::new();
+    params.insert("state", options[state as usize]);
+
+    let http_client = Client::new();
+    let response = http_client
+        .put(url)
+        .header("Authorization", authorization)
+        .header("Content-Length", 0)
+        .query(&params)
+        .send()
+        .await
+        .unwrap();
+
+    // let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    println!("Toggle Repeat Json: {:?}", response);
+
+    match response.error_for_status() {
+        Ok(_response) => {
+            true
+        }
+        Err(err) => {
+            println!("Error shuffling: {}", err);
+            false
+        }
+    }
+}
+
+#[tauri::command]
 pub async fn get_user_saved_tracks(access_token: String, offset: i32, limit: i32) -> String {
     let url = "https://api.spotify.com/v1/me/tracks";
     let authorization = format!("Bearer {}", access_token);

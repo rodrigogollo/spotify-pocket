@@ -6,6 +6,7 @@ import "./Player.css";
 import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { invoke } from '@tauri-apps/api/core';
 import useAuth from "../../hooks/useAuth";
+import ScrollingText from "../ScrollingText/ScrollingText";
 
 const Player = () => {
   const { isPlaying,  currentTrack, player, setSeek, isPlayerReady, shuffle, seek, maxSeek, trackNum, repeat } = useSpotifyPlayerContext()
@@ -54,26 +55,28 @@ const Player = () => {
 
   return (
     <div className="player">
-      <h3 className="track">{trackNum} {currentTrack}</h3>
+      <div className="track-container"> 
+        <ScrollingText text={currentTrack} className={"current-track"} />
+      </div>
       <div className="times">
         <Seek />
         <Volume />
       </div>
       <div className="controls">
         <button id="next" onClick={handlePrev}>
-          <FontAwesomeIcon icon={faBackwardStep} size="xl" />
+          <FontAwesomeIcon icon={faBackwardStep} size="2xl" />
         </button>
         <button id="togglePlay" onClick={handleToggle}>
-          <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay } size="xl" />
+          <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay } size="2xl" />
         </button>
         <button id="next" onClick={handleNext}>
-          <FontAwesomeIcon icon={faForwardStep} size="xl"/>
+          <FontAwesomeIcon icon={faForwardStep} size="2xl"/>
         </button>
         <button onClick={handleShuffle}>
-          <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active": ""} size="xl"/>
+          <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active": ""} size="2xl"/>
         </button>
         <button onClick={handleRepeat}>
-          <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2": ""} size="xl"/>
+          <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2": ""} size="2xl"/>
         </button>
       </div>
     </div>

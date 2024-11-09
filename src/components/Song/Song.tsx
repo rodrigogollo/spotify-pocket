@@ -4,9 +4,10 @@ import { invoke } from '@tauri-apps/api/core';
 import { msToTime } from "../../utils/utils";
 import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { useEffect } from "react";
+import ScrollingText from "../ScrollingText/ScrollingText";
 
 const Song = ({idx, song, songs}) => {
-  const { token } = useAuth();
+  const { tokenRef } = useAuth();
   const { currentUri } = useSpotifyPlayerContext();
 
   const setSong = async (uri: string) => {
@@ -14,7 +15,7 @@ const Song = ({idx, song, songs}) => {
     const offset = uris.indexOf(uri);
 
     const isChanged = await invoke<string>("set_playback", {
-      accessToken: token, 
+      accessToken: tokenRef.current, 
       uris: uris,
       offset: offset,
     });
@@ -27,15 +28,18 @@ const Song = ({idx, song, songs}) => {
   }
 
   const handleClick = (uri: string) => {
+    console.log(uri)
     setSong(uri);
   }
 
   const classes = `song ${currentUri == song.track.uri ? "current": ""}`
 
   return (
-    <div onClick={() => handleClick(song.track.uri)} 
-      className={classes} >
-      <p>{idx + ". " + song.track.artists[0].name + " - " + song.track.name}</p>
+    <div onClick={() => handleClick(song.track.uri)} className={classes} >
+      <span>{idx + ". "}</span>
+      <div className="text-container">
+        <ScrollingText className="song-text" text={song.track.artists[0].name + " - " + song.track.name} />
+      </div>
       <span>{msToTime(song.track.duration_ms)}</span>
     </div>
   )

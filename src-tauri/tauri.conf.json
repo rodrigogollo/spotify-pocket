@@ -17,7 +17,8 @@
         "height": 640,
         "resizable": false,
         "maximizable": false,
-        "minimizable": false
+        "minimizable": false,
+        "transparent": true
       }
     ],
    "security": {

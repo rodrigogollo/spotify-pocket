@@ -29,7 +29,7 @@ const Volume = () => {
 
   const bubble: CSSProperties = {
     position: "absolute",
-    top: "40px",
+    top: "20px",
     left: `${365 + bubblePosition}px`,
     width: "30px",
     padding: "2px",

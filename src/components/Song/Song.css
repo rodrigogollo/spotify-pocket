@@ -1,17 +1,14 @@
 .song {
-	display: flex;
+	display: grid;
+	grid-template-rows: 1fr;
+	grid-template-columns: 1fr auto 1fr;
 	border-bottom: 1px solid var(--color-middle);
 	margin: 1px 0;
 	font-size: 14px;
 }
 
-@keyframes slide {
-	from { 
-		left: 100%;
-	}
-	to {
-		left: -100%;
-	}
+.text-container {
+	width: 80vw;
 }
 
 .song:hover {
@@ -26,19 +23,20 @@
 .active {
 	background-color: var(--color-darkest);
 }
+
 .active2 {
 	color: red;
 }
-.song > p {
+
+.song-text {
 	padding: 10px 0;
 	display: inline-block;
-	overflow: hidden;
-	text-overflow: hidden;
-	white-space: nowrap;
+	z-index: 10;
 }
 
 .song > span {
 	display: inline-block;
 	margin-left: auto;
 	padding: 10px;
+	background: var(--color-dark);
 }

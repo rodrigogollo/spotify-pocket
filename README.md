@@ -2,7 +2,7 @@
 
 Spotify minimalist player.
 
-![Spotify-lite](./app-state.png)
+![Spotify-lite](./spotify-lite.png)
 
 This app idea came to me after getting annoyed with the original Spotify App, which is slow and renders too many useless things on the screen. When I was younger I used Winamp, which was a simple app that shown our songs and played it. 
 

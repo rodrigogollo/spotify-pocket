@@ -213,7 +213,7 @@ const useSpotifyPlayerProvider = () => {
     isPlayerReady,
     device: deviceRef.current,
     shuffle,
-    currentUri: currentUriRef.current,
+    currentUri: currentUriRef,
     repeat
   }), [
       isPlaying, 

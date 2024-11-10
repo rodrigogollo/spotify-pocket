@@ -12,7 +12,7 @@ interface SpotifyPlayerContextType {
   isPlayerReady: boolean;
   device: string;
   shuffle: boolean;
-  currentUri: string;
+  currentUri: any;
   repeat: string;
   setCurrentTrackNum: any
 }

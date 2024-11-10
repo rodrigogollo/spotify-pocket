@@ -11,7 +11,7 @@ nav {
 	overflow: hidden;
 	z-index: 10;
 }
-nav > a {
+nav a {
 	color: var(--color-light);
 	text-decoration: none;
 	padding: 8px;
@@ -20,12 +20,12 @@ nav > a {
 	border-radius: 5px;
 }
 
-nav > a:hover {
+nav a:hover {
 	background: var(--color-green);
 	color: var(--color-darkest);
 }
 
-.active {
+nav a.active {
 	background: var(--color-green);
 	color: var(--color-darkest);
 }

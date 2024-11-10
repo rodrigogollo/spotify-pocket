@@ -44,14 +44,6 @@
 	background-color: var(--color-darkest);
 }
 
-.current {
+.song.active {
 	color: var(--color-green);
-}
-
-.active {
-	background-color: var(--color-darkest);
-}
-
-.active2 {
-	color: red;
 }

@@ -1,5 +1,17 @@
 # Spotify-lite (Winamp alike)
 
+Spotify minimalist player.
+
+![Spotify-lite State](./app-state.png)
+
+This is a fully functional Spotify Player, it uses Spotify Authentication to get into your premium account, 
+and then is able to connect to Spotify Playback SDK to play your liked songs.
+
+This app idea came to me after getting annoyed with the original Spotify App, 
+which is slow and renders too many useless things on the screen. When I was younger I used Winamp, which was a simple app that shown our songs and played it. 
+
+Also I used this app to improve my skills in Rust and React. 
+
 ## Tools:
 - Rust (back-end) 
     - Tauri 2.0
@@ -11,37 +23,38 @@
     - Typescript
     - Spotify API
     - Spotify SDK
+    - React Query (TanStack)
 
 ## TODOS:
-[X] - Spotify Authentication (API).
-[X] - Spotify Player (SDK).
-[X] - Spotify auto connect to device.
-[X] - Spotify Auto refresh token.
-[X] - Frontend loading screen (wait for Auth + Connect Device).
-[X] - Get Liked Songs (top 50 working).
-[X] - List Liked Songs (Test showing top 50 working).
-[X] - Play/Pause/Next/Prev buttons.
-[X] - Volume slider.
-[X] - Song timestamp slider.
-[X] - On click set specific song.
-[X] - Refactor Spotify Playback SDK to global state (useContext).
-[X] - On token expired refresh token automatically.
-[X] - Refactor get songs to use React Query.
-[X] - Refactor react code (organize in components/containers).
-[X] - Refactor Player Controls design.
-[X] - Refactor List Songs design.
-[X] - On Scroll down request + 50 songs.
-[X] - Add repeat button.
-[X] - Add shuffle button.
-[X] - Make proper Loading component for multiple uses (animation spinning);
+- [x] Spotify Authentication (API).
+- [x] Spotify Player (SDK).
+- [x] Spotify auto connect to device.
+- [x] Spotify Auto refresh token.
+- [x] Frontend loading screen (wait for Auth + Connect Device).
+- [x] Get Liked Songs (top 50 working).
+- [x] List Liked Songs (Test showing top 50 working).
+- [x] Play/Pause/Next/Prev buttons.
+- [x] Volume slider.
+- [x] Song timestamp slider.
+- [x] On click set specific song.
+- [x] Refactor Spotify Playback SDK to global state (useContext).
+- [x] On token expired refresh token automatically.
+- [x] Refactor get songs to use React Query.
+- [x] Refactor react code (organize in components/containers).
+- [x] Refactor Player Controls design.
+- [x] Refactor List Songs design.
+- [x] On Scroll down request + 50 songs.
+- [x] Add repeat button.
+- [x] Add shuffle button.
+- [x] Make proper Loading component for multiple uses (animation spinning);
 
 ## Later TODOS:
-[X] - Create navbar
-[ ] - New Tab (Playlists) React Router maybe. 
-[ ] - Search button (search inside liked songs).
-[ ] - Select playlist to play.
-[ ] - Search albums/songs/playlists/podcasts.
-[ ] - Play specific searched albums/songs/playlists/podcasts.
-[ ] - Add song to liked/playlist.
-[ ] - Remove song to liked/playlist.
-[ ] - Check songs that don't get active for some URI reason (Childish Gambino - Me and Your Mama)
+- [x] Create navbar
+- [ ] New Tab (Playlists) React Router maybe. 
+- [ ] Search button (search inside liked songs).
+- [ ] Select playlist to play.
+- [ ] Search albums/songs/playlists/podcasts.
+- [ ] Play specific searched albums/songs/playlists/podcasts.
+- [ ] Add song to liked/playlist.
+- [ ] Remove song to liked/playlist.
+- [ ] check songs that don't get active for some uri reason (childish gambino - me and your mama)

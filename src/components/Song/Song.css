@@ -1,0 +1,49 @@
+.song {
+	display: flex;
+	font-size: 14px;
+	align-items: center;
+	width: 100%;
+	border-bottom: 1px solid var(--color-middle);
+}
+
+.song-index {
+	flex-grow: 0;
+	flex-shrink: 0;
+	padding: 8px;
+	z-index: 1;
+	background: var(--color-dark);
+	min-width: 35px;
+}
+
+.text-container {
+	flex-grow: 1;
+	flex-shrink: 1;
+	min-width: 0;
+	z-index: 0;
+	padding: 8px;
+}
+
+.song-text {
+	display: inline-block;
+	white-space: nowrap;
+}
+
+
+.song-duration {
+	flex-grow: 0;
+	flex-shrink: 0;
+	padding: 8px;
+	z-index: 1;
+	background: var(--color-dark);
+}
+
+.song:hover .song-duration,
+.song:hover .text-container,
+.song:hover .song-index {
+	cursor: pointer;
+	background-color: var(--color-darkest);
+}
+
+.song.active {
+	color: var(--color-green);
+}

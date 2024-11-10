@@ -1,0 +1,22 @@
+.scrolling-text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.needs-scroll {
+  cursor: pointer;
+}
+
+.needs-scroll:hover {
+  animation: scroll 5s linear infinite;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+

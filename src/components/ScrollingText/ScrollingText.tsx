@@ -1,6 +1,5 @@
 import "./ScrollingText.css";
 import { useRef, useState, useEffect } from "react";
-import { watch } from "react"
 
 type ScrollingTextProps = {
   text: string;
@@ -18,7 +17,6 @@ const ScrollingText = ({ text, className='' }: ScrollingTextProps) => {
         if (parent) {
           const textWidth = textRef.current.scrollWidth;
           const containerWidth = parent.clientWidth;
-          console.log(text, textWidth, containerWidth);
           setNeedsScroll(textWidth > containerWidth);
         }
       }

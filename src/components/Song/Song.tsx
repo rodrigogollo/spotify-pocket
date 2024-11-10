@@ -20,6 +20,8 @@ const Song = ({idx, song, songs}) => {
       offset: offset,
     });
 
+    console.log(tokenRef.current);
+
     if (isChanged) {
       console.log("song changed");
     } else {
@@ -36,11 +38,11 @@ const Song = ({idx, song, songs}) => {
 
   return (
     <div onClick={() => handleClick(song.track.uri)} className={classes} >
-      <span>{idx + ". "}</span>
+      <span className="song-index">{idx + ". "}</span>
       <div className="text-container">
         <ScrollingText className="song-text" text={song.track.artists[0].name + " - " + song.track.name} />
       </div>
-      <span>{msToTime(song.track.duration_ms)}</span>
+      <span className="song-duration">{msToTime(song.track.duration_ms)}</span>
     </div>
   )
 }

@@ -63,6 +63,8 @@ const useSpotifyPlayerProvider = () => {
           getOAuthToken: async (cb) => { 
             console.log("getOAuthToken");
             const newToken = await handleRefreshToken();
+            tokenRef.current = newToken;
+            setToken(newToken);
             cb(newToken);
           },
           volume: volume,
@@ -132,7 +134,6 @@ const useSpotifyPlayerProvider = () => {
   const transferDevice = async (device: IDevice) => {
       try {
         if (!isDeviceConnected) {
-          console.log("token to transfer", tokenRef.current);
           let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: tokenRef.current, deviceId: device.device_id });
           setIsDeviceConnected(isDeviceTransfered);
           console.log("Device successfully transfered");

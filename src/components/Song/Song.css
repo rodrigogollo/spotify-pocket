@@ -1,14 +1,39 @@
 .song {
-	display: grid;
-	grid-template-rows: 1fr;
-	grid-template-columns: 1fr auto 1fr;
-	border-bottom: 1px solid var(--color-middle);
-	margin: 1px 0;
+	display: flex;
 	font-size: 14px;
+	align-items: center;
+	width: 100%;
+	border-bottom: 1px solid var(--color-middle);
+}
+
+.song-index {
+	flex-grow: 0;
+	flex-shrink: 0;
+	padding: 8px;
+	z-index: 1;
+	background: var(--color-dark);
 }
 
 .text-container {
-	width: 80vw;
+	flex-grow: 1;
+	flex-shrink: 1;
+	min-width: 0;
+	z-index: 0;
+	padding: 0 4px;
+}
+
+.song-text {
+	display: inline-block;
+	white-space: nowrap;
+}
+
+
+.song-duration {
+	flex-grow: 0;
+	flex-shrink: 0;
+	padding: 8px;
+	z-index: 1;
+	background: var(--color-dark);
 }
 
 .song:hover {
@@ -26,17 +51,4 @@
 
 .active2 {
 	color: red;
-}
-
-.song-text {
-	padding: 10px 0;
-	display: inline-block;
-	z-index: 10;
-}
-
-.song > span {
-	display: inline-block;
-	margin-left: auto;
-	padding: 10px;
-	background: var(--color-dark);
 }

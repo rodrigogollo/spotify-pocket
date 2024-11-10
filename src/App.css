@@ -1,7 +1,6 @@
 @font-face {
     font-family: 'circular-black';
     src: url('/font/circular-black.ttf');
-	--scrollbar-width: calc(100vw - 100%);
 }
 
 * {
@@ -25,18 +24,5 @@ body {
 	margin: 0;
 	display: flex;
 	flex-direction: column;
-	overflow-x: hidden;
-}
-
-body::-webkit-scrollbar {
-  width: 2px;
-}
-
-body::-webkit-scrollbar-track {
-  background: var(--color-light);        /* color of the tracking area */
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: var(--color-green);    /* color of the scroll thumb */
-  border-radius: 20px;       /* roundness of the scroll thumb */
+	overflow: hidden;
 }

@@ -12,6 +12,7 @@
 	padding: 8px;
 	z-index: 1;
 	background: var(--color-dark);
+	min-width: 35px;
 }
 
 .text-container {
@@ -19,7 +20,7 @@
 	flex-shrink: 1;
 	min-width: 0;
 	z-index: 0;
-	padding: 0 4px;
+	padding: 8px;
 }
 
 .song-text {
@@ -36,7 +37,9 @@
 	background: var(--color-dark);
 }
 
-.song:hover {
+.song:hover .song-duration,
+.song:hover .text-container,
+.song:hover .song-index {
 	cursor: pointer;
 	background-color: var(--color-darkest);
 }

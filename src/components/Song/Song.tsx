@@ -20,7 +20,7 @@ const Song = ({idx, song, songs}) => {
       offset: offset,
     });
 
-    console.log(tokenRef.current);
+    console.log(currentUri, song.track.uri);
 
     if (isChanged) {
       console.log("song changed");

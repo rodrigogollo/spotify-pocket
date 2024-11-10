@@ -43,7 +43,7 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Add repeat button.
 - [x] Add shuffle button.
 - [x] Make proper Loading component for multiple uses (animation spinning);
-- 
+
 ## Later TODO
 - [x] Create navbar
 - [ ] New Tab (Playlists) React Router maybe. 

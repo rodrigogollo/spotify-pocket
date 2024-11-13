@@ -1,8 +1,15 @@
 .volume {
 	display: flex;
 	flex-direction: row;
-	width: 20vw;
+	width: 30vw;
 	align-items: center;
+}
+
+.volume .icon {
+	padding: 8px;
+	max-width: 20px;
+	min-width: 20px;
+	cursor: pointer;
 }
 
 .volume > input {

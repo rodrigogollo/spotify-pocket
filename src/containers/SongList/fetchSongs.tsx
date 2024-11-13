@@ -1,6 +1,7 @@
+import { QueryFunction } from "@tanstack/react-query";
 import { invoke } from '@tauri-apps/api/core';
 
-const fetchSongs = async ({ queryKey, pageParam }) => {
+const fetchSongs: QueryFunction<any, ["liked-songs", string]> = async ({ queryKey, pageParam }) => {
   const token = queryKey[1];
   const url = new URL(pageParam)
   const offset = parseInt(url.searchParams.get("offset") || 0);

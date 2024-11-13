@@ -6,8 +6,9 @@ import useAuth from "./hooks/useAuth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./containers/LoginPage";
 import HomePage from "./containers/HomePage/HomePage";
-import Loading from "./components/Loading/Loading";
 import Navbar from "./components/Navbar/Navbar";
+import PlaylistsPage from "./containers/PlaylistsPage/PlaylistsPage";
+import Player from "./components/Player/Player";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,10 +26,16 @@ const App = () => {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <SpotifyPlayerContext.Provider value={playbackPlayerHook}>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={isUserLogged ? <HomePage /> : <LoginPage />} />
-          </Routes>
+          {isUserLogged ? <Navbar /> : <LoginPage /> }
+          {
+          <div>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/playlists" element={<PlaylistsPage />} />
+            </Routes>
+          </div>
+          }
+          <Player />
         </SpotifyPlayerContext.Provider>
       </QueryClientProvider>
     </ BrowserRouter>

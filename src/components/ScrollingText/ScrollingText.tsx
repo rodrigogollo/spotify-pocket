@@ -17,7 +17,6 @@ const ScrollingText = ({ text, className='' }: ScrollingTextProps) => {
         if (parent) {
           const textWidth = textRef.current.getBoundingClientRect().width;
           const containerWidth = parent.clientWidth;
-          console.log(text, textWidth, containerWidth);
           setNeedsScroll(textWidth > containerWidth);
         }
       }

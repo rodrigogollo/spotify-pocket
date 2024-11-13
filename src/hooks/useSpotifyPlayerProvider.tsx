@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import useLocalStorageState from "../hooks/useLocalStorageState";
 import useAuth from "./useAuth";
 import { invoke } from "@tauri-apps/api/core";
@@ -24,7 +23,7 @@ const useSpotifyPlayerProvider = () => {
   const [volume, setVolume] = useLocalStorageState("volume", 0.5);
   const [shuffle, setShuffle] = useLocalStorageState("shuffle", false);
   const [repeat, setRepeat] = useLocalStorageState("repeat", false);
-  const currentUriRef = useRef();
+  const [currentUri, setCurrentUri] = useState();
 
   useEffect(() => {
     let interval: any;
@@ -63,8 +62,6 @@ const useSpotifyPlayerProvider = () => {
           getOAuthToken: async (cb) => { 
             console.log("getOAuthToken");
             const newToken = await handleRefreshToken();
-            tokenRef.current = newToken;
-            setToken(newToken);
             cb(newToken);
           },
           volume: volume,
@@ -72,16 +69,16 @@ const useSpotifyPlayerProvider = () => {
 
         player.addListener("ready", (device:IDevice) => {
           console.log('Ready with Device ID', device.device_id);
-          deviceRef.current = device;
+          // deviceRef.current = device;
           transferDevice(device);
-          setIsPlayerReady(true);
-          isPlayerReadyRef.current = true;
+          // setIsPlayerReady(true);
+          // isPlayerReadyRef.current = true;
         });
 
         player.addListener('not_ready', ({ device_id }) => {
           console.log('Device ID is not ready for playback', device_id);
-          setIsPlayerReady(false);
-          isPlayerReadyRef.current = false;
+          // setIsPlayerReady(false);
+          // isPlayerReadyRef.current = false;
         });
 
         player.addListener('authentication_error', ({ message }) => {
@@ -98,11 +95,13 @@ const useSpotifyPlayerProvider = () => {
 
         player.addListener('playback_error', ({ message }) => {
           console.error('Failed to perform playback', message);
-          setIsDeviceConnected(false);
-          transferDevice(deviceRef.current);
+          // setIsDeviceConnected(false);
+          // transferDevice(deviceRef.current);
         });
 
-        player.addListener('player_state_changed', updateState);
+        player.addListener('player_state_changed', (state) => {
+          updateState(state)
+        });
 
         const success = await player.connect();
         if (success) {
@@ -133,10 +132,13 @@ const useSpotifyPlayerProvider = () => {
 
   const transferDevice = async (device: IDevice) => {
       try {
+        console.log("transferDevice", device.device_id);
         if (!isDeviceConnected) {
           let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: tokenRef.current, deviceId: device.device_id });
           setIsDeviceConnected(isDeviceTransfered);
           console.log("Device successfully transfered");
+          // setIsPlayerReady(true);
+          // isPlayerReadyRef.current = true;
         } else {
           console.log("Device already transfered");
         }
@@ -160,15 +162,18 @@ const useSpotifyPlayerProvider = () => {
 
   const updateState = async (state) => {
     console.log("updated state", state)
-    setSeek(state.position);
-    lastSeek.current = state.position;
+    if (state.position) {
+      setSeek(state.position);
+      lastSeek.current = state.position;
+    }
 
-    if (state.loading && isPlayerReadyRef.current != state.loading){
+    if (isPlayerReadyRef.current != !state.loading){
       setIsPlayerReady(!state.loading)
+      // isPlayerReadyRef.current = !state.loading;
     }
     if (isPlayingRef.current != !state?.paused) {
       setIsPlaying(!state?.paused);
-      isPlayingRef.current = !state?.paused;
+      // isPlayingRef.current = !state?.paused;
     }
 
     if (shuffle !== state.shuffle) {
@@ -181,9 +186,9 @@ const useSpotifyPlayerProvider = () => {
     const stateTrack = state?.track_window?.current_track;
     const stateUri = stateTrack?.uri;
 
-    if (stateTrack && currentUriRef.current != stateUri) {
+    if (stateTrack && currentUri != stateUri) {
       setMaxSeek(stateTrack.duration_ms);
-      currentUriRef.current = stateTrack.uri;
+      setCurrentUri(stateTrack.uri);
 
       // const likedSongsData = queryClient.getQueryData(["liked-songs", tokenRef.current]);
       // console.log("likedSongsData", likedSongsData)
@@ -201,34 +206,21 @@ const useSpotifyPlayerProvider = () => {
     }
   }
 
-  return useMemo(() => ({
-    isPlaying: isPlayingRef.current, 
-    currentTrack, 
-    maxSeek,
-    seek,
-    setSeek,
+  return {
     player: playerRef.current,
-    volume,
-    setVolume,
     isPlayerReady,
-    device: deviceRef.current,
+    currentTrack, 
+    setSeek, 
+    isPlaying,
     shuffle,
-    currentUri: currentUriRef,
-    repeat
-  }), [
-      isPlaying, 
-      currentTrack,
-      maxSeek,
-      seek,
-      volume,
-      playerRef,
-      volume,
-      isPlayerReady,
-      deviceRef,
-      shuffle,
-      currentUriRef,
-      repeat
-  ]);
+    repeat,
+    seek, 
+    maxSeek, 
+    volume,
+    setVolume, 
+    currentUri,
+    setCurrentUri
+  }
 }
 
 export default useSpotifyPlayerProvider;

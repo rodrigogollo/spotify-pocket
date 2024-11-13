@@ -7,7 +7,7 @@ import ScrollingText from "../ScrollingText/ScrollingText";
 
 const Song = ({className, idx, song, songs}) => {
   const { tokenRef } = useAuth();
-  const { currentUri } = useSpotifyPlayerContext();
+  const { currentUri, setCurrentUri } = useSpotifyPlayerContext();
 
   const setSong = async (uri: string) => {
     const uris = songs.map(song => song.track.uri)
@@ -21,7 +21,7 @@ const Song = ({className, idx, song, songs}) => {
 
     if (isChanged) {
       console.log("song changed");
-      currentUri.current = uri;
+      setCurrentUri(uri);
     } else {
       console.log("Failed to change song");
     }
@@ -31,7 +31,7 @@ const Song = ({className, idx, song, songs}) => {
     setSong(uri);
   }
 
-  const classes = `song ${currentUri.current == song.track.uri ? "current": ""}`
+  const classes = `song ${currentUri == song.track.uri ? "current": ""}`
 
   return (
     <div onClick={() => handleClick(song.track.uri)} className={`song ${className}`} >

@@ -13,7 +13,6 @@ const HomePage = () => {
           <Loading /> : 
           <div className="home">
             <SongList />
-            <Player />
           </div>
         }
     </>

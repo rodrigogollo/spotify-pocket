@@ -6,7 +6,7 @@ import fetchSongs from "./fetchSongs";
 import Song from "../../components/Song/Song";
 import useAuth from "../../hooks/useAuth";
 import Loading from "../../components/Loading/Loading";
-import useSpotifyPlayerProvider from "../../hooks/useSpotifyPlayerProvider";
+import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 
 type SongListParams = {
   songs: ISong[];
@@ -22,7 +22,8 @@ interface ISong {
 
 const SongList = () => {
   const { token } = useAuth();
-  const { currentUri } = useSpotifyPlayerProvider()
+  const { currentUri } = useSpotifyPlayerContext();
+
   const {isFetchingNextPage, data, error, status, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 
     queryFn: fetchSongs,
@@ -38,6 +39,7 @@ const SongList = () => {
     }
   }, [fetchNextPage, inView]);
 
+
   if (status === "pending" || !data) {
     return <Loading />
   } else if (status === "error") {
@@ -49,7 +51,7 @@ const SongList = () => {
             return <div key={page.offset}>
               {
               page.items.map((song: ISong, idx:number) => (
-                 <Song className={currentUri.current == song.track.uri ? "active": ""} idx={1 + page.offset + idx}key={song.id} song={song} songs={page.items} />
+                 <Song className={currentUri == song.track.uri ? "active": ""} idx={1 + page.offset + idx}key={song.id} song={song} songs={page.items} />
               ))}
             </div>
             })

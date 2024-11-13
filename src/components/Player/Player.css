@@ -22,30 +22,6 @@
 	color: var(--color-darkest);
 }
 
-.controls {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	width: 100vw;
-}
-
-.controls > button {
-	padding: 8px;
-	margin: .5px;
-	border: none;
-	background: none;
-	color: var(--color-light);
-}
-
-.controls > button:hover {
-	cursor: pointer;
-	color: var(--color-middle);
-}
-
-.controls .active {
-	color: var(--color-green);
-	background: none;
-}
 
 .times {
 	display: flex;

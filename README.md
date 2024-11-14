@@ -43,11 +43,12 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Add repeat button.
 - [x] Add shuffle button.
 - [x] Make proper Loading component for multiple uses (animation spinning);
-
-## Later TODO
 - [x] Create navbar
+- [ ] Fix on user not logged, render only login page.
 - [ ] Fix TypeScript/Rust errors for build.
-- [ ] New Tab (Playlists) React Router maybe. 
+- [ ] Organize Rust functions.
+- [x] New Tab (Playlists) React Router maybe. 
+- [x] Search User's Playlists.
 - [ ] Search button (search inside liked songs).
 - [ ] Select playlist to play.
 - [ ] Search albums/songs/playlists/podcasts.
@@ -55,5 +56,9 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Add song to liked/playlist.
 - [ ] Remove song to liked/playlist.
 - [ ] check songs that don't get active for some uri reason (childish gambino - me and your mama)
+- [ ] Log off button
+- [ ] Dark/Light mode
+- [ ] Custom Themes
+- [ ] User Options?
 
 

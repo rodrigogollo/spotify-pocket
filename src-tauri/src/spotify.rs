@@ -20,7 +20,18 @@ pub fn initiate_spotify_auth(app_handle: AppHandle) {
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
     let redirect_uri = "http://localhost:3000/callback";
     let state = generate_random_state();
-    let scope = "user-read-private user-read-email user-modify-playback-state streaming user-read-playback-state user-library-read";
+    let scope_list: [&str; 8] = [
+        "user-read-private", 
+        "user-read-email", 
+        "user-modify-playback-state", 
+        "streaming", 
+        "user-read-playback-state", 
+        "user-library-read", 
+        "playlist-read-private",
+        "playlist-read-collaborative"
+    ];
+    
+    let scope = scope_list.join(" ");
 
     let auth_url = format!(
       "https://accounts.spotify.com/authorize?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}",
@@ -292,6 +303,33 @@ pub async fn get_user_saved_tracks(access_token: String, offset: i32, limit: i32
     let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
     return json.to_string();
 }
+
+#[tauri::command]
+pub async fn get_user_playlists(access_token: String, offset: i32, limit: i32) -> String {
+    let url = "https://api.spotify.com/v1/me/playlists";
+    let authorization = format!("Bearer {}", access_token);
+
+    let mut params = HashMap::new();
+    params.insert("offset", offset);
+    params.insert("limit", limit);
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
+
 
 #[tauri::command]
 pub async fn set_playback(access_token: String, uris: Vec<String>, offset: Number) -> bool {

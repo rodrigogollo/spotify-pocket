@@ -12,9 +12,9 @@ interface SpotifyPlayerContextType {
   isPlayerReady: boolean;
   device: string;
   shuffle: boolean;
-  currentUri: any;
+  currentUri: string;
+  setCurrentUri: any;
   repeat: string;
-  setCurrentTrackNum: any
 }
 
 export const SpotifyPlayerContext = createContext<SpotifyPlayerContextType | null>(null);

@@ -1,34 +1,31 @@
 import "./SongList.css";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import fetchSongs from "./fetchSongs";
 import Song from "../../components/Song/Song";
 import useAuth from "../../hooks/useAuth";
 import Loading from "../../components/Loading/Loading";
 import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 
-type SongListParams = {
-  songs: ISong[];
-  setSong: any;
-}
-
 interface ISong {
-  id: string,
-  name: string,
-  artist: string,
-  uri: string
+  track: {
+    id: string,
+    name: string,
+    artist: string,
+    uri: string
+  }
 }
 
 const SongList = () => {
   const { token } = useAuth();
   const { currentUri } = useSpotifyPlayerContext();
 
-  const {isFetchingNextPage, data, error, status, fetchNextPage } = useInfiniteQuery({
+  const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 
     queryFn: fetchSongs,
     initialPageParam: "https://api.spotify.com/v1/me/tracks?offset=0&limit=50",
-    getNextPageParam: (lastPage)  => lastPage.next
+    getNextPageParam: (lastPage)  => lastPage.next,
   });
 
   const { ref, inView } = useInView();
@@ -39,28 +36,38 @@ const SongList = () => {
     }
   }, [fetchNextPage, inView]);
 
-
-  if (status === "pending" || !data) {
+  if (isLoading || !data || !data.pages) {
     return <Loading />
-  } else if (status === "error") {
+  } 
+
+  if (error) {
     return <>{error.message}</>
-  } else {
-     return (
-        <div className="song-list">
-          {data.pages.map((page) => {
-            return <div key={page.offset}>
-              {
-              page.items.map((song: ISong, idx:number) => (
-                 <Song className={currentUri == song.track.uri ? "active": ""} idx={1 + page.offset + idx}key={song.id} song={song} songs={page.items} />
-              ))}
-            </div>
-            })
-          }
-          <div ref={ref}></div>
-          {isFetchingNextPage ? <Loading /> : null} 
-        </div>
-    );
   }
-}
+
+   return (
+      <div className="song-list">
+        {
+          data.pages.map((page, pageIndex) => {
+            return <div key={`${pageIndex}-${1 + page.offset}`}>
+              {
+                page.items.map((song: ISong, idx:number) => {
+                  return <Song 
+                      className={currentUri == song.track.uri ? "active": ""} 
+                      idx={1 + page.offset + idx}
+                      key={`${pageIndex}-${song.track.id}`} 
+                      song={song} 
+                      songs={page.items} 
+                    />
+                })
+              }
+            </div>
+            }
+          )
+        }
+        <div ref={ref}></div>
+        {isFetchingNextPage ? <Loading /> : null} 
+      </div>
+  );
+};
 
 export default SongList;

@@ -46,6 +46,7 @@ Also I used this app to improve my skills in Rust and React.
 
 ## Later TODO
 - [x] Create navbar
+- [ ] Fix TypeScript/Rust errors for build.
 - [ ] New Tab (Playlists) React Router maybe. 
 - [ ] Search button (search inside liked songs).
 - [ ] Select playlist to play.

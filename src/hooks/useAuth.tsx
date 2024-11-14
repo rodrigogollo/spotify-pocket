@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import useLocalStorageState from "./useLocalStorageState";
+import { useMemo } from "react";
 
 interface LoadedPayload {
   logged: boolean,
@@ -39,13 +40,15 @@ const useAuth = () => {
     }
   }
 
-  return {
-    token, 
-    isUserLogged, 
-    handleLoginSpotify, 
+  const authContext = useMemo(() => ({
+    token,
+    isUserLogged,
+    handleLoginSpotify,
     setToken,
     tokenRef
-  };
-}
+  }), [token, isUserLogged, handleLoginSpotify, setToken]);
+
+  return authContext;
+};
 
 export default useAuth;

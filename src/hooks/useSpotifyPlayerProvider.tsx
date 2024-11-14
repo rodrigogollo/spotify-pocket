@@ -10,12 +10,9 @@ interface IDevice {
 const useSpotifyPlayerProvider = () => {
   const playerRef = useRef<Spotify.Player | null>(null);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const isPlayerReadyRef = useRef<boolean>(false);
   const { setToken, tokenRef } = useAuth(); 
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
-  const deviceRef = useRef<String | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const isPlayingRef = useRef<boolean>(false);
   const [currentTrack, setCurrentTrack] = useState("");
   const [seek, setSeek] = useState(0);
   const [maxSeek, setMaxSeek] = useState(0);
@@ -29,7 +26,7 @@ const useSpotifyPlayerProvider = () => {
     let interval: any;
     let isFinished = Number(seek) >= Number(maxSeek);
 
-    if (isPlayingRef.current && !isFinished) {
+    if (isPlaying && !isFinished) {
       interval = setInterval(() => {
         setSeek(() => {
           const newSeek = Number(lastSeek.current) + 1000;
@@ -69,16 +66,11 @@ const useSpotifyPlayerProvider = () => {
 
         player.addListener("ready", (device:IDevice) => {
           console.log('Ready with Device ID', device.device_id);
-          // deviceRef.current = device;
           transferDevice(device);
-          // setIsPlayerReady(true);
-          // isPlayerReadyRef.current = true;
         });
 
         player.addListener('not_ready', ({ device_id }) => {
           console.log('Device ID is not ready for playback', device_id);
-          // setIsPlayerReady(false);
-          // isPlayerReadyRef.current = false;
         });
 
         player.addListener('authentication_error', ({ message }) => {
@@ -137,8 +129,6 @@ const useSpotifyPlayerProvider = () => {
           let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: tokenRef.current, deviceId: device.device_id });
           setIsDeviceConnected(isDeviceTransfered);
           console.log("Device successfully transfered");
-          // setIsPlayerReady(true);
-          // isPlayerReadyRef.current = true;
         } else {
           console.log("Device already transfered");
         }
@@ -167,14 +157,11 @@ const useSpotifyPlayerProvider = () => {
       lastSeek.current = state.position;
     }
 
-    if (isPlayerReadyRef.current != !state.loading){
+    if (isPlayerReady != !state.loading){
       setIsPlayerReady(!state.loading)
-      // isPlayerReadyRef.current = !state.loading;
     }
-    if (isPlayingRef.current != !state?.paused) {
-      setIsPlaying(!state?.paused);
-      // isPlayingRef.current = !state?.paused;
-    }
+
+    setIsPlaying(!state?.paused);
 
     if (shuffle !== state.shuffle) {
       setShuffle(state.shuffle);
@@ -189,9 +176,6 @@ const useSpotifyPlayerProvider = () => {
     if (stateTrack && currentUri != stateUri) {
       setMaxSeek(stateTrack.duration_ms);
       setCurrentUri(stateTrack.uri);
-
-      // const likedSongsData = queryClient.getQueryData(["liked-songs", tokenRef.current]);
-      // console.log("likedSongsData", likedSongsData)
 
       const newTrack = `${stateTrack.artists[0].name} - ${stateTrack.name}`;
       
@@ -210,13 +194,13 @@ const useSpotifyPlayerProvider = () => {
     player: playerRef.current,
     isPlayerReady,
     currentTrack, 
-    setSeek, 
     isPlaying,
     shuffle,
     repeat,
     seek, 
     maxSeek, 
     volume,
+    setSeek,
     setVolume, 
     currentUri,
     setCurrentUri

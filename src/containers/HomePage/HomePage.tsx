@@ -1,12 +1,10 @@
 import "./HomePage.css";
-import Player from "../../components/Player/Player";
 import SongList from "../SongList/SongList";
-import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import Loading from "../../components/Loading/Loading";
-import Navbar from "../../components/Navbar/Navbar";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const HomePage = () => {
-  const { isPlayerReady } = useSpotifyPlayerContext();
+  const isPlayerReady = useSpotifyStore.getState().isPlayerReady;
     return ( 
       <>
         { !isPlayerReady ? 

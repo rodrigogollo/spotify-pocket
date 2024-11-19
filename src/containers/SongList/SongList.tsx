@@ -4,9 +4,9 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import fetchSongs from "./fetchSongs";
 import Song from "../../components/Song/Song";
-import useAuth from "../../hooks/useAuth";
 import Loading from "../../components/Loading/Loading";
 import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
+import { useAuthContext } from "../../hooks/Auth/AuthContext";
 
 interface ISong {
   track: {
@@ -17,8 +17,9 @@ interface ISong {
   }
 }
 
+
 const SongList = () => {
-  const { token } = useAuth();
+  const { token } = useAuthContext();
   const { currentUri } = useSpotifyPlayerContext();
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({

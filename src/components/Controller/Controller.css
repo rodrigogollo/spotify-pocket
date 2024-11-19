@@ -22,3 +22,6 @@
 	color: var(--color-green);
 	background: none;
 }
+.controls .active2 {
+	color: red;
+}

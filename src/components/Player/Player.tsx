@@ -1,12 +1,12 @@
 import Volume from "../Volume/Volume";
 import Seek from "../Seek/Seek";
 import "./Player.css";
-import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import ScrollingText from "../ScrollingText/ScrollingText";
 import Controller from "../Controller/Controller";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Player = () => {
-  const { currentTrack } = useSpotifyPlayerContext();
+  const currentTrack = useSpotifyStore.getState().currentTrack;
 
   return (
     <div className="player">

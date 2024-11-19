@@ -1,9 +1,9 @@
 import "./Controller.css";
 import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
-import useAuth from "../../hooks/useAuth";
 import { invoke } from "@tauri-apps/api/core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlay, faCirclePause, faForwardStep, faBackwardStep, faShuffle, faRepeat } from '@fortawesome/free-solid-svg-icons'
+import { useAuthContext } from "../../hooks/Auth/AuthContext";
 
 const Controller = () => {
   const { 
@@ -14,7 +14,7 @@ const Controller = () => {
     repeat 
   } = useSpotifyPlayerContext();
 
-  const { tokenRef } = useAuth();
+  const { token } = useAuthContext();
 
   const handleToggle = async () => {
     try {
@@ -48,13 +48,13 @@ const Controller = () => {
   };
 
   const handleShuffle = async () => {
-    const isShuffle = await invoke<string>("toggle_shuffle", { accessToken: tokenRef.current, state: !shuffle });
+    const isShuffle = await invoke<string>("toggle_shuffle", { accessToken: token, state: !shuffle });
     console.log(isShuffle);
   };
 
   const handleRepeat = async () => {
     const state = repeat == 0 ? 1 : repeat == 1 ? 2 : 0;
-    await invoke<string>("toggle_repeat", { accessToken: tokenRef.current, state: state });
+    await invoke<string>("toggle_repeat", { accessToken: token, state: state });
   };
 
   return ( 

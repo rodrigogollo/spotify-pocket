@@ -1,7 +1,7 @@
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 import useLocalStorageState from "../hooks/useLocalStorageState";
-import useAuth from "./useAuth";
 import { invoke } from "@tauri-apps/api/core";
+import { useAuthContext } from "./Auth/AuthContext";
 
 interface IDevice {
   device_id: string
@@ -10,7 +10,7 @@ interface IDevice {
 const useSpotifyPlayerProvider = () => {
   const playerRef = useRef<Spotify.Player | null>(null);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const { setToken, tokenRef } = useAuth(); 
+  const {setToken, token, handleRefreshToken} = useAuthContext(); 
   const [isDeviceConnected, setIsDeviceConnected] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState("");
@@ -21,6 +21,11 @@ const useSpotifyPlayerProvider = () => {
   const [shuffle, setShuffle] = useLocalStorageState("shuffle", false);
   const [repeat, setRepeat] = useLocalStorageState("repeat", false);
   const [currentUri, setCurrentUri] = useState();
+
+  useEffect(() => {
+    console.log("Updated token:", token);
+    console.log("useSpotifyPlayerProvider token", token);
+  }, [token]);
 
   useEffect(() => {
     let interval: any;
@@ -57,7 +62,6 @@ const useSpotifyPlayerProvider = () => {
         const player = new window.Spotify.Player({
           name: "Spotify-Lite Gollo",
           getOAuthToken: async (cb) => { 
-            console.log("getOAuthToken");
             const newToken = await handleRefreshToken();
             cb(newToken);
           },
@@ -103,7 +107,7 @@ const useSpotifyPlayerProvider = () => {
       };
     }
 
-    setupPlayer()
+    setupPlayer();
 
     const cleanupSpotifyElements = () => {
       console.log("cleanup spotify");
@@ -125,8 +129,9 @@ const useSpotifyPlayerProvider = () => {
   const transferDevice = async (device: IDevice) => {
       try {
         console.log("transferDevice", device.device_id);
+        console.log(token)
         if (!isDeviceConnected) {
-          let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: tokenRef.current, deviceId: device.device_id });
+          let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device.device_id });
           setIsDeviceConnected(isDeviceTransfered);
           console.log("Device successfully transfered");
         } else {
@@ -135,19 +140,6 @@ const useSpotifyPlayerProvider = () => {
       } catch (err) {
         console.log("Error transfering device", err);
       }
-  }
-
-  const handleRefreshToken = async () => {
-    try {
-      const newToken = await invoke<string>("refresh_token");
-      console.log("New token generated:", newToken);
-      setToken(newToken);
-      tokenRef.current = newToken;
-      return newToken;
-    } catch (err) {
-      console.log("Failed to refresh token", err);
-      return "";
-    }
   }
 
   const updateState = async (state) => {

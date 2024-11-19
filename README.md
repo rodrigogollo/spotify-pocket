@@ -44,7 +44,10 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Add shuffle button.
 - [x] Make proper Loading component for multiple uses (animation spinning);
 - [x] Create navbar
+- [ ] Fix fail to change song 401 on token expired.
 - [ ] Fix on user not logged, render only login page.
+
+## Later
 - [ ] Fix TypeScript/Rust errors for build.
 - [ ] Organize Rust functions.
 - [x] New Tab (Playlists) React Router maybe. 

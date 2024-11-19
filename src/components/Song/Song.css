@@ -47,3 +47,8 @@
 .song.active {
 	color: var(--color-green);
 }
+
+.invalid {
+  color: gray;
+  pointer-events:none;
+}

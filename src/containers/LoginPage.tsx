@@ -1,7 +1,7 @@
-import useAuth from "../hooks/useAuth";
+import { useAuthStore } from "../stores/authStore";
 
 const LoginPage = () => {
-  const { handleLoginSpotify } = useAuth();
+  const handleLoginSpotify = useAuthStore.getState().handleLoginSpotify
   return <>
     <button id="login" onClick={handleLoginSpotify}>Login</button>
   </>

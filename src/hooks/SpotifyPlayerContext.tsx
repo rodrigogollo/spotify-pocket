@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
 interface SpotifyPlayerContextType {
-  player: Spotify.Player | null;
+  player: Spotify.Player;
   isPlaying: boolean;
   currentTrack: string;
   maxSeek: number;

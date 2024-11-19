@@ -2,11 +2,11 @@ import fetchPlaylists from "./fetchPlaylists";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
-import useAuth from "../../hooks/useAuth";
 import Loading from "../../components/Loading/Loading";
+import { useAuthStore } from "../../stores/authStore";
 
 const PlaylistsPage = () => {
-  const { token } = useAuth();
+  const token = useAuthStore.getState().token;
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
     queryKey: ["playlists", token], 

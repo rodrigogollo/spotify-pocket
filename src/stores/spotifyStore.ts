@@ -51,7 +51,7 @@ export const useSpotifyStore = create<SpotifyStore>((set, get) => ({
 
       if (isChanged) {
         console.log("song changed");
-        set(() => ({ currentUri: uri })); 
+        // set(() => ({ currentUri: uri })); 
         return true;
       } else {
         console.log("Failed to change song");
@@ -104,9 +104,10 @@ export const useSpotifyStore = create<SpotifyStore>((set, get) => ({
     const stateUri = stateTrack?.uri;
 
     if (stateTrack && get().currentUri !== stateUri) {
+      const uri = stateTrack.linked_from.uri ? stateTrack.linked_from.uri : stateTrack.uri;
       set({ 
         maxSeek: stateTrack.duration_ms,
-        currentUri: stateTrack.uri,
+        currentUri: uri,
         currentTrack: `${stateTrack.artists[0].name} - ${stateTrack.name}`,
         seek: 0,
       });

@@ -2,7 +2,7 @@ import "./SongList.css";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
-import fetchSongs from "./fetchSongs";
+import fetchPage from "./fetchSongs";
 import Song from "../../components/Song/Song";
 import Loading from "../../components/Loading/Loading";
 import { useAuthStore } from "../../stores/authStore";
@@ -14,8 +14,12 @@ interface ISong {
     name: string,
     artist: string,
     uri: string
+    linked_from: {
+      uri: string;
+    }
   }
 }
+
 
 
 const SongList = () => {
@@ -24,9 +28,9 @@ const SongList = () => {
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 
-    queryFn: fetchSongs,
-    initialPageParam: "https://api.spotify.com/v1/me/tracks?offset=0&limit=50",
-    getNextPageParam: (lastPage)  => lastPage.next,
+    queryFn: fetchPage,
+    // getNextPageParam: (lastPage)  => lastPage.next,
+    getNextPageParam: (lastPage) => lastPage.hasNextPage ? lastPage.nextPage : undefined,
   });
 
   const { ref, inView } = useInView();
@@ -37,6 +41,7 @@ const SongList = () => {
     }
   }, [fetchNextPage, inView]);
 
+  console.log(isLoading, data);
   if (isLoading || !data || !data.pages) {
     return <Loading />
   } 
@@ -49,12 +54,14 @@ const SongList = () => {
       <div className="song-list">
         {
           data.pages.map((page, pageIndex) => {
-            return <div key={`${pageIndex}-${1 + page.offset}`}>
+            console.log("page", page)
+            console.log("index", pageIndex, page.nextPage)
+            return <div key={`${pageIndex}-${1 + page.nextPage -150}`}>
               {
-                page.items.map((song: ISong, idx:number) => {
+                page.items.flatMap((song: ISong, idx:number) => {
                   return <Song 
                       className={currentUri == song.track.uri ? "active": ""} 
-                      idx={1 + page.offset + idx}
+                      idx={1 + page.nextPage + idx - 150}
                       key={`${pageIndex}-${song.track.id}`} 
                       song={song} 
                       songs={page.items} 

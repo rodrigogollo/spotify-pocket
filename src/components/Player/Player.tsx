@@ -6,7 +6,7 @@ import Controller from "../Controller/Controller";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Player = () => {
-  const currentTrack = useSpotifyStore.getState().currentTrack;
+  const currentTrack = useSpotifyStore((state) => state.currentTrack)
 
   return (
     <div className="player">

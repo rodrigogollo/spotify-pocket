@@ -18,6 +18,7 @@ type SpotifyStore = {
   transferDevice: (device: {device_id: string}) => Promise<void>;
   updateState: (state: any) => void;
   setCurrentUri: (uri: string) => void;
+  setSong: (uri: string, songs: any[]) => Promise<boolean>;
 }
 
 export const useSpotifyStore = create<SpotifyStore>((set, get) => ({
@@ -36,13 +37,38 @@ export const useSpotifyStore = create<SpotifyStore>((set, get) => ({
   setCurrentUri: (uri) => {
     set(() => ({ currentUri: uri }))
   },
+  setSong: async (uri, songs) => {
+    const token = useAuthStore.getState().token;
+    const uris = songs.map(song => song.track.uri)
+    const offset = uris.indexOf(uri);
+
+    try {
+      const isChanged = await invoke<string>("set_playback", {
+        accessToken: token, 
+        uris: uris,
+        offset: offset,
+      });
+
+      if (isChanged) {
+        console.log("song changed");
+        set(() => ({ currentUri: uri })); 
+        return true;
+      } else {
+        console.log("Failed to change song");
+        return false;
+      }
+    } catch (err) {
+      console.log("error changing song", err);
+      return false;
+    }
+  },
   transferDevice: async ({device_id}: {device_id: string}) => {
     const token = useAuthStore.getState().token;
     try {
       console.log("transferDevice", device_id);
       if (!get().isDeviceConnected) {
         let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device_id });
-        set(() => ({ isDeviceConnected: isDeviceTransfered })); 
+        set(() => ({ isDeviceConnected: isDeviceTransfered, isPlayerReady: true })); 
         console.log("Device successfully transfered");
       } else {
         console.log("Device already transfered");
@@ -53,18 +79,26 @@ export const useSpotifyStore = create<SpotifyStore>((set, get) => ({
     }
   },
   updateState: (state) => {
+    console.log("updating state", state);
     if (!state) return; 
 
     if (state.position) {
       set(() => ({ seek: state.position }));
     }
 
-    set(() => ({
-      isPlayerReady: !state.loading,
-      isPlaying: !state.paused,
-      shuffle: state.shuffle,
-      repeat: state.repeat_mode,
-    }))
+    set(() => ({ isPlaying: !state.paused }));
+
+    // if (get().isPlayerReady != !state.loading) {
+    //   set(() => ({ isPlayerReady: !state.loading }));
+    // }
+
+    if (get().shuffle != state.shuffle) {
+      set(() => ({ shuffle: state.shuffle }));
+    }
+
+    if (get().repeat != state.repeat_mode) {
+      set(() => ({ repeat: state.repeat_mode }));
+    }
 
     const stateTrack = state?.track_window?.current_track;
     const stateUri = stateTrack?.uri;

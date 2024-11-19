@@ -1,12 +1,12 @@
 import "./Song.css";
 import { msToTime } from "../../utils/utils";
 import ScrollingText from "../ScrollingText/ScrollingText";
-import useSetSong from "./useSetSong";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Song = ({className, idx, song, songs}) => {
-  const { setSong } = useSetSong();
+  const setSong = useSpotifyStore((state) => state.setSong);
 
-  const handleClick = (uri: string, ) => {
+  const handleClick = (uri: string) => {
     setSong(uri, songs);
   }
 

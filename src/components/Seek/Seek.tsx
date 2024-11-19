@@ -4,17 +4,15 @@ import { msToTime } from "../../utils/utils";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Seek = () => {
-  const player = useSpotifyStore.getState().player;
-  const maxSeek = useSpotifyStore.getState().maxSeek;
-  const seek = useSpotifyStore.getState().seek;
+  const player = useSpotifyStore((state) => state.player)
+  const maxSeek = useSpotifyStore((state) => state.maxSeek)
+  const seek = useSpotifyStore((state) => state.seek)
 
   const handleSeek = async (event) => {
     if (player) {
       try {
-        let seek = event.target.value;
-        useSpotifyStore.setState({ seek: seek });
-        // setSeek(seek);
-        await player.seek(seek);
+        await player?.seek(event.target.value);
+        useSpotifyStore.setState({ seek: event.target.value });
         console.log('Changed song position!', msToTime(seek));
       } catch (err) {
         console.log("Error changing seek", err);

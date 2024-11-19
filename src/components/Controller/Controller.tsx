@@ -1,18 +1,21 @@
 import "./Controller.css";
-import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { invoke } from "@tauri-apps/api/core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlay, faCirclePause, faForwardStep, faBackwardStep, faShuffle, faRepeat } from '@fortawesome/free-solid-svg-icons'
-import { useAuthContext } from "../../hooks/Auth/AuthContext";
 import { useSpotifyStore } from "../../stores/spotifyStore";
+import { useAuthStore } from "../../stores/authStore";
 
 const Controller = () => {
-  const player = useSpotifyStore.getState().player;
-  const isPlaying = useSpotifyStore.getState().isPlaying;
-  const shuffle = useSpotifyStore.getState().shuffle;
-  const repeat = useSpotifyStore.getState().repeat;
+  const player = useSpotifyStore((state) => state.player)
+  const isPlaying = useSpotifyStore((state) => state.isPlaying)
+  const shuffle = useSpotifyStore((state) => state.shuffle)
+  const repeat = useSpotifyStore((state) => state.repeat)
 
-  const { token } = useAuthContext();
+  const token = useAuthStore.getState().token
+
+  console.log("isPlaying", isPlaying);
+  console.log("shuffle", shuffle);
+  console.log("repeat", repeat);
 
   const handleToggle = async () => {
     try {

@@ -1,12 +1,12 @@
 import "./Volume.css";
 import { CSSProperties, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVolumeOff, faVolumeUp, faVolumeLow, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
+import { faVolumeLow, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Volume = () => {
-  const player = useSpotifyStore.getState().player;
-  const volume = useSpotifyStore.getState().volume;
+  const player = useSpotifyStore((state) => state.player);
+  const volume = useSpotifyStore((state) => state.volume);
   const [bubblePosition, setBubblePosition] = useState(0);
   const [lastVolume, setLastVolume] = useState(volume);
 

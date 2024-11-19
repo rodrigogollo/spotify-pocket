@@ -19,8 +19,8 @@ interface ISong {
 
 
 const SongList = () => {
-  const token = useAuthStore.getState().token;
-  const currentUri = useSpotifyStore.getState().currentUri;
+  const token = useAuthStore((state) => state.token)
+  const currentUri = useSpotifyStore((state) => state.currentUri)
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 

@@ -4,8 +4,8 @@ import { useAuthStore } from "../../stores/authStore";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const useSetSong = () => {
-  const token = useAuthStore.getState().token;
-  const setCurrentUri = useSpotifyStore.getState().setCurrentUri;
+  const token = useAuthStore((state) => state.token)
+  // const setCurrentUri = useSpotifyStore((state) => state.setCurrentUri)
 
   const setSong = useCallback(async (uri: string, songs: any[]) => {
     if (!token) {
@@ -24,8 +24,8 @@ const useSetSong = () => {
 
       if (isChanged) {
         console.log("song changed");
-        // useSpotifyStore.setState({ currentUri: uri });
-        setCurrentUri(uri);
+        useSpotifyStore.setState({ currentUri: uri });
+        // setCurrentUri(uri);
         return true;
       } else {
         console.log("Failed to change song");

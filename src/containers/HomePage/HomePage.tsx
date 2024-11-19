@@ -4,7 +4,7 @@ import Loading from "../../components/Loading/Loading";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const HomePage = () => {
-  const isPlayerReady = useSpotifyStore.getState().isPlayerReady;
+  const isPlayerReady = useSpotifyStore((state) => state.isPlayerReady);
     return ( 
       <>
         { !isPlayerReady ? 

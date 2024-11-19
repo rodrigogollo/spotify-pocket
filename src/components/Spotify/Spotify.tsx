@@ -7,14 +7,15 @@ interface IDevice {
 }
 
 export const Spotify = () => {
-  const token = useAuthStore.getState().token;
-  const handleRefreshToken = useAuthStore.getState().handleRefreshToken;
-  const isPlaying = useSpotifyStore.getState().isPlaying;
-  const seek = useSpotifyStore.getState().seek;
-  const maxSeek = useSpotifyStore.getState().maxSeek;
-  const volume = useSpotifyStore.getState().volume;
-  const updateState = useSpotifyStore.getState().updateState;
-  const transferDevice = useSpotifyStore.getState().transferDevice;
+  const token = useAuthStore((state) => state.token);
+  const handleRefreshToken = useAuthStore((state) => state.handleRefreshToken);
+  const player = useSpotifyStore((state) => state.player);
+  const isPlaying = useSpotifyStore((state) => state.isPlaying);
+  const seek = useSpotifyStore((state) => state.seek);
+  const maxSeek = useSpotifyStore((state) => state.maxSeek);
+  const volume = useSpotifyStore((state) => state.volume);
+  const updateState = useSpotifyStore((state) => state.updateState);
+  const transferDevice = useSpotifyStore((state) => state.transferDevice);
 
   useEffect(() => {
     console.log("useSpotifyPlayerProvider token", token);
@@ -80,8 +81,7 @@ export const Spotify = () => {
 
         player.addListener('playback_error', ({ message }) => {
           console.error('Failed to perform playback', message);
-          // setIsDeviceConnected(false);
-          // transferDevice(deviceRef.current);
+          useSpotifyStore.setState({ isDeviceConnected: false });
         });
 
         player.addListener('player_state_changed', (state) => {
@@ -90,8 +90,7 @@ export const Spotify = () => {
 
         const success = await player.connect();
         if (success) {
-          // playerRef.current = player;
-			useSpotifyStore.setState({ player: player });
+          useSpotifyStore.setState({ player: player });
           console.log('The Web Playback SDK successfully connected to Spotify!');
         } 
       };
@@ -109,46 +108,12 @@ export const Spotify = () => {
     };
 
     return function cleanup() {
-      // if (playerRef.current){
-      //   playerRef.current?.disconnect()
-      // }
+      if (player) {
+        player.disconnect();
+      }
       cleanupSpotifyElements();
     }
   }, []);
 
-	return null;
-
-  // const transferDevice = async (device: IDevice) => {
-  //     try {
-  //       console.log("transferDevice", device.device_id);
-  //       console.log(token)
-  //       if (!isDeviceConnected) {
-  //         let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device.device_id });
-  //         setIsDeviceConnected(isDeviceTransfered);
-  //         console.log("Device successfully transfered");
-  //       } else {
-  //         console.log("Device already transfered");
-  //       }
-  //     } catch (err) {
-  //       console.log("Error transfering device", err);
-  //     }
-  // }
-
-  // return {
-  //   player,
-  //   isPlayerReady,
-  //   currentTrack, 
-  //   isPlaying,
-  //   shuffle,
-  //   repeat,
-  //   seek, 
-  //   maxSeek, 
-  //   volume,
-  //   setSeek,
-  //   setVolume, 
-  //   currentUri,
-  //   setCurrentUri
-  // }
+  return null;
 }
-
-// export default Spotify;

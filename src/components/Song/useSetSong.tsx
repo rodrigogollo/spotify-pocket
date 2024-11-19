@@ -1,11 +1,11 @@
 import { useCallback } from "react";
-import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { invoke } from "@tauri-apps/api/core";
-import { useAuthContext } from "../../hooks/Auth/AuthContext";
+import { useAuthStore } from "../../stores/authStore";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const useSetSong = () => {
-  const { token } = useAuthContext();
-  const { setCurrentUri } = useSpotifyPlayerContext();
+  const token = useAuthStore.getState().token;
+  const setCurrentUri = useSpotifyStore.getState().setCurrentUri;
 
   const setSong = useCallback(async (uri: string, songs: any[]) => {
     if (!token) {
@@ -15,7 +15,6 @@ const useSetSong = () => {
     const uris = songs.map(song => song.track.uri)
     const offset = uris.indexOf(uri);
 
-    console.log(token);
     try {
       const isChanged = await invoke<string>("set_playback", {
         accessToken: token, 
@@ -25,6 +24,7 @@ const useSetSong = () => {
 
       if (isChanged) {
         console.log("song changed");
+        // useSpotifyStore.setState({ currentUri: uri });
         setCurrentUri(uri);
         return true;
       } else {
@@ -34,7 +34,7 @@ const useSetSong = () => {
     } catch (err) {
       console.log("error changing song", err);
     }
-  }, [token, setCurrentUri]);
+  }, [token]);
 
   return { setSong };
 };

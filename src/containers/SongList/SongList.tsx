@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import fetchSongs from "./fetchSongs";
 import Song from "../../components/Song/Song";
 import Loading from "../../components/Loading/Loading";
-import { useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
-import { useAuthContext } from "../../hooks/Auth/AuthContext";
+import { useAuthStore } from "../../stores/authStore";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 interface ISong {
   track: {
@@ -19,8 +19,8 @@ interface ISong {
 
 
 const SongList = () => {
-  const { token } = useAuthContext();
-  const { currentUri } = useSpotifyPlayerContext();
+  const token = useAuthStore.getState().token;
+  const currentUri = useSpotifyStore.getState().currentUri;
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 

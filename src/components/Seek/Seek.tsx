@@ -1,15 +1,19 @@
 import "./Seek.css";
 import { SpotifyPlayerContext, useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { msToTime } from "../../utils/utils";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Seek = () => {
-  const { player, maxSeek, setSeek, seek } = useSpotifyPlayerContext();
+  const player = useSpotifyStore.getState().player;
+  const maxSeek = useSpotifyStore.getState().maxSeek;
+  const seek = useSpotifyStore.getState().seek;
 
   const handleSeek = async (event) => {
     if (player) {
       try {
         let seek = event.target.value;
-        setSeek(seek);
+        useSpotifyStore.setState({ seek: seek });
+        // setSeek(seek);
         await player.seek(seek);
         console.log('Changed song position!', msToTime(seek));
       } catch (err) {

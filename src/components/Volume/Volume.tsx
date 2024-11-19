@@ -1,11 +1,12 @@
 import "./Volume.css";
-import { SpotifyPlayerContext, useSpotifyPlayerContext } from "../../hooks/SpotifyPlayerContext";
 import { CSSProperties, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeOff, faVolumeUp, faVolumeLow, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Volume = () => {
-  const { player, volume, setVolume } = useSpotifyPlayerContext();
+  const player = useSpotifyStore.getState().player;
+  const volume = useSpotifyStore.getState().volume;
   const [bubblePosition, setBubblePosition] = useState(0);
   const [lastVolume, setLastVolume] = useState(volume);
 
@@ -14,7 +15,8 @@ const Volume = () => {
       try {
         let vol = event.target.value / 10;
         await player?.setVolume(vol / 10);
-        setVolume(vol / 10);
+        useSpotifyStore.setState({ volume: vol / 10 });
+        // setVolume(vol / 10);
         setLastVolume(vol/10);
 
         // Update bubble position based on slider value
@@ -49,10 +51,12 @@ const Volume = () => {
   const handleToggleVolume = async () => {
     if (volume != 0) {
       await player?.setVolume(0);
-      setVolume(0);
+      useSpotifyStore.setState({ volume: 0 });
+      // setVolume(0);
     } else {
       await player?.setVolume(lastVolume);
-      setVolume(lastVolume);
+      useSpotifyStore.setState({ volume: lastVolume });
+      // setVolume(lastVolume);
     }
   }
 

@@ -9,7 +9,5 @@ const Navbar = () => {
     </nav>
   )
 }
-      // <NavLink activeClassName="active" to={"/playlists"}>Playlists</NavLink> 
-      // <NavLink activeClassName="active" to={"/search"}>Search</NavLink> 
 
 export default Navbar;

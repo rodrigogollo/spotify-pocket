@@ -4,15 +4,13 @@ import { invoke } from "@tauri-apps/api/core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlay, faCirclePause, faForwardStep, faBackwardStep, faShuffle, faRepeat } from '@fortawesome/free-solid-svg-icons'
 import { useAuthContext } from "../../hooks/Auth/AuthContext";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Controller = () => {
-  const { 
-    isPlaying,  
-    player, 
-    setSeek, 
-    shuffle, 
-    repeat 
-  } = useSpotifyPlayerContext();
+  const player = useSpotifyStore.getState().player;
+  const isPlaying = useSpotifyStore.getState().isPlaying;
+  const shuffle = useSpotifyStore.getState().shuffle;
+  const repeat = useSpotifyStore.getState().repeat;
 
   const { token } = useAuthContext();
 
@@ -40,7 +38,8 @@ const Controller = () => {
     if (player) {
       try {
         await player?.previousTrack();
-        setSeek(0);
+        useSpotifyStore.setState({ seek: 0 });
+        // setSeek(0);
       } catch (err) {
         console.log(err);
       }

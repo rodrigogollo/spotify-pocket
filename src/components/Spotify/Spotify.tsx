@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 import { useAuthStore } from "../../stores/authStore";
 
@@ -7,14 +7,14 @@ interface IDevice {
 }
 
 export const Spotify = () => {
-	const token = useAuthStore.getState().token;
-	const handleRefreshToken = useAuthStore.getState().handleRefreshToken;
-	const isPlaying = useSpotifyStore.getState().isPlaying;
-	const seek = useSpotifyStore.getState().seek;
-	const maxSeek = useSpotifyStore.getState().maxSeek;
-	const volume = useSpotifyStore.getState().volume;
-	const updateState = useSpotifyStore.getState().updateState;
-	const transferDevice = useSpotifyStore.getState().transferDevice;
+  const token = useAuthStore.getState().token;
+  const handleRefreshToken = useAuthStore.getState().handleRefreshToken;
+  const isPlaying = useSpotifyStore.getState().isPlaying;
+  const seek = useSpotifyStore.getState().seek;
+  const maxSeek = useSpotifyStore.getState().maxSeek;
+  const volume = useSpotifyStore.getState().volume;
+  const updateState = useSpotifyStore.getState().updateState;
+  const transferDevice = useSpotifyStore.getState().transferDevice;
 
   useEffect(() => {
     console.log("useSpotifyPlayerProvider token", token);

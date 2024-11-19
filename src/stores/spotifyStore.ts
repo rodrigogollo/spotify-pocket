@@ -12,11 +12,12 @@ type SpotifyStore = {
   device: string;
   shuffle: boolean;
   currentUri: string;
-  repeat: string;
+  repeat: number;
   isDeviceConnected: boolean;
   isPlaying: boolean;
   transferDevice: (device: {device_id: string}) => Promise<void>;
   updateState: (state: any) => void;
+  setCurrentUri: (uri: string) => void;
 }
 
 export const useSpotifyStore = create<SpotifyStore>((set, get) => ({
@@ -29,9 +30,12 @@ export const useSpotifyStore = create<SpotifyStore>((set, get) => ({
   device: "",
   shuffle: false,
   currentUri: "",
-  repeat: "",
+  repeat: 0,
   isDeviceConnected: false,
   isPlaying: false,
+  setCurrentUri: (uri) => {
+    set(() => ({ currentUri: uri }))
+  },
   transferDevice: async ({device_id}: {device_id: string}) => {
     const token = useAuthStore.getState().token;
     try {

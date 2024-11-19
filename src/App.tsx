@@ -40,18 +40,34 @@ const App = () => {
   if (!isUserLogged) return <LoginPage />
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SpotifyPlayer />
-      <Navbar />
-      <div>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/playlists" element={<PlaylistsPage />} />
-        </Routes>
-        {isPlayerReady && <Player />}
-      </div>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <SpotifyPlayer />
+        <Navbar />
+        <div>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/playlists" element={<PlaylistsPage />} />
+          </Routes>
+          {isPlayerReady && <Player />}
+        </div>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
+
+  // return (
+  //   <QueryClientProvider client={queryClient}>
+  //     <SpotifyPlayer />
+  //     <Navbar />
+  //     <div>
+  //       <Routes>
+  //         <Route path="/" element={<HomePage />} />
+  //         <Route path="/playlists" element={<PlaylistsPage />} />
+  //       </Routes>
+  //       {isPlayerReady && <Player />}
+  //     </div>
+  //   </QueryClientProvider>
+  // );
 }
 
 export default App;

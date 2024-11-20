@@ -19,6 +19,10 @@ declare global {
       addListener(event: string, callback: (arg: any) => void): void;
       removeListener(event: string, callback: (arg: any) => void): void;
       togglePlay(): Promise<void>;
+      nextTrack(): Promise<void>;
+      previousTrack(): Promise<void>;
+      setVolume: (volume: number) => Promise<void>;
+      setSeek(): Promise<void>;
     }
 
     interface PlaybackState {
@@ -37,8 +41,30 @@ declare global {
       };
     }
   }
+  interface Song {
+    track: {
+      name: string,
+      uri: string,
+      artists: [
+      {
+        name: string
+      }
+    ],
+      duration_ms: number,
+      id: string,
+      is_playable: boolean
+    }
+  }
+  interface Playlist {
+    id: string,
+    uri: string,
+    name: string
+  }
 }
 
+
 export {
-  Spotify
+  Spotify,
+  Song,
+  Playlist
 };

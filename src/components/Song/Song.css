@@ -9,18 +9,18 @@
 .song-index {
 	flex-grow: 0;
 	flex-shrink: 0;
-	padding: 8px;
+	padding: 4px;
 	z-index: 1;
 	background: var(--color-dark);
-	min-width: 35px;
 }
 
 .text-container {
+	display: inline-block;
 	flex-grow: 1;
 	flex-shrink: 1;
 	min-width: 0;
 	z-index: 0;
-	padding: 8px;
+	padding: 4px;
 }
 
 .song-text {
@@ -28,11 +28,10 @@
 	white-space: nowrap;
 }
 
-
 .song-duration {
 	flex-grow: 0;
 	flex-shrink: 0;
-	padding: 8px;
+	padding: 4px;
 	z-index: 1;
 	background: var(--color-dark);
 }
@@ -46,6 +45,7 @@
 
 .song.active {
 	color: var(--color-green);
+	border-bottom: 1px solid var(--color-green);
 }
 
 .invalid {

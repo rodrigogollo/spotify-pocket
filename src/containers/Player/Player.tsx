@@ -1,8 +1,8 @@
-import Volume from "../Volume/Volume";
-import Seek from "../Seek/Seek";
+import Volume from "../../components/Volume/Volume";
+import Seek from "../../components/Seek/Seek";
 import "./Player.css";
-import ScrollingText from "../ScrollingText/ScrollingText";
-import Controller from "../Controller/Controller";
+import ScrollingText from "../../components/ScrollingText/ScrollingText";
+import Controller from "../../components/Controller/Controller";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Player = () => {
@@ -15,9 +15,9 @@ const Player = () => {
       </div>
       <div className="times">
         <Seek />
+        <Controller />
         <Volume />
       </div>
-      <Controller />
     </div>
   )
 }

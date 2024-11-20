@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Spotify Lite",
+        "title": "Spotify Pocket",
         "width": 480,
         "height": 640,
         "resizable": false,

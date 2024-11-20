@@ -6,6 +6,7 @@
   color: var(--color-green);
   text-align: center;
   margin: 8px;
+  font-size: 48px;
 }
 
 @keyframes spin {

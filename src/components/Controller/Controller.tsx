@@ -13,10 +13,6 @@ const Controller = () => {
 
   const token = useAuthStore.getState().token
 
-  console.log("isPlaying", isPlaying);
-  console.log("shuffle", shuffle);
-  console.log("repeat", repeat);
-
   const handleToggle = async () => {
     try {
       if (player) {
@@ -30,7 +26,7 @@ const Controller = () => {
   const handleNext = async () => {
     if (player) {
       try {
-        await player?.nextTrack();
+        await player.nextTrack();
       } catch (err) {
         console.log("error next", err);
       }
@@ -40,9 +36,8 @@ const Controller = () => {
   const handlePrev = async () => {
     if (player) {
       try {
-        await player?.previousTrack();
+        await player.previousTrack();
         useSpotifyStore.setState({ seek: 0 });
-        // setSeek(0);
       } catch (err) {
         console.log(err);
       }
@@ -61,20 +56,20 @@ const Controller = () => {
 
   return ( 
     <div className="controls">
-      <button id="next" onClick={handlePrev}>
-        <FontAwesomeIcon icon={faBackwardStep} size="2xl" />
+      <button onClick={handleShuffle}>
+        <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active": ""} size="md"/>
       </button>
-      <button id="togglePlay" onClick={handleToggle}>
+      <button id="next" onClick={handlePrev}>
+        <FontAwesomeIcon icon={faBackwardStep} size="xl" />
+      </button>
+      <button id="play" onClick={handleToggle}>
         <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay } size="2xl" />
       </button>
       <button id="next" onClick={handleNext}>
-        <FontAwesomeIcon icon={faForwardStep} size="2xl"/>
-      </button>
-      <button onClick={handleShuffle}>
-        <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active": ""} size="2xl"/>
+        <FontAwesomeIcon icon={faForwardStep} size="xl"/>
       </button>
       <button onClick={handleRepeat}>
-        <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2": ""} size="2xl"/>
+        <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2": ""} size="md"/>
       </button>
     </div>
   )

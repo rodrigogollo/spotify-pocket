@@ -10,22 +10,40 @@ nav {
 	flex-shrink: 0;
 	overflow: hidden;
 	z-index: 10;
+	justify-content: center;
+	align-items: center;
 }
 nav a {
 	color: var(--color-light);
 	text-decoration: none;
-	padding: 8px;
-	border-bottom: 4px solid var(--color-darkest);
-	border-right: 4px solid var(--color-darkest);
+	font-weight: bold;
+}
+
+nav p {
+	border-bottom: 2px solid var(--color-darkest);
+	border-right: 2px solid var(--color-darkest);
+	border-radius: 5px;
+	padding: 4px 8px;
+}
+
+nav svg {
+	padding: 4px;
 	border-radius: 5px;
 }
 
-nav a:hover {
+nav p:hover,
+nav svg:hover
+{
+	background: var(--color-green);
+	color: var(--color-darkest);
+	cursor: pointer;
+}
+
+nav a.active p {
 	background: var(--color-green);
 	color: var(--color-darkest);
 }
 
-nav a.active {
-	background: var(--color-green);
-	color: var(--color-darkest);
+nav .options {
+	margin-left: auto;
 }

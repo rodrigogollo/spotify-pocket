@@ -1,8 +1,8 @@
-# Spotify-lite (Winamp alike)
+# Spotify Pocket (Winamp alike)
 
 Spotify minimalist player.
 
-![Spotify-lite](./spotify-lite.png)
+![Spotify Pocket](./spotify-lite.png)
 
 This app idea came to me after getting annoyed with the original Spotify App, which is slow and renders too many useless things on the screen. When I was younger I used Winamp, which was a simple app that shown our songs and played it. 
 
@@ -16,10 +16,11 @@ Also I used this app to improve my skills in Rust and React.
     - Tokio
  
 - React (front-end)
-    - Typescript
+    - TypeScript
     - Spotify API
     - Spotify SDK
     - React Query (TanStack)
+    - Zustand
 
 ## TODOS:
 - [x] Spotify Authentication (API).
@@ -45,13 +46,11 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Make proper Loading component for multiple uses (animation spinning);
 - [x] Create navbar
 - [x] Refactored SpotifyPlayer & Auth from useContext to Zustand.
-- [~] Fix fail to change song 401 on token expired.
+- [x] Fix fail to change song 401 on token expired.
+- [x] Fix on user not logged, render only login page.
 - [ ] Design login page.
-- [ ] Fix on user not logged, render only login page.
 
 ## Later
-- [ ] Fix TypeScript/Rust errors for build.
-- [ ] Organize Rust functions.
 - [x] New Tab (Playlists) React Router maybe. 
 - [x] Search User's Playlists.
 - [ ] Search button (search inside liked songs).
@@ -60,10 +59,12 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Play specific searched albums/songs/playlists/podcasts.
 - [ ] Add song to liked/playlist.
 - [ ] Remove song to liked/playlist.
-- [ ] check songs that don't get active for some uri reason (childish gambino - me and your mama)
+- [x] check songs that don't get active for some uri reason (childish gambino - me and your mama)
 - [ ] Log off button
 - [ ] Dark/Light mode
 - [ ] Custom Themes
 - [ ] User Options?
+- [ ] Fix TypeScript/Rust errors for build.
+- [ ] Organize Rust functions.
 
 

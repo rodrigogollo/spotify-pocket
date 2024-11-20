@@ -15,21 +15,24 @@ const ScrollingText = ({ text, className='' }: ScrollingTextProps) => {
       if (textRef.current) {
         const parent = textRef.current.parentElement;
         if (parent) {
-          const textWidth = textRef.current.getBoundingClientRect().width;
-          const containerWidth = parent.clientWidth;
-          setNeedsScroll(textWidth > containerWidth);
+          const textWidth = textRef.current.firstChild.offsetWidth;
+          const clientBounding = parent.getBoundingClientRect().width
+          setNeedsScroll(textWidth > clientBounding);
         }
       }
     };
 
     checkOverflow();
     window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
-  }, [text]);
+    return () => {
+      window.removeEventListener('resize', checkOverflow);
+      setNeedsScroll(false);
+    }
+  }, [text, needsScroll]);
 
   return (
     <div ref={textRef} className={`scrolling-text ${needsScroll ? "needs-scroll": ""} ${className}`}>
-      {text}
+      <span>{text}</span>
       {needsScroll && <span className="scroll-separator">•</span>}
       {needsScroll && text}
     </div>

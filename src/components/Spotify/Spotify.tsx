@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 import { useAuthStore } from "../../stores/authStore";
 
-interface IDevice {
-  device_id: string
-}
-
 export const Spotify = () => {
-  const token = useAuthStore((state) => state.token);
   const handleRefreshToken = useAuthStore((state) => state.handleRefreshToken);
   const player = useSpotifyStore((state) => state.player);
   const isPlaying = useSpotifyStore((state) => state.isPlaying);
@@ -18,16 +13,12 @@ export const Spotify = () => {
   const transferDevice = useSpotifyStore((state) => state.transferDevice);
 
   useEffect(() => {
-    console.log("useSpotifyPlayerProvider token", token);
-  }, [token]);
-
-  useEffect(() => {
     let interval: any;
     let isFinished = Number(seek) >= Number(maxSeek);
 
     if (isPlaying && !isFinished) {
       interval = setInterval(() => {
-		useSpotifyStore.setState((store) => ({ seek: store.seek + 1000 }));
+        useSpotifyStore.setState((store) => ({ seek: store.seek + 1000 }));
       }, 1000);
     } else {
       clearInterval(interval);
@@ -50,7 +41,7 @@ export const Spotify = () => {
       window.onSpotifyWebPlaybackSDKReady = async () => {
 
         const player = new window.Spotify.Player({
-          name: "Spotify-Lite Gollo",
+          name: "Spotify Pocket",
           getOAuthToken: async (cb) => { 
             const newToken = await handleRefreshToken();
             cb(newToken);
@@ -58,9 +49,9 @@ export const Spotify = () => {
           volume: volume,
         });
 
-        player.addListener("ready", (device:IDevice) => {
-          console.log('Ready with Device ID', device.device_id);
-          transferDevice(device);
+        player.addListener("ready", ({ device_id }) => {
+          console.log('Ready with Device ID', device_id);
+          transferDevice(device_id);
         });
 
         player.addListener('not_ready', ({ device_id }) => {

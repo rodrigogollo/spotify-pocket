@@ -3,7 +3,14 @@ import { msToTime } from "../../utils/utils";
 import ScrollingText from "../ScrollingText/ScrollingText";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
-const Song = ({className, idx, song, songs}) => {
+type SongProps = {
+  className: string;
+  idx: number;
+  song: Song,
+  songs: Song[]
+}
+
+const Song = ({className, idx, song, songs}: SongProps) => {
   const setSong = useSpotifyStore((state) => state.setSong);
 
   const handleClick = (uri: string) => {

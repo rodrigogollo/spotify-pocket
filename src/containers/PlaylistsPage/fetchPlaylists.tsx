@@ -16,7 +16,6 @@ const fetchPlaylists: QueryFunction<any, ["liked-songs", string]> = async ({ que
   });
 
   const playlists = JSON.parse(apiRes);
-  console.log(playlists);
 
   if (!playlists) {
     throw new Error(`Liked songs offset : ${offset} not ok`);

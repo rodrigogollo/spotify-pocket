@@ -20,8 +20,6 @@ interface ISong {
   }
 }
 
-
-
 const SongList = () => {
   const token = useAuthStore((state) => state.token)
   const currentUri = useSpotifyStore((state) => state.currentUri)
@@ -41,10 +39,9 @@ const SongList = () => {
     }
   }, [fetchNextPage, inView]);
 
-  console.log(isLoading, data);
-  if (isLoading || !data || !data.pages) {
-    return <Loading />
-  } 
+  // if (isLoading || !data || !data.pages) {
+  //   return <Loading />
+  // } 
 
   if (error) {
     return <>{error.message}</>
@@ -52,10 +49,9 @@ const SongList = () => {
 
    return (
       <div className="song-list">
-        {
+        { isLoading || !data || !data.pages ?
+          <Loading /> :
           data.pages.map((page, pageIndex) => {
-            console.log("page", page)
-            console.log("index", pageIndex, page.nextPage)
             return <div key={`${pageIndex}-${1 + page.nextPage -150}`}>
               {
                 page.items.flatMap((song: ISong, idx:number) => {

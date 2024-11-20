@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'circular-black';
-    src: url('/font/circular-black.ttf');
+    src: url('./assets/font/circular-black.ttf');
 }
 
 * {

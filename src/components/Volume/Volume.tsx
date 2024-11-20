@@ -1,5 +1,5 @@
 import "./Volume.css";
-import { CSSProperties, useState } from "react";
+import { ChangeEvent, CSSProperties, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeLow, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSpotifyStore } from "../../stores/spotifyStore";
@@ -10,22 +10,21 @@ const Volume = () => {
   const [bubblePosition, setBubblePosition] = useState(0);
   const [lastVolume, setLastVolume] = useState(volume);
 
-  const handleVolumeChange = async (event) => {
+  const handleVolumeChange = async (event: ChangeEvent<HTMLInputElement>) => {
     if (player) {
       try {
-        let vol = event.target.value / 10;
+        let vol = Number(event.target.value) / 10;
         await player?.setVolume(vol / 10);
         useSpotifyStore.setState({ volume: vol / 10 });
-        // setVolume(vol / 10);
         setLastVolume(vol/10);
 
         // Update bubble position based on slider value
-        const newValue = event.target.value;
-        const sliderWidth = event.target.offsetWidth;
-        const min = event.target.min || 0;
-        const max = event.target.max || 100;
+        const newValue = Number(event.target.value);
+        const sliderWidth = Number(event.target.offsetWidth);
+        const min = Number(event.target.min) || 0;
+        const max = Number(event.target.max) || 100;
         const percentage = (newValue - min) / (max - min);
-        setBubblePosition(percentage * sliderWidth);
+        setBubblePosition(percentage * sliderWidth + 4);
         
       } catch (err) {
         console.log("error changing volume", err);
@@ -35,11 +34,11 @@ const Volume = () => {
 
   const bubble: CSSProperties = {
     position: "absolute",
-    top: "30px",
-    left: `${355 + bubblePosition}px`,
+    top: "65px",
+    left: `${313 + bubblePosition}px`,
     width: "30px",
     padding: "2px",
-    backgroundColor: "white",
+    backgroundColor: "var(--color-light)",
     borderRadius: "4px",
     textAlign: "center",
     pointerEvents: "none",
@@ -52,11 +51,9 @@ const Volume = () => {
     if (volume != 0) {
       await player?.setVolume(0);
       useSpotifyStore.setState({ volume: 0 });
-      // setVolume(0);
     } else {
       await player?.setVolume(lastVolume);
       useSpotifyStore.setState({ volume: lastVolume });
-      // setVolume(lastVolume);
     }
   }
 
@@ -69,6 +66,7 @@ const Volume = () => {
       } 
         onClick={handleToggleVolume}
         className="icon"
+        size="sm"
       />
       <input 
         type="range" 
@@ -77,6 +75,7 @@ const Volume = () => {
         value={volume * 100} 
         onChange={handleVolumeChange} 
         name="volume"
+        orient="vertical"
       />
       <div id="bubble" style={bubble}>{Math.floor(Number(volume * 100))}%</div>
     </div>

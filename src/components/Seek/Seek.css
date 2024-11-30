@@ -7,11 +7,11 @@
 	align-items: center;
 }
 
-.seek > input {
-	flex: 1;
-	margin: 0 4px;
+.seek p {
+	flex: 0 0 auto;
 }
 
-.seek > p {
-	flex: 0 0 auto;
+.seek input[type="range"] {
+	flex: 1;
+	margin: 0 4px;
 }

@@ -3,12 +3,18 @@ import { ChangeEvent, CSSProperties, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeLow, faVolumeHigh, faVolumeXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSpotifyStore } from "../../stores/spotifyStore";
+import { useEffect } from "react";
 
 const Volume = () => {
   const player = useSpotifyStore((state) => state.player);
   const volume = useSpotifyStore((state) => state.volume);
   const [bubblePosition, setBubblePosition] = useState(0);
   const [lastVolume, setLastVolume] = useState(volume);
+  const [color, setColor] = useState("var(--color-light)");
+
+  useEffect(() => {
+    setColor(`linear-gradient(90deg, var(--color-green) ${volume * 100}%, var(--color-light) ${volume * 100}%)`);
+  }, [volume])
 
   const handleVolumeChange = async (event: ChangeEvent<HTMLInputElement>) => {
     if (player) {
@@ -66,9 +72,10 @@ const Volume = () => {
       } 
         onClick={handleToggleVolume}
         className="icon"
-        size="sm"
+        size="lg"
       />
       <input 
+        style={{"background": color }}
         type="range" 
         min="0" 
         max="100" 

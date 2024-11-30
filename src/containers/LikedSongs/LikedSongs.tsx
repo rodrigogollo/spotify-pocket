@@ -1,28 +1,14 @@
-import "./SongList.css";
+import "./LikedSongs.css";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import fetchPage from "./fetchSongs";
-import Song from "../../components/Song/Song";
+import SongList from "../../components/SongList/SongList";
 import Loading from "../../components/Loading/Loading";
 import { useAuthStore } from "../../stores/authStore";
-import { useSpotifyStore } from "../../stores/spotifyStore";
 
-interface ISong {
-  track: {
-    id: string,
-    name: string,
-    artist: string,
-    uri: string
-    linked_from: {
-      uri: string;
-    }
-  }
-}
-
-const SongList = () => {
+const LikedSongs = () => {
   const token = useAuthStore((state) => state.token)
-  const currentUri = useSpotifyStore((state) => state.currentUri)
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
     queryKey: ["liked-songs", token], 
@@ -39,34 +25,21 @@ const SongList = () => {
     }
   }, [fetchNextPage, inView]);
 
-  // if (isLoading || !data || !data.pages) {
-  //   return <Loading />
-  // } 
-
   if (error) {
     return <>{error.message}</>
   }
 
    return (
-      <div className="song-list">
+      <div className="liked-songs">
         { isLoading || !data || !data.pages ?
           <Loading /> :
           data.pages.map((page, pageIndex) => {
-            return <div key={`${pageIndex}-${1 + page.nextPage -150}`}>
-              {
-                page.items.flatMap((song: ISong, idx:number) => {
-                  return <Song 
-                      className={currentUri == song.track.uri ? "active": ""} 
-                      idx={1 + page.nextPage + idx - 150}
-                      key={`${pageIndex}-${song.track.id}`} 
-                      song={song} 
-                      songs={page.items} 
-                    />
-                })
-              }
-            </div>
-            }
-          )
+            return <SongList 
+              key={`${pageIndex}-${1 + page.nextPage -150}`}
+              page={page}
+              pageIndex={pageIndex}
+            />
+          })
         }
         <div ref={ref}></div>
         {isFetchingNextPage ? <Loading /> : null} 
@@ -74,4 +47,4 @@ const SongList = () => {
   );
 };
 
-export default SongList;
+export default LikedSongs;

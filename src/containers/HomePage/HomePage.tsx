@@ -1,7 +1,7 @@
 import "./HomePage.css";
-import SongList from "../SongList/SongList";
 import Loading from "../../components/Loading/Loading";
 import { useSpotifyStore } from "../../stores/spotifyStore";
+import LikedSongs from "../LikedSongs/LikedSongs";
 
 const HomePage = () => {
   const isPlayerReady = useSpotifyStore((state) => state.isPlayerReady);
@@ -10,7 +10,7 @@ const HomePage = () => {
         { !isPlayerReady ? 
           <Loading /> : 
           <div className="home">
-            <SongList />
+            <LikedSongs />
           </div>
         }
     </>

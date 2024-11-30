@@ -17,10 +17,10 @@ const Navbar = () => {
       </NavLink> 
       <div className="options">
         <span id="refresh" title="Refresh" onClick={() => window.location.reload()}>
-          <FontAwesomeIcon icon={faRefresh} size="sm"/>
+          <FontAwesomeIcon icon={faRefresh} size="lg"/>
         </span> 
         <NavLink id="settings" title="Settings" className={({ isActive }) => (isActive ? 'active' : '')} to={"/settings"}>
-          <FontAwesomeIcon icon={faCog} size="sm" />
+          <FontAwesomeIcon icon={faCog} size="lg" />
         </NavLink> 
       </div>
     </nav>

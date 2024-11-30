@@ -57,7 +57,7 @@ const Controller = () => {
   return ( 
     <div className="controls">
       <button onClick={handleShuffle}>
-        <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active": ""} size="md"/>
+        <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active": ""} size="lg"/>
       </button>
       <button id="next" onClick={handlePrev}>
         <FontAwesomeIcon icon={faBackwardStep} size="xl" />
@@ -69,7 +69,7 @@ const Controller = () => {
         <FontAwesomeIcon icon={faForwardStep} size="xl"/>
       </button>
       <button onClick={handleRepeat}>
-        <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2": ""} size="md"/>
+        <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2": ""} size="lg"/>
       </button>
     </div>
   )

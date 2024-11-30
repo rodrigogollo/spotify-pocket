@@ -26,3 +26,13 @@ body {
 	flex-direction: column;
 	overflow: hidden;
 }
+
+input[type="range"]:hover::-webkit-slider-thumb {
+	filter: brightness(var(--brightness-hover));
+	cursor: grab;
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+	filter: brightness(var(--brightness-down));
+	cursor: grabbing;
+}

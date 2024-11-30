@@ -5,9 +5,6 @@ const fetchPage: QueryFunction<any, ["liked-songs", string]> = async ({ queryKey
   const token = queryKey[1];
 
   const fetchSongs = async (offset: number) => {
-    // const url = new URL(pageParam);
-    // const offset = parseInt(url.searchParams.get("offset") || 0); 
-
     const apiRes: string = await invoke("get_user_saved_tracks", 
       {
         accessToken: token,
@@ -29,14 +26,16 @@ const fetchPage: QueryFunction<any, ["liked-songs", string]> = async ({ queryKey
     fetchSongs(pageParam + 50),
     fetchSongs(pageParam + 100),
   ]);
-
-  console.log("page1", page1)
   
-  return {
-    items: [...page1.items, ...page2.items, ...page3.items],
-    nextPage: pageParam + 150,
-    hasNextPage: page3.items.length > 0,
+  if (page1.items) {
+    return {
+      items: [...page1.items, ...page2.items, ...page3.items],
+      nextPage: pageParam + 150,
+      hasNextPage: page3.items.length > 0,
+    }
   }
+
+  return null;
 
 
 }

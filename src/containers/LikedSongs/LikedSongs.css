@@ -1,4 +1,4 @@
-.song-list {
+.liked-songs {
   display: flex;
   flex-direction: column;
   background-color: var(--color-dark);
@@ -10,15 +10,15 @@
   min-height: 475px;
 }
 
-.song-list::-webkit-scrollbar {
+.liked-songs::-webkit-scrollbar {
   width: 6px;
 }
 
-.song-list::-webkit-scrollbar-track {
+.liked-songs::-webkit-scrollbar-track {
   background: var(--color-dark);        /* color of the tracking area */
 }
 
-.song-list::-webkit-scrollbar-thumb {
+.liked-songs::-webkit-scrollbar-thumb {
   background-color: var(--color-green);    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
 }

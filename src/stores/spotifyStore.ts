@@ -42,7 +42,7 @@ export const useSpotifyStore = create<SpotifyStore>()(
     },
     setSong: async (uri, songs) => {
       const token = useAuthStore.getState().token;
-      const uris = songs.map(song => song.track.uri)
+      const uris = songs.flatMap(song => song.track.uri)
       const offset = uris.indexOf(uri);
 
       try {
@@ -58,7 +58,7 @@ export const useSpotifyStore = create<SpotifyStore>()(
         } else {
           console.log("offset", offset)
           console.log("uri", uri);
-          console.log("songs", songs);
+          console.log("uris", uris);
           console.log("Failed to change song");
           // useAuthStore.getState().handleRefreshToken();
           return false;

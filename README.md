@@ -19,6 +19,7 @@ Also I used this app to improve my skills in Rust and React.
     - TypeScript
     - Spotify API
     - Spotify SDK
+    - React Router
     - React Query (TanStack)
     - Zustand
 
@@ -48,13 +49,14 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Refactored SpotifyPlayer & Auth from useContext to Zustand.
 - [x] Fix fail to change song 401 on token expired.
 - [x] Fix on user not logged, render only login page.
-- [ ] Design login page.
+- [x] Design login page.
 
 ## Later
 - [x] New Tab (Playlists) React Router maybe. 
 - [x] Search User's Playlists.
 - [ ] Search button (search inside liked songs).
-- [ ] Select playlist to play.
+- [x] Select playlist to play.
+- [x] Get songs from playlist (and play song).
 - [ ] Search albums/songs/playlists/podcasts.
 - [ ] Play specific searched albums/songs/playlists/podcasts.
 - [ ] Add song to liked/playlist.

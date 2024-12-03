@@ -5,5 +5,5 @@ mod routes;
 mod spotify;
 
 fn main() {
-    spotify_lite_lib::run()
+    spotify_pocket_lib::run()
 }

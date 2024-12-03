@@ -38,7 +38,6 @@ const PlaylistsPage = () => {
      <div>{
         data.pages.map((page, index) => {
           return <PlaylistList key={index} data={page} />
-
         })
       }
       <div ref={ref}></div>

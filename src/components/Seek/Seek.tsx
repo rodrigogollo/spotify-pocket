@@ -11,7 +11,7 @@ const Seek = () => {
   const [color, setColor] = useState("var(--color-light)");
 
   useEffect(() => {
-    setColor(`linear-gradient(90deg, var(--color-green) ${(seek / maxSeek) * 100}%, var(--color-light) ${(seek / maxSeek) * 100}%)`);
+    setColor(`linear-gradient(90deg, var(--color-green) ${(seek / maxSeek) * 100}%, var(--color-darkest) ${(seek / maxSeek) * 100}%)`);
   }, [seek, maxSeek])
 
   const handleSeek = async (event) => {

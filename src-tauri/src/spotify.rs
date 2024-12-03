@@ -305,6 +305,33 @@ pub async fn get_user_saved_tracks(access_token: String, offset: i32, limit: i32
 }
 
 #[tauri::command]
+pub async fn get_playlist_tracks(access_token: String, offset: i32, limit: i32, playlist_id: String) -> String {
+    let url = format!("https://api.spotify.com/v1/playlists/{}/tracks", playlist_id);
+    let authorization = format!("Bearer {}", access_token);
+
+    let mut params = HashMap::new();
+    // params.insert("market", "ES");
+    params.insert("offset", offset);
+    params.insert("limit", limit);
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
+
+#[tauri::command]
 pub async fn get_user_playlists(access_token: String, offset: i32, limit: i32) -> String {
     let url = "https://api.spotify.com/v1/me/playlists";
     let authorization = format!("Bearer {}", access_token);

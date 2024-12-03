@@ -10,6 +10,7 @@ import { useAuthStore } from "./stores/authStore";
 import { useSpotifyStore } from "./stores/spotifyStore";
 import { useEffect } from "react";
 import { Spotify as SpotifyPlayer } from "./components/Spotify/Spotify";
+import PlaylistSongList from "./containers/PlaylistSongList/PlaylistSongList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +43,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
+            <Route path="/playlist/:playlistId" element={<PlaylistSongList />} />
           </Routes>
           {isPlayerReady && <Player />}
         </div>

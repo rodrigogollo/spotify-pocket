@@ -13,7 +13,7 @@ const Volume = () => {
   const [color, setColor] = useState("var(--color-light)");
 
   useEffect(() => {
-    setColor(`linear-gradient(90deg, var(--color-green) ${volume * 100}%, var(--color-light) ${volume * 100}%)`);
+    setColor(`linear-gradient(90deg, var(--color-green) ${volume * 100}%, var(--color-darkest) ${volume * 100}%)`);
   }, [volume])
 
   const handleVolumeChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,11 +26,12 @@ const Volume = () => {
 
         // Update bubble position based on slider value
         const newValue = Number(event.target.value);
-        const sliderWidth = Number(event.target.offsetWidth);
+        const sliderWidth = Number(event.target.getBoundingClientRect().width);
         const min = Number(event.target.min) || 0;
         const max = Number(event.target.max) || 100;
         const percentage = (newValue - min) / (max - min);
-        setBubblePosition(percentage * sliderWidth + 4);
+        console.log(percentage);
+        setBubblePosition(percentage * sliderWidth);
         
       } catch (err) {
         console.log("error changing volume", err);
@@ -41,7 +42,7 @@ const Volume = () => {
   const bubble: CSSProperties = {
     position: "absolute",
     top: "65px",
-    left: `${313 + bubblePosition}px`,
+    left: `${310 + bubblePosition}px`,
     width: "30px",
     padding: "2px",
     backgroundColor: "var(--color-light)",

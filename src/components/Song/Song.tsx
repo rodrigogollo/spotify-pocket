@@ -17,8 +17,10 @@ const Song = ({className, idx, song, songs}: SongProps) => {
     setSong(uri, songs);
   }
 
+  const classname = `song ${className} ${(!song.track.is_playable ?? true) && (!song.track.track ?? true) ? "invalid" : ""}`
+
   return (
-    <div onClick={() => handleClick(song.track.uri)} className={`song ${className} ${!song.track.is_playable ? "invalid" : ""}`} >
+    <div onClick={() => handleClick(song.track.uri)} className={classname} >
       <span className="song-index">{idx + ". "}</span>
       <div className="text-container">
         <ScrollingText className="song-text" text={song.track.artists[0].name + " - " + song.track.name} />

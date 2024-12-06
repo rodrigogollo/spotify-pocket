@@ -11,6 +11,10 @@
   animation: scroll 5s linear infinite;
 }
 
+.main {
+  font-weight: bold;
+}
+
 @keyframes scroll {
   from {
     transform: translateX(0);

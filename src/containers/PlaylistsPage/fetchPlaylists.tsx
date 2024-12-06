@@ -3,7 +3,6 @@ import { invoke } from '@tauri-apps/api/core';
 import { QueryFunction } from '@tanstack/react-query';
 
 const fetchPlaylists: QueryFunction<any, ["liked-songs", string]> = async ({ queryKey, pageParam }) => {
-  console.log(queryKey, pageParam);
   const token = queryKey[1];
   const url = new URL(pageParam);
   const offset = parseInt(url.searchParams.get("offset") || 0); 

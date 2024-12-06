@@ -23,4 +23,24 @@
   border-radius: 20px;       /* roundness of the scroll thumb */
 }
 
+.playlist-header {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  max-height: 100px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+}
+
+.playlist-header img {
+  width: 40px;
+  height: 40px;
+}
+
+.playlist-header .icon:hover {
+    cursor: pointer;
+	filter: brightness(80%);
+}
+
 

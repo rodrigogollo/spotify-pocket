@@ -17,6 +17,7 @@ nav a {
 	color: var(--color-light);
 	text-decoration: none;
 	font-weight: bold;
+	padding: 0 4px;
 }
 
 nav p {
@@ -39,7 +40,7 @@ nav svg:hover
 	cursor: pointer;
 }
 
-nav a.active p {
+nav a.active .icon {
 	background: var(--color-green);
 	color: var(--color-darkest);
 }

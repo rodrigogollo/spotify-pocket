@@ -5,7 +5,6 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import Loading from "../../components/Loading/Loading";
 import { useAuthStore } from "../../stores/authStore";
-import PlaylistSongList from "../PlaylistSongList/PlaylistSongList";
 import PlaylistList from "../PlaylistList/PlaylistList";
 
 const PlaylistsPage = () => {

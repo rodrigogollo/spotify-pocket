@@ -30,7 +30,9 @@ pub fn run() {
             spotify::toggle_shuffle,
             spotify::toggle_repeat,
             spotify::get_user_playlists,
-            spotify::get_playlist_tracks
+            spotify::get_playlist_tracks,
+            spotify::get_playlist,
+            spotify::search
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application")

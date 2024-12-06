@@ -16,10 +16,11 @@ type SpotifyStore = {
   repeat: number;
   isDeviceConnected: boolean;
   isPlaying: boolean;
-  transferDevice: ({device_id}: {device_id: string}) => Promise<void>;
+  currentPlaylist: any | null;
+  transferDevice: (device_id: {device_id: string}) => Promise<void>;
   updateState: (state: any) => void;
-  setCurrentUri: (uri: string) => void;
   setSong: (uri: string, songs: any[]) => Promise<boolean>;
+  getPlaylist: (playlistId: string | undefined) => void;
 }
 
 export const useSpotifyStore = create<SpotifyStore>()(
@@ -37,8 +38,20 @@ export const useSpotifyStore = create<SpotifyStore>()(
     repeat: 0,
     isDeviceConnected: false,
     isPlaying: false,
-    setCurrentUri: (uri) => {
-      set(() => ({ currentUri: uri }))
+    currentPlaylist: null,
+    getPlaylist: async (playlistId) => {
+      if (playlistId) {
+        const token = useAuthStore.getState().token;
+        const response = await invoke<string>("get_playlist", {
+          accessToken: token, 
+          playlistId: playlistId
+        });
+        const playlist = JSON.parse(response);
+
+        set(() => ({ currentPlaylist: playlist }));
+      } else {
+        set(() => ({ currentPlaylist: null }));
+      }
     },
     setSong: async (uri, songs) => {
       const token = useAuthStore.getState().token;
@@ -75,6 +88,7 @@ export const useSpotifyStore = create<SpotifyStore>()(
         if (!get().isDeviceConnected) {
           let isDeviceTransfered: boolean = await invoke('transfer_playback', { accessToken: token, deviceId: device_id });
           set(() => ({ isDeviceConnected: isDeviceTransfered, isPlayerReady: true })); 
+          // useSetSong(!get().currentUri);
           console.log("Device successfully transfered");
         } else {
           console.log("Device already transfered");
@@ -122,7 +136,11 @@ export const useSpotifyStore = create<SpotifyStore>()(
   }),
     {
       name: 'spotify-store',
-      partialize: (state) => ({ volume: state.volume, shuffle: state.shuffle, repeat: state.repeat }),
+      partialize: (state) => ({ 
+        volume: state.volume, 
+        shuffle: state.shuffle, 
+        repeat: state.repeat, 
+      }),
     }
   )
 );

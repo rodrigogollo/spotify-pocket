@@ -1,19 +1,19 @@
 import "./Navbar.css";
 import { NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faRefresh } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faRefresh, faMagnifyingGlass, faHeart, faCompactDisc } from '@fortawesome/free-solid-svg-icons'
 
 const Navbar = () => {
   return (
     <nav>
-      <NavLink className={({ isActive }) => (isActive ? 'active' : '')} to={"/"}>
-        <p>Library</p>
+      <NavLink title="Library" className={({ isActive }) => (isActive ? 'active' : '')} to={"/"}>
+        <FontAwesomeIcon className="icon" icon={faHeart} size="lg"/>
       </NavLink> 
-      <NavLink className={({ isActive }) => (isActive ? 'active' : '')} to={"/playlists"}>
-        <p>Playlists</p>
+      <NavLink title="Playlists" className={({ isActive }) => (isActive ? 'active' : '')} to={"/playlists"}>
+        <FontAwesomeIcon className="icon" icon={faCompactDisc} size="lg"  />
       </NavLink> 
-      <NavLink className={({ isActive }) => (isActive ? 'active' : '')} to={"/search"}>
-        <p>Search</p>
+      <NavLink title="Search" className={({ isActive }) => (isActive ? 'active' : '')} to={"/search"}>
+        <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} size="lg" />
       </NavLink> 
       <div className="options">
         <span id="refresh" title="Refresh" onClick={() => window.location.reload()}>

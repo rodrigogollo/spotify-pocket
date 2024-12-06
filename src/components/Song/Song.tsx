@@ -21,7 +21,7 @@ const Song = ({className, idx, song, songs}: SongProps) => {
 
   return (
     <div onClick={() => handleClick(song.track.uri)} className={classname} >
-      <span className="song-index">{idx + ". "}</span>
+      <span className="song-index">{idx ? idx + ". ": null}</span>
       <div className="text-container">
         <ScrollingText className="song-text" text={song.track.artists[0].name + " - " + song.track.name} />
       </div>

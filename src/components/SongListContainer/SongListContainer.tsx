@@ -9,6 +9,7 @@ const SongListContainer = ({ isLoading, data }) => {
           <Loading /> :
           data.pages.map((page, pageIndex) => (
             <SongList 
+              key={`song-list-${pageIndex}`}
               page={page}
               pageIndex={pageIndex}
             />

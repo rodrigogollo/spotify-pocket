@@ -331,6 +331,65 @@ pub async fn get_playlist_tracks(access_token: String, offset: i32, limit: i32, 
     return json.to_string();
 }
 
+
+#[tauri::command]
+pub async fn search(access_token: String, offset: i32, limit: i32, query: String) -> String {
+    let url = format!("https://api.spotify.com/v1/search");
+    let authorization = format!("Bearer {}", access_token);
+
+    let media_type: String = "album,track".to_string();
+
+    let mut params = HashMap::new();
+    params.insert("q", query);
+    params.insert("offset", offset.to_string());
+    params.insert("limit", limit.to_string());
+    params.insert("type", media_type);
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
+
+#[tauri::command]
+pub async fn get_playlist(access_token: String, playlist_id: String) -> String {
+    let url = format!("https://api.spotify.com/v1/playlists/{}", playlist_id);
+    let authorization = format!("Bearer {}", access_token);
+
+    // let mut params = HashMap::new();
+    // // params.insert("market", "ES");
+    // params.insert("offset", offset);
+    // params.insert("limit", limit);
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        // .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
+
+
 #[tauri::command]
 pub async fn get_user_playlists(access_token: String, offset: i32, limit: i32) -> String {
     let url = "https://api.spotify.com/v1/me/playlists";

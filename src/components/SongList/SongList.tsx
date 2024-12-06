@@ -1,3 +1,4 @@
+import "./SongList.css";
 import Song from "../Song/Song";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 
@@ -5,7 +6,7 @@ const SongList = ({ page, pageIndex }) => {
 	const currentUri = useSpotifyStore((state) => state.currentUri)
 
 	return (
-		<div key={`${pageIndex}-${1 + page.nextPage -150}`}>
+		<div className="song-list" key={`${pageIndex}-${1 + page.nextPage -150}`}>
 		{
 			page.items.flatMap((song: Song, idx:number) => {
 			  return <Song 

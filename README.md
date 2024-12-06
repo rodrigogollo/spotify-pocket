@@ -50,14 +50,15 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Fix fail to change song 401 on token expired.
 - [x] Fix on user not logged, render only login page.
 - [x] Design login page.
-
-## Later
 - [x] New Tab (Playlists) React Router maybe. 
 - [x] Search User's Playlists.
+- [ ] Make No data found component to show on data null.
 - [ ] Search button (search inside liked songs).
 - [x] Select playlist to play.
 - [x] Get songs from playlist (and play song).
+- [x] Search songs and play it.
 - [ ] Search albums/songs/playlists/podcasts.
+- [ ] Fix playlist name scrolling-text.
 - [ ] Play specific searched albums/songs/playlists/podcasts.
 - [ ] Add song to liked/playlist.
 - [ ] Remove song to liked/playlist.
@@ -66,7 +67,9 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Dark/Light mode
 - [ ] Custom Themes
 - [ ] User Options?
-- [ ] Fix TypeScript/Rust errors for build.
+- [ ] Fix volume bubble dynamic left
+- [ ] Graph page that shows user's top items (Wrapped style).
+- [ ] Make player custom buttons on hover windows taskbar.
 - [ ] Organize Rust functions.
-
+- [ ] Fix TypeScript/Rust errors for build.
 

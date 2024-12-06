@@ -30,7 +30,6 @@ const Volume = () => {
         const min = Number(event.target.min) || 0;
         const max = Number(event.target.max) || 100;
         const percentage = (newValue - min) / (max - min);
-        console.log(percentage);
         setBubblePosition(percentage * sliderWidth);
         
       } catch (err) {

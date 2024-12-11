@@ -17,6 +17,9 @@ type SpotifyStore = {
   isDeviceConnected: boolean;
   isPlaying: boolean;
   currentPlaylist: any | null;
+  search: string;
+  searchData: any[] | null;
+  setSearch: (query: string) => void;
   transferDevice: (device_id: {device_id: string}) => Promise<void>;
   updateState: (state: any) => void;
   setSong: (uri: string, songs: any[]) => Promise<boolean>;
@@ -39,6 +42,11 @@ export const useSpotifyStore = create<SpotifyStore>()(
     isDeviceConnected: false,
     isPlaying: false,
     currentPlaylist: null,
+    search: "",
+    searchData: null,
+    setSearch: (query) => {
+      set(() => ({ search: query }));
+    },
     getPlaylist: async (playlistId) => {
       if (playlistId) {
         const token = useAuthStore.getState().token;

@@ -4,23 +4,7 @@
 	align-items: center;
 	min-height: 475px;
 	max-height: 475px;
-	overflow-y: auto;
-	overflow-x: hidden;
-	--scrollbar-width: calc(100vw - 100%);
 	width: 100%;
-}
-
-.search-page::-webkit-scrollbar {
-  width: 6px;
-}
-
-.search-page::-webkit-scrollbar-track {
-  background: var(--color-dark);        /* color of the tracking area */
-}
-
-.search-page::-webkit-scrollbar-thumb {
-  background-color: var(--color-green);    /* color of the scroll thumb */
-  border-radius: 20px;       /* roundness of the scroll thumb */
 }
 
 .search-nav {
@@ -28,7 +12,35 @@
 	flex-direction: row;
 	align-items: center;
 	width: 100%;
-	padding: 4px 8px;
+	padding: 4px 4px;
+	border-bottom: 4px solid var(--color-green);
+	position: sticky;
+	background: var(--color-dark);
+	z-index: 2;
+	min-height: 60px;
+	max-height: 60px;
+	top: 0;
+	left: 0;
+}
+
+.searched-songs {
+	width: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	--scrollbar-width: calc(100vw - 100%);
+}
+
+.searched-songs::-webkit-scrollbar {
+  width: 6px;
+}
+
+.searched-songs::-webkit-scrollbar-track {
+  background: var(--color-dark);        /* color of the tracking area */
+}
+
+.searched-songs::-webkit-scrollbar-thumb {
+  background-color: var(--color-green);    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
 }
 
 .search-nav input[type="text"] {

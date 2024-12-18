@@ -1,7 +1,7 @@
 import "./Navbar.css";
 import { NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faRefresh, faMagnifyingGlass, faHeart, faCompactDisc } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faRefresh, faMagnifyingGlass, faHeart, faCompactDisc, faPieChart } from '@fortawesome/free-solid-svg-icons'
 
 const Navbar = () => {
   return (
@@ -21,6 +21,9 @@ const Navbar = () => {
         </span> 
         <NavLink id="settings" title="Settings" className={({ isActive }) => (isActive ? 'active' : '')} to={"/settings"}>
           <FontAwesomeIcon icon={faCog} size="lg" />
+        </NavLink> 
+        <NavLink id="settings" title="Chart" className={({ isActive }) => (isActive ? 'active' : '')} to={"/chart"}>
+          <FontAwesomeIcon icon={faPieChart} size="lg" />
         </NavLink> 
       </div>
     </nav>

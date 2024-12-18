@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { Spotify as SpotifyPlayer } from "./components/Spotify/Spotify";
 import PlaylistSongList from "./containers/PlaylistSongList/PlaylistSongList";
 import SearchPage from "./containers/SearchPage/SearchPage";
+import ChartPage from "./containers/ChartPage/ChartPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +31,7 @@ const App = () => {
   }, []);
 
   const isPlayerReady = useSpotifyStore((state) => state.isPlayerReady);
-  const isUserLogged = useAuthStore.getState().isUserLogged;
+  const isUserLogged = useAuthStore((state) => state.isUserLogged);
 
   if (!isUserLogged) return <LoginPage />
 
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/playlists" element={<PlaylistsPage />} />
             <Route path="/playlist/:playlistId" element={<PlaylistSongList />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/chart" element={<ChartPage />} />
           </Routes>
           {isPlayerReady && <Player />}
         </div>

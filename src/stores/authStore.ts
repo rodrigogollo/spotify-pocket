@@ -49,8 +49,7 @@ export const useAuthStore = create<AuthStore>()(
             `App is loaded, loggedIn: ${event.payload.logged}, token: ${event.payload.access_token}`
           );
 
-          set({ token: event.payload.access_token })
-          set({ isUserLogged: true })
+          set({ token: event.payload.access_token, isUserLogged: true })
         });
 
         return unlisten;

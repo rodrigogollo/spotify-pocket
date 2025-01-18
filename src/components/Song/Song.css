@@ -11,7 +11,6 @@
 	flex-shrink: 0;
 	padding: 4px;
 	z-index: 1;
-	background: var(--color-dark);
 }
 
 .text-container {
@@ -20,7 +19,8 @@
 	flex-shrink: 1;
 	min-width: 0;
 	z-index: 0;
-	padding: 4px;
+	padding: 5px;
+  overflow: hidden;
 }
 
 .song-text {
@@ -33,7 +33,6 @@
 	flex-shrink: 0;
 	padding: 4px;
 	z-index: 1;
-	background: var(--color-dark);
 }
 
 .song:hover .song-duration,

@@ -6,7 +6,7 @@ type ScrollingTextProps = {
   className: string
 }
 
-const ScrollingText = ({ text, className='' }: ScrollingTextProps) => {
+const ScrollingText = ({ text, className = '' }: ScrollingTextProps) => {
   const textRef = useRef(null);
   const [needsScroll, setNeedsScroll] = useState(false);
 
@@ -31,10 +31,10 @@ const ScrollingText = ({ text, className='' }: ScrollingTextProps) => {
   }, [text, needsScroll]);
 
   return (
-    <div ref={textRef} className={`scrolling-text ${needsScroll ? "needs-scroll": ""} ${className}`}>
+    <div ref={textRef} className={`scrolling-text-container ${needsScroll ? "needs-scroll" : ""} ${className}`}>
       <span>{text}</span>
       {needsScroll && <span className="scroll-separator">•</span>}
-      {needsScroll && text}
+      {needsScroll && <span className="scrolling-text">{text}</span>}
     </div>
   );
 }

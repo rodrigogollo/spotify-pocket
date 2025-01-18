@@ -30,8 +30,7 @@ const Volume = () => {
         const min = Number(event.target.min) || 0;
         const max = Number(event.target.max) || 100;
         const percentage = (newValue - min) / (max - min);
-        console.log(bubblePosition);
-        setBubblePosition(475 - (130 - percentage * sliderWidth));
+        setBubblePosition(480 - (130 - percentage * sliderWidth));
         
       } catch (err) {
         console.log("error changing volume", err);

@@ -1,10 +1,18 @@
-.scrolling-text {
+.scrolling-text-container {
   display: inline-block;
   white-space: nowrap;
 }
 
+.scrolling-text {
+  display: none;
+}
+
 .needs-scroll {
   cursor: pointer;
+}
+
+.needs-scroll:hover .scrolling-text {
+  display: inline-block;
 }
 
 .needs-scroll:hover {

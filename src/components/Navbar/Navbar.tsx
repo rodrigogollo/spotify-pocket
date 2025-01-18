@@ -22,7 +22,7 @@ const Navbar = () => {
         <NavLink id="settings" title="Settings" className={({ isActive }) => (isActive ? 'active' : '')} to={"/settings"}>
           <FontAwesomeIcon icon={faCog} size="lg" />
         </NavLink> 
-        <NavLink id="settings" title="Chart" className={({ isActive }) => (isActive ? 'active' : '')} to={"/chart"}>
+        <NavLink id="settings" title="Top Items" className={({ isActive }) => (isActive ? 'active' : '')} to={"/chart"}>
           <FontAwesomeIcon icon={faPieChart} size="lg" />
         </NavLink> 
       </div>

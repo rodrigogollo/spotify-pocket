@@ -52,7 +52,7 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Design login page.
 - [x] New Tab (Playlists) React Router maybe. 
 - [x] Search User's Playlists.
-- [ ] Make No data found component to show on data null.
+- [~] Make No data found component to show on data null.
 - [ ] Search button (search inside liked songs).
 - [x] Select playlist to play.
 - [x] Get songs from playlist (and play song).
@@ -66,7 +66,8 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Log off button
 - [ ] Dark/Light mode
 - [ ] Custom Themes
-- [ ] User Options?
+- [ ] User Options
+- [ ] Player Opacity inside User Options.
 - [ ] Fix volume bubble dynamic left
 - [ ] Graph page that shows user's top items (Wrapped style).
 - [ ] Make player custom buttons on hover windows taskbar.

@@ -6,6 +6,8 @@
 	background-color: var(--color-dark);
 	overflow: hidden;
 	z-index: 10;
+  min-height: 120px;
+  max-height: 120px;
 }
 
 .current-track {

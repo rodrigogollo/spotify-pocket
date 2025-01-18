@@ -82,7 +82,7 @@ const SearchPage = () => {
         }
         <div ref={ref}></div>
       </div>
-      {isFetchingNextPage ? <Loading /> : null}
+      {/*isFetchingNextPage ? <Loading /> : null*/}
     </form>
   )
 }

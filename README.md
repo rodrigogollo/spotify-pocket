@@ -52,25 +52,32 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Design login page.
 - [x] New Tab (Playlists) React Router maybe. 
 - [x] Search User's Playlists.
-- [~] Make No data found component to show on data null.
-- [ ] Search button (search inside liked songs).
 - [x] Select playlist to play.
 - [x] Get songs from playlist (and play song).
 - [x] Search songs and play it.
-- [ ] Search albums/songs/playlists/podcasts.
-- [ ] Fix playlist name scrolling-text.
-- [ ] Play specific searched albums/songs/playlists/podcasts.
-- [ ] Add song to liked/playlist.
-- [ ] Remove song to liked/playlist.
+- [x] Background Image.
 - [x] check songs that don't get active for some uri reason (childish gambino - me and your mama)
+
+### Profile Preferences:
 - [ ] Log off button
 - [ ] Dark/Light mode
 - [ ] Custom Themes
 - [ ] User Options
 - [ ] Player Opacity inside User Options.
+- [ ] Background Image inside User Options.
+
+### Fixes:
+- [~] Make No data found component to show on data null.
+- [ ] Fix playlist name scrolling-text.
 - [ ] Fix volume bubble dynamic left
 - [ ] Graph page that shows user's top items (Wrapped style).
-- [ ] Make player custom buttons on hover windows taskbar.
 - [ ] Organize Rust functions.
 - [ ] Fix TypeScript/Rust errors for build.
 
+### New Features:
+- [ ] Add song to liked/playlist.
+- [ ] Make player custom buttons on hover windows taskbar.
+- [ ] Remove song to liked/playlist.
+- [ ] Search albums/playlists/podcasts.
+- [ ] Search button (search inside liked songs).
+- [ ] Play specific searched albums/playlists/podcasts.

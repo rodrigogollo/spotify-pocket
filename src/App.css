@@ -17,10 +17,12 @@
 }
 
 body {
-	background: var(--color-dark);
+	/*background: var(--color-dark);*/
+  background: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d9b9c9b2-b80f-4dd6-b0f9-5191aed634c9/dhhjp3z-90e69fd9-dab1-4301-a1d7-83ce1827d4d6.jpg/v1/fill/w_1188,h_673,q_70,strp/cyberpunk_2077_cityscape_wallpaper_by_jmasaryk_dhhjp3z-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTA2IiwicGF0aCI6IlwvZlwvZDliOWM5YjItYjgwZi00ZGQ2LWIwZjktNTE5MWFlZDYzNGM5XC9kaGhqcDN6LTkwZTY5ZmQ5LWRhYjEtNDMwMS1hMWQ3LTgzY2UxODI3ZDRkNi5qcGciLCJ3aWR0aCI6Ijw9MTYwMCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.Gqu0QFxH6BDjquB3z4yJ9299pvfULMbd4rqAkMos1mg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 	color: var(--color-light);
-	height: 100vh;
-	width: calc(100vw - var(--scrollbar-width));
 	margin: 0;
 	display: flex;
 	flex-direction: column;

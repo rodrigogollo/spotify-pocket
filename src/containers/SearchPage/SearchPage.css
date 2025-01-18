@@ -29,6 +29,7 @@
 	overflow-x: hidden;
 	--scrollbar-width: calc(100vw - 100%);
 	min-height: 475px;
+  background: var(--color-dark);
 }
 
 .searched-songs::-webkit-scrollbar {

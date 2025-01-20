@@ -28,7 +28,8 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	--scrollbar-width: calc(100vw - 100%);
-	min-height: 475px;
+	min-height: 440px;
+	max-height: 440px;
   background: var(--color-dark);
 }
 

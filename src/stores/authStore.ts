@@ -2,14 +2,16 @@ import { create } from "zustand";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from '@tauri-apps/api/event';
 import { persist } from "zustand/middleware";
+import { useNavigate } from "react-router";
 
 type AuthStore = {
-  token: string | null, 
+  token: string | null,
   isUserLogged: boolean,
   setToken: (newValue: string | null) => void;
   handleLoginSpotify: () => Promise<void>,
   handleRefreshToken: () => Promise<string>,
   initialize: () => void,
+  reset: () => void,
 }
 
 interface LoadedPayload {
@@ -17,17 +19,21 @@ interface LoadedPayload {
   access_token: string
 }
 
+const initialState = {
+  token: null,
+  isUserLogged: false
+}
+
+
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
-      token: null, 
-      isUserLogged: false, 
+      ...initialState,
       setToken: (newValue) => set({ token: newValue }),
       handleLoginSpotify: async () => {
         try {
           await invoke('initiate_spotify_auth');
           console.log('Spotify login initiated.');
-          set({ isUserLogged: true });
         } catch (err) {
           console.log('Failed to initiate Spotify login', err);
         }
@@ -54,9 +60,12 @@ export const useAuthStore = create<AuthStore>()(
 
         return unlisten;
       },
+      reset: () => {
+        set(initialState)
+      },
     }),
     {
-      name: 'token', 
+      name: 'token',
       partialize: (state) => ({ token: state.token, isUserLogged: !!state.token }),
     }
   )

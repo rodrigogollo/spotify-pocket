@@ -33,7 +33,8 @@ pub fn run() {
             spotify::get_playlist_tracks,
             spotify::get_playlist,
             spotify::search,
-            spotify::get_user_top_items
+            spotify::get_user_top_items,
+            spotify::user_log_out,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application")

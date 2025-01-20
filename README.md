@@ -24,6 +24,40 @@ Also I used this app to improve my skills in Rust and React.
     - Zustand
 
 ## TODOS:
+
+### Fixes:
+- [x] Fix Login behaviour.
+- [ ] Fix App on build (get songs and player not working).
+- [~] Make No data found component to show on data null.
+- [ ] Fix playlist name scrolling-text.
+- [ ] Fix volume bubble dynamic left
+- [ ] Graph page that shows user's top items (Wrapped style).
+- [ ] Organize Rust functions.
+- [ ] Fix TypeScript/Rust errors for build.
+
+### Design:
+
+- [ ] Design SettingsPage
+- [ ] Design Log out button
+
+### Profile Preferences:
+- [~] Settings Page (Log out).
+- [x] Log out button
+- [ ] Dark/Light mode
+- [ ] Custom Themes
+- [ ] User Options
+- [ ] Player Opacity inside User Options.
+- [ ] Background Image inside User Options.
+
+### New Features:
+- [ ] Add song to liked/playlist.
+- [ ] Make player custom buttons on hover windows taskbar.
+- [ ] Remove song to liked/playlist.
+- [ ] Search albums/playlists/podcasts.
+- [ ] Search button (search inside liked songs).
+- [ ] Play specific searched albums/playlists/podcasts.
+
+### Done
 - [x] Spotify Authentication (API).
 - [x] Spotify Player (SDK).
 - [x] Spotify auto connect to device.
@@ -57,27 +91,3 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Search songs and play it.
 - [x] Background Image.
 - [x] check songs that don't get active for some uri reason (childish gambino - me and your mama)
-
-### Profile Preferences:
-- [ ] Log off button
-- [ ] Dark/Light mode
-- [ ] Custom Themes
-- [ ] User Options
-- [ ] Player Opacity inside User Options.
-- [ ] Background Image inside User Options.
-
-### Fixes:
-- [~] Make No data found component to show on data null.
-- [ ] Fix playlist name scrolling-text.
-- [ ] Fix volume bubble dynamic left
-- [ ] Graph page that shows user's top items (Wrapped style).
-- [ ] Organize Rust functions.
-- [ ] Fix TypeScript/Rust errors for build.
-
-### New Features:
-- [ ] Add song to liked/playlist.
-- [ ] Make player custom buttons on hover windows taskbar.
-- [ ] Remove song to liked/playlist.
-- [ ] Search albums/playlists/podcasts.
-- [ ] Search button (search inside liked songs).
-- [ ] Play specific searched albums/playlists/podcasts.

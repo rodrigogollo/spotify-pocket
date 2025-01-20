@@ -16,6 +16,7 @@ use tauri_plugin_store::StoreBuilder;
 
 #[tauri::command]
 pub fn initiate_spotify_auth(app_handle: AppHandle) {
+    println!("initiate_spotify_auth");
     dotenv().ok();
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
     let redirect_uri = "http://localhost:3000/callback";
@@ -55,6 +56,7 @@ pub async fn handle_spotify_callback(
     State(app_handle): State<Arc<AppHandle>>,
     Query(params): Query<HashMap<String, String>>,
 ) -> &'static str {
+    println!("handle_spotify_callback");
     let code = params.get("code");
     let state = params.get("state");
     if let (Some(code), Some(state_value)) = (code, state) {
@@ -94,7 +96,6 @@ pub async fn handle_spotify_callback(
         let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
         println!("Json: {:?}", json);
 
-
         // save refresh token
         let app_handle_ref = app_handle.as_ref();
         let store = StoreBuilder::new(app_handle_ref, "store.json").build();
@@ -120,6 +121,20 @@ pub async fn handle_spotify_callback(
         println!("Authorization failed. No code found.");
         "Authorization failed. No code found."
     }
+}
+
+
+#[tauri::command]
+pub async fn user_log_out(app_handle: AppHandle) -> bool {
+    dotenv().ok();
+    println!("Logging out the current user.");
+
+    let store = StoreBuilder::new(&app_handle, "store.json").build();
+    store.delete("REFRESH_TOKEN");
+    store.save();
+    println!("REFRESH_TOKEN has been removed from the store.");
+
+    true
 }
 
 #[tauri::command]

@@ -5,14 +5,15 @@ import LikedSongs from "../LikedSongs/LikedSongs";
 
 const HomePage = () => {
   const isPlayerReady = useSpotifyStore((state) => state.isPlayerReady);
-    return ( 
-      <>
-        { !isPlayerReady ? 
-          <Loading /> : 
-          <div className="home">
-            <LikedSongs />
-          </div>
-        }
+  console.log("HOME PAGE");
+  return (
+    <>
+      {!isPlayerReady ?
+        <Loading /> :
+        <div className="home">
+          <LikedSongs />
+        </div>
+      }
     </>
   )
 }

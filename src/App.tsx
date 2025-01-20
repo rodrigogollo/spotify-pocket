@@ -13,6 +13,7 @@ import { Spotify as SpotifyPlayer } from "./components/Spotify/Spotify";
 import PlaylistSongList from "./containers/PlaylistSongList/PlaylistSongList";
 import SearchPage from "./containers/SearchPage/SearchPage";
 import ChartPage from "./containers/ChartPage/ChartPage";
+import SettingsPage from "./containers/SettingsPage/SettingsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,20 +34,24 @@ const App = () => {
   const isPlayerReady = useSpotifyStore((state) => state.isPlayerReady);
   const isUserLogged = useAuthStore((state) => state.isUserLogged);
 
-  if (!isUserLogged) return <LoginPage />
-
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <SpotifyPlayer />
-        <Navbar />
+        {isUserLogged ? (
+          <>
+            <Navbar />
+            <SpotifyPlayer />
+          </>
+        ) : null}
         <div>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={!isUserLogged ? <LoginPage /> : <HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
             <Route path="/playlist/:playlistId" element={<PlaylistSongList />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/chart" element={<ChartPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </Routes>
           {isPlayerReady && <Player />}
         </div>

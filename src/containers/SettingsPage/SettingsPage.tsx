@@ -10,7 +10,6 @@ const SettingsPage = () => {
   const resetAuthStore = useAuthStore((state) => state.reset);
   const resetSpotifyStore = useSpotifyStore((state) => state.reset);
   const backgroundImage = useSpotifyStore((state) => state.backgroundImage);
-  console.log(backgroundImage);
 
   const handleLogOut = async () => {
     await invoke<string>("user_log_out");
@@ -20,11 +19,11 @@ const SettingsPage = () => {
     navigate("/login");
   }
 
-  useEffect(() => {
-    const body = document.querySelector("body");
-    let value = URL.createObjectURL(backgroundImage);
-    body.style.backgroundImage = `url(${value})`;
-  }, [])
+  //useEffect(() => {
+  //  const body = document.querySelector("body");
+  //  let value = URL.createObjectURL(backgroundImage);
+  //  body.style.backgroundImage = `url(${value})`;
+  //}, [])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {

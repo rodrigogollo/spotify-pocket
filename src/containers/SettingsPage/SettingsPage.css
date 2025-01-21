@@ -1,4 +1,5 @@
 .settings-container { 
-  min-height: 440px;
-  max-height: 440px;
+  min-height: 475px;
+  max-height: 475px;
+  background: var(--color-dark);
 }

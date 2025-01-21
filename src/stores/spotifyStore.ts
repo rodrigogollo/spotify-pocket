@@ -19,6 +19,7 @@ type SpotifyStore = {
   currentPlaylist: any | null;
   search: string;
   searchData: any[] | null;
+  backgroundImage: File | null;
   setSearch: (query: string) => void;
   transferDevice: (device_id: { device_id: string }) => Promise<void>;
   updateState: (state: any) => void;
@@ -43,6 +44,7 @@ const initialState = {
   currentPlaylist: null,
   search: "",
   searchData: null,
+  backgroundImage: null,
 }
 
 export const useSpotifyStore = create<SpotifyStore>()(
@@ -156,6 +158,7 @@ export const useSpotifyStore = create<SpotifyStore>()(
         volume: state.volume,
         shuffle: state.shuffle,
         repeat: state.repeat,
+        backgroundImage: state.backgroundImage,
       }),
     }
   )

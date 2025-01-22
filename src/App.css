@@ -9,11 +9,11 @@
 	box-sizing: border-box;
 	font-family: 'circular-black', sans-serif;
 
-	--color-darkest: rgba(18, 18, 18, 0.75);
-	--color-dark: rgba(33, 33, 33, 0.75);
-	--color-middle: rgba(83, 83, 83, 0.75);
-	--color-light: rgba(179, 179, 179, 0.75);
-	--color-green: rgba(29, 185, 84, 0.75);
+	--color-darkest: rgba(18, 18, 18, 1);
+	--color-dark: rgba(33, 33, 33, 0.5);
+	--color-middle: rgba(83, 83, 83, 1);
+	--color-light: rgba(179, 179, 179, 1);
+	--color-green: rgba(29, 185, 84, 1);
 }
 
 body {

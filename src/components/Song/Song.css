@@ -9,7 +9,7 @@
 .song-index {
 	flex-grow: 0;
 	flex-shrink: 0;
-	padding: 4px;
+	padding: 5px;
 	z-index: 1;
 }
 
@@ -31,7 +31,7 @@
 .song-duration {
 	flex-grow: 0;
 	flex-shrink: 0;
-	padding: 4px;
+	padding: 5px;
 	z-index: 1;
 }
 

@@ -10,18 +10,18 @@ type SongProps = {
   songs: Song[]
 }
 
-const Song = ({className, idx, song, songs}: SongProps) => {
+const Song = ({ className, idx, song, songs }: SongProps) => {
   const setSong = useSpotifyStore((state) => state.setSong);
 
   const handleClick = (uri: string) => {
     setSong(uri, songs);
   }
 
-  const classname = `song ${className} ${(!song.track.is_playable ?? true) && (!song.track.track ?? true) ? "invalid" : ""}`
+  let classname = `song ${className} ${!song.track.is_playable && !song?.track.track ? "invalid" : ""}`
 
   return (
     <div onClick={() => handleClick(song.track.uri)} className={classname} >
-      <span className="song-index">{idx ? idx + ". ": null}</span>
+      <span className="song-index">{idx ? idx + ". " : null}</span>
       <div className="text-container">
         <ScrollingText className="song-text" text={song.track.artists[0].name + " - " + song.track.name} />
       </div>

@@ -13,12 +13,11 @@
 	align-items: center;
 	width: 100%;
 	padding: 4px 4px;
-	border-bottom: 4px solid var(--color-green);
 	position: sticky;
 	background: var(--color-dark);
 	z-index: 2;
-	min-height: 60px;
-	max-height: 60px;
+	min-height: 40px;
+	max-height: 40px;
 	top: 0;
 	left: 0;
 }
@@ -28,8 +27,8 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	--scrollbar-width: calc(100vw - 100%);
-	min-height: 440px;
-	max-height: 440px;
+	min-height: 390px;
+	max-height: 390px;
   background: var(--color-dark);
   display: flex;
   flex-direction: column;
@@ -51,36 +50,46 @@
 .search-nav input[type="text"] {
 	flex-grow: 1;
 	flex-shrink: 1;
-	padding: 8px;
-	background: var(--color-dark);
-	border: 1px solid var(--color-green);
-	border-radius: 5px;
-	margin: 10px 0;
-	color: var(--color-light)
+	background: var(--color-darkest);
+  border: none;
+	color: var(--color-light);
+  padding: 4px;
+  border-radius: 4px 4px 0 0;
+	border-bottom: 1px solid var(--color-darkest);
+}
+
+.search-nav input[type="text"]:focus {
+  outline: none;
+	border-bottom: 1px solid var(--color-green);
 }
 
 .search-nav button {
 	flex-grow: 0;
-	padding: 10px;
+	padding: 4px 10px;
 	margin: 4px;
 	background: none;
 	border: none;
-	color: var(--color-green);
+	color: var(--color-light);
+  background: var(--color-darkest);
+  border-radius: 4px;
+  text-align: center;
 }
 
 .search-nav .delete {
 	position: absolute;
 	left: 410px;
-	color: var(--color-green);
+	color: var(--color-light);
 	font-size: 10px;
 }
 
 .delete:hover {
 	filter: brightness(80%);
+  color: var(--color-green);
 	cursor: pointer;
 }
 
 .search-nav button:hover {
-    cursor: pointer;
-	filter: brightness(80%);
+  filter: brightness(80%);
+  color: var(--color-green);
+  cursor: pointer;
 }

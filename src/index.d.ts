@@ -12,7 +12,7 @@ declare global {
         getOAuthToken: (cb: (token: string) => void) => void;
         volume?: number;
       });
-      
+
       connect(): Promise<boolean>;
       disconnect(): void;
       getCurrentState(): Promise<PlaybackState | null>;
@@ -45,11 +45,12 @@ declare global {
     track: {
       name: string,
       uri: string,
+      track: string,
       artists: [
-      {
-        name: string
-      }
-    ],
+        {
+          name: string
+        }
+      ],
       duration_ms: number,
       id: string,
       is_playable: boolean

@@ -20,8 +20,9 @@
 	width: 100%;
 	background: var(--color-green);
 	color: var(--color-darkest);
-	min-height: 25px;
-	max-height: 25px;
+	min-height: 30px;
+	max-height: 30px;
+  align-items: center;
 }
 
 

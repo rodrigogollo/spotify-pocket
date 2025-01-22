@@ -29,14 +29,16 @@ Also I used this app to improve my skills in Rust and React.
 ## TODOS:
 
 ### Fixes:
-- [x] Fix Login behaviour.
-- [ ] Fix App on build (get songs and player not working).
-- [~] Make No data found component to show on data null.
+- [ ] Fix on song start playing seek counter buggy (on start 0.1 resets to 0.0 for no reason, and on song ending does 1 sec more).
+- [ ] Fix Login behaviour.
+- [ ] Fix on idle app stop working (token expired).
 - [ ] Fix playlist name scrolling-text.
 - [ ] Fix volume bubble dynamic left
 - [ ] Graph page that shows user's top items (Wrapped style).
 - [ ] Organize Rust functions.
 - [ ] Fix TypeScript/Rust errors for build.
+- [ ] Fix App on build (get songs and player not working).
+- [x] Make No data found component to show on data null.
 
 ### Design:
 
@@ -57,7 +59,7 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Make player custom buttons on hover windows taskbar.
 - [ ] Remove song to liked/playlist.
 - [ ] Search albums/playlists/podcasts.
-- [ ] Search button (search inside liked songs).
+- [ ] Filter button (search inside liked songs).
 - [ ] Play specific searched albums/playlists/podcasts.
 
 ### Done

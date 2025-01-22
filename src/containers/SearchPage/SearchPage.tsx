@@ -9,6 +9,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import fetchPage from "./fetchSearch";
 import { useSpotifyStore } from "../../stores/spotifyStore";
+import Tags from "../../components/Tags/Tags";
 
 const SearchPage = () => {
   const token = useAuthStore((state) => state.token);
@@ -55,9 +56,10 @@ const SearchPage = () => {
         <input type="text" placeholder="search" value={query} onChange={handleSearchChange} />
         <FontAwesomeIcon className="delete" icon={faX} onClick={() => setQuery("")} size={"sm"} />
         <button type="submit">
-          <FontAwesomeIcon icon={faSearch} />
+          <FontAwesomeIcon icon={faSearch} size="sm" />
         </button>
       </div>
+      <Tags />
       <div className="searched-songs">
         {
           isLoading ? (

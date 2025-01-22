@@ -13,6 +13,7 @@ nav {
 	justify-content: center;
 	align-items: center;
 }
+
 nav a {
 	color: var(--color-light);
 	text-decoration: none;

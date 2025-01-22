@@ -13,6 +13,19 @@
 	width: 100%;
 }
 
+.playlist-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.playlist-list::-webkit-scrollbar-track {
+  background: var(--color-dark);        /* color of the tracking area */
+}
+
+.playlist-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-green);    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+}
+
 .playlist-list a {
 	text-decoration: none;
 	display: flex;

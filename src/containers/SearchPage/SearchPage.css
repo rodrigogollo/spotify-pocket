@@ -31,6 +31,8 @@
 	min-height: 440px;
 	max-height: 440px;
   background: var(--color-dark);
+  display: flex;
+  flex-direction: column;
 }
 
 .searched-songs::-webkit-scrollbar {

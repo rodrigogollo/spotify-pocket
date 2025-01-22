@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import "./PlaylistSongList.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Loading from "../../components/Loading/Loading";
 import { useAuthStore } from "../../stores/authStore";
 import SongListContainer from "../../components/SongListContainer/SongListContainer";
@@ -20,7 +20,7 @@ const PlaylistSongList = () => {
   const getPlaylist = useSpotifyStore((state) => state.getPlaylist);
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
-    queryKey: [`playlist-songs-${id}`, token, id], 
+    queryKey: [`playlist-songs-${id}`, token, id],
     queryFn: fetchPlaylistSongs,
     getNextPageParam: (lastPage) => lastPage.hasNextPage ? lastPage.nextPage : undefined,
   });
@@ -34,7 +34,7 @@ const PlaylistSongList = () => {
   }, [fetchNextPage, inView]);
 
   useEffect(() => {
-	getPlaylist(id)
+    getPlaylist(id)
   }, [])
 
   if (error) {
@@ -42,24 +42,24 @@ const PlaylistSongList = () => {
   }
 
   return (
-	<div className="playlist-songs">
-	  { playlist && 
-		<div className="playlist-header">
-		  <FontAwesomeIcon className="icon" onClick={() => navigate(-1)} icon={faArrowLeft} size="lg" />
-		  <h3>{playlist.name}</h3>
-		  <img src={playlist.images[0].url} />
-		</div>
-	  }
-	  { isLoading || !data || !data.pages ?
-		<Loading /> :
-		<SongListContainer 
-			isLoading={isLoading}
-			data={data}
-		/> 
-	}
-	<div ref={ref}></div>
-	{isFetchingNextPage ? <Loading /> : null} 
-	</div>
+    <div className="playlist-songs">
+      {playlist &&
+        <div className="playlist-header">
+          <FontAwesomeIcon className="icon" onClick={() => navigate(-1)} icon={faArrowLeft} size="lg" />
+          <h3>{playlist.name}</h3>
+          <img src={playlist.images[0].url} />
+        </div>
+      }
+      {isLoading || !data || !data.pages ?
+        <Loading /> :
+        <SongListContainer
+          isLoading={isLoading}
+          data={data}
+        />
+      }
+      <div ref={ref}></div>
+      {isFetchingNextPage ? <Loading /> : null}
+    </div>
   );
 };
 

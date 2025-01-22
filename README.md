@@ -2,7 +2,10 @@
 
 Spotify minimalist player.
 
-![Spotify Pocket](./spotify-pocket.png)
+## Demo Video:
+https://github.com/user-attachments/assets/a4bb567e-4a6e-4c68-98e3-f1aeefb7823b
+
+![Spotify Pocket](./main.png)
 
 This app idea came to me after getting annoyed with the original Spotify App, which is slow and renders too many useless things on the screen. When I was younger I used Winamp, which was a simple app that just shown our songs and played it. 
 

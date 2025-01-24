@@ -39,9 +39,10 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Fix TypeScript/Rust errors for build.
 - [ ] Fix App on build (get songs and player not working).
 - [x] Make No data found component to show on data null.
+- [ ] Follow rules for publishing (https://developer.spotify.com/documentation/design#using-our-content).
+
 
 ### Design:
-
 - [ ] Design SettingsPage
 - [ ] Design Log out button
 

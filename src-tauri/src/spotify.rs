@@ -12,7 +12,55 @@ use std::env;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_shell::ShellExt;
-use crate::preferences::{UserPreferences, save_preferences, load_preferences, clear_preferences};
+use pref::{UserPreferences, save_preferences, load_preferences, clear_preferences};
+
+mod pref {
+    use serde::{Serialize, Deserialize};
+    use serde_json::{to_string, from_str};
+    use std::io::{self, Write, Read};
+    use std::fs::File;
+
+    const FILE_PATH: &str = "../preferences.json";
+
+    #[derive(Serialize, Deserialize, Debug)]
+    pub struct UserPreferences {
+        pub refresh_token: Option<String>,
+        pub theme: String,
+        pub language: String,
+    }
+
+    impl UserPreferences {
+        pub fn default() -> Self {
+            UserPreferences {
+                refresh_token: None,
+                theme: "dark".to_string(),
+                language: "EN".to_string(),
+            }
+        }
+    }
+
+    pub fn save_preferences(prefrences: &UserPreferences) -> io::Result<()> {
+        let json = to_string(prefrences)?;
+        let mut file = File::create(FILE_PATH)?;
+        file.write_all(json.as_bytes())?;
+        Ok(())
+    }
+
+    pub fn load_preferences() -> io::Result<UserPreferences> {
+        let mut file = File::open(FILE_PATH)?;
+        let mut contents = String::new();
+        file.read_to_string(&mut contents)?;
+        let preferences: UserPreferences = from_str(&contents)?;
+
+        Ok(preferences)
+    }
+
+    pub fn clear_preferences() -> io::Result<()> {
+        let default_preferences = UserPreferences::default();
+        save_preferences(&default_preferences);
+        Ok(())
+    }
+}
 
 #[tauri::command]
 pub fn initiate_spotify_auth(app_handle: AppHandle) {
@@ -101,7 +149,7 @@ pub async fn handle_spotify_callback(
         //let store = StoreBuilder::new(app_handle_ref, "store.json").build();
         //
 
-        let mut preferences = load_preferences("preferences.json").unwrap_or_else(|_| {
+        let mut preferences = load_preferences().unwrap_or_else(|_| {
             UserPreferences::default()
         });
 
@@ -110,7 +158,7 @@ pub async fn handle_spotify_callback(
             .map(|s| s.to_string());
 
         // save preferences
-        save_preferences(&preferences, "preferences.json");
+        save_preferences(&preferences);
 
         //store.set("REFRESH_TOKEN", json!({ "value": json["refresh_token"] }));
         //store.save();
@@ -140,11 +188,11 @@ pub async fn handle_spotify_callback(
 pub async fn user_log_out() -> bool {
     println!("Logging out the current user.");
 
-    let loaded_preferences = load_preferences("preferences.json");
+    let loaded_preferences = load_preferences();
     println!("Loaded Preferences: {:?}", loaded_preferences);
-    clear_preferences("preferences.json");
+    clear_preferences();
 
-    let cleared_preferences = load_preferences("preferences.json");
+    let cleared_preferences = load_preferences();
     println!("Cleared Preferences: {:?}", cleared_preferences);
 
     //println!("REFRESH_TOKEN has been removed from the store.");
@@ -160,7 +208,7 @@ pub async fn refresh_token(app_handle: AppHandle) -> String {
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
     let client_secret = env::var("SPOTIFY_CLIENT_SECRET").expect("SPOTIFY_CLIENT_SECRET not found in .env");
 
-    let loaded_preferences: UserPreferences = load_preferences("preferences.json")
+    let loaded_preferences: UserPreferences = load_preferences()
         .unwrap_or_else(|_| UserPreferences::default());
     
     let stored_refresh_token = loaded_preferences.refresh_token.clone();
@@ -340,6 +388,7 @@ pub async fn get_user_top_items(access_token: String) -> String {
 
 #[tauri::command]
 pub async fn get_user_saved_tracks(access_token: String, offset: i32, limit: i32) -> String {
+    println!("nocheckin {}", access_token);
     let url = "https://api.spotify.com/v1/me/tracks";
     let authorization = format!("Bearer {}", access_token);
 

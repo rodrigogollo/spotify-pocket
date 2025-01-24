@@ -12,7 +12,7 @@ use std::env;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_shell::ShellExt;
-use tauri_plugin_store::StoreBuilder;
+use crate::preferences::{UserPreferences, save_preferences, load_preferences, clear_preferences};
 
 #[tauri::command]
 pub fn initiate_spotify_auth(app_handle: AppHandle) {
@@ -97,11 +97,23 @@ pub async fn handle_spotify_callback(
         println!("Json: {:?}", json);
 
         // save refresh token
-        let app_handle_ref = app_handle.as_ref();
-        let store = StoreBuilder::new(app_handle_ref, "store.json").build();
+        //let app_handle_ref = app_handle.as_ref();
+        //let store = StoreBuilder::new(app_handle_ref, "store.json").build();
+        //
 
-        store.set("REFRESH_TOKEN", json!({ "value": json["refresh_token"] }));
-        store.save();
+        let mut preferences = load_preferences("preferences.json").unwrap_or_else(|_| {
+            UserPreferences::default()
+        });
+
+        preferences.refresh_token = json.get("refresh_token")
+            .and_then(|v| v.as_str()) 
+            .map(|s| s.to_string());
+
+        // save preferences
+        save_preferences(&preferences, "preferences.json");
+
+        //store.set("REFRESH_TOKEN", json!({ "value": json["refresh_token"] }));
+        //store.save();
         // let refresh = store.get("REFRESH_TOKEN").expect("Failed to get value from store");
         // println!("refresh token from store {}", refresh);
 
@@ -125,14 +137,17 @@ pub async fn handle_spotify_callback(
 
 
 #[tauri::command]
-pub async fn user_log_out(app_handle: AppHandle) -> bool {
-    dotenv().ok();
+pub async fn user_log_out() -> bool {
     println!("Logging out the current user.");
 
-    let store = StoreBuilder::new(&app_handle, "store.json").build();
-    store.delete("REFRESH_TOKEN");
-    store.save();
-    println!("REFRESH_TOKEN has been removed from the store.");
+    let loaded_preferences = load_preferences("preferences.json");
+    println!("Loaded Preferences: {:?}", loaded_preferences);
+    clear_preferences("preferences.json");
+
+    let cleared_preferences = load_preferences("preferences.json");
+    println!("Cleared Preferences: {:?}", cleared_preferences);
+
+    //println!("REFRESH_TOKEN has been removed from the store.");
 
     true
 }
@@ -145,18 +160,21 @@ pub async fn refresh_token(app_handle: AppHandle) -> String {
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
     let client_secret = env::var("SPOTIFY_CLIENT_SECRET").expect("SPOTIFY_CLIENT_SECRET not found in .env");
 
-    let store = StoreBuilder::new(&app_handle, "store.json").build();
-    let store_result = store.get("REFRESH_TOKEN").expect("Failed to get token from store");
+    let loaded_preferences: UserPreferences = load_preferences("preferences.json")
+        .unwrap_or_else(|_| UserPreferences::default());
+    
+    let stored_refresh_token = loaded_preferences.refresh_token.clone();
 
-    let stored_refresh_token = &store_result["value"];
-    println!("refresh token from store {}", stored_refresh_token);
+    //let store = StoreBuilder::new(&app_handle, "store.json").build();
+    //let store_result = store.get("REFRESH_TOKEN").expect("Failed to get token from store");
 
-    let refresh_token = match stored_refresh_token.as_str() {
-        Some(s) => s,
-        None => {
-            eprintln!("REFRESH_TOKEN is not a string");
-            return "".to_string();
-        }
+    //let stored_refresh_token = &store_result["value"];
+    //println!("refresh token from store {}", stored_refresh_token);
+    println!("refresh token from store {}", stored_refresh_token.as_deref().unwrap_or("no refresh token"));
+
+    let refresh_token = match stored_refresh_token {
+        Some(ref token) => token.as_str(),
+        None => "No token vailable",
     };
 
     let mut params = HashMap::new();

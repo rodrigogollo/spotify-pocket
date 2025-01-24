@@ -1,6 +1,8 @@
 mod routes;
-mod spotify;
+pub mod preferences;
+pub mod spotify;
 use std::sync::Arc;
+use spotify::{initiate_spotify_auth};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -19,7 +21,7 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            spotify::initiate_spotify_auth,
+            initiate_spotify_auth,
             spotify::transfer_playback,
             spotify::refresh_token,
             spotify::get_user_saved_tracks,

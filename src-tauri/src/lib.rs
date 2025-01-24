@@ -1,9 +1,6 @@
 mod routes;
 mod spotify;
 use std::sync::Arc;
-use tauri_plugin_store::StoreExt;
-use tauri::Wry;
-use serde_json::json;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

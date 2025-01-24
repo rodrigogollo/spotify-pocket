@@ -52,6 +52,11 @@
 	padding: 4px;
 }
 
+
+.current-playlist-text:hover {
+  color: var(--color-green);
+}
+
 .current-playlist img {
 	flex-grow: 0;
 	flex-shrink: 0;
@@ -63,9 +68,9 @@
 	height: 60px;
 }
 
-.current-playlist:hover {
+.current-playlist:hover .current-playlist:hover {
 	cursor: pointer;
-	background-color: var(--color-darkest);
+	border-bottom: 1px solid var(--color-green);
 }
 
 .current-playlist::-webkit-scrollbar {

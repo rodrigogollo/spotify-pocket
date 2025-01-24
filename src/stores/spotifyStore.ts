@@ -20,6 +20,7 @@ type SpotifyStore = {
   search: string;
   searchData: any[] | null;
   backgroundImage: File | null;
+  filter: string;
   setSearch: (query: string) => void;
   transferDevice: (device_id: { device_id: string }) => Promise<void>;
   updateState: (state: any) => void;
@@ -45,6 +46,7 @@ const initialState = {
   search: "",
   searchData: null,
   backgroundImage: null,
+  filter: "track",
 }
 
 export const useSpotifyStore = create<SpotifyStore>()(

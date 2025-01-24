@@ -22,7 +22,7 @@ const Volume = () => {
         let vol = Number(event.target.value) / 10;
         await player?.setVolume(vol / 10);
         useSpotifyStore.setState({ volume: vol / 10 });
-        setLastVolume(vol/10);
+        setLastVolume(vol / 10);
 
         // Update bubble position based on slider value
         const newValue = Number(event.target.value);
@@ -31,7 +31,7 @@ const Volume = () => {
         const max = Number(event.target.max) || 100;
         const percentage = (newValue - min) / (max - min);
         setBubblePosition(480 - (130 - percentage * sliderWidth));
-        
+
       } catch (err) {
         console.log("error changing volume", err);
       }
@@ -66,21 +66,21 @@ const Volume = () => {
   return (
     <div className="volume">
       <FontAwesomeIcon icon={
-        volume == 0 ? faVolumeXmark : 
-        volume <= 0.5 ? faVolumeLow : 
-        faVolumeHigh 
-      } 
+        volume == 0 ? faVolumeXmark :
+          volume <= 0.5 ? faVolumeLow :
+            faVolumeHigh
+      }
         onClick={handleToggleVolume}
         className="icon"
         size="lg"
       />
-      <input 
-        style={{"background": color }}
-        type="range" 
-        min="0" 
-        max="100" 
-        value={volume * 100} 
-        onChange={handleVolumeChange} 
+      <input
+        style={{ "background": color }}
+        type="range"
+        min="0"
+        max="100"
+        value={volume * 100}
+        onChange={handleVolumeChange}
         name="volume"
         orient="vertical"
       />

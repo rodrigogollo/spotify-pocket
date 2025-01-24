@@ -1,12 +1,11 @@
-import { useState } from "react";
 import "./Tags.css";
+import { useSpotifyStore } from "../../stores/spotifyStore";
 
 const Tags = () => {
-  const [filter, setFilter] = useState("top");
+  const filter = useSpotifyStore((state) => state.filter);
 
-  const handleFilterClick = (e: MouseEvent<HTMLSpanElement>) => {
-    console.log(e.target.id);
-    setFilter(e.target.id)
+  const handleFilterClick = (e) => {
+    useSpotifyStore.setState({ filter: e.target.id });
   }
 
   return (

@@ -17,9 +17,10 @@ const SearchPage = () => {
   const [query, setQuery] = useState(search);
   const searchData = useSpotifyStore((state) => state.searchData);
   const setSearch = useSpotifyStore((state) => state.setSearch);
+  const filter = useSpotifyStore((state) => state.filter);
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["searched-songs", token, search],
+    queryKey: ["searched-songs", token, search, filter],
     queryFn: fetchPage,
     getNextPageParam: (lastPage) => lastPage.hasNextPage ? lastPage.nextPage : undefined,
     enabled: !!search,
@@ -49,6 +50,8 @@ const SearchPage = () => {
     event.preventDefault();
     setQuery(event.target.value);
   }
+
+  console.log("data", data);
 
   return (
     <form onSubmit={handleSearchSubmit} className="search-page">

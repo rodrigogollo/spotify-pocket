@@ -66,18 +66,17 @@
 .search-nav button {
 	flex-grow: 0;
 	padding: 4px 10px;
-	margin: 4px;
+	margin: 0 4px;
 	background: none;
 	border: none;
 	color: var(--color-light);
-  background: var(--color-darkest);
   border-radius: 4px;
   text-align: center;
 }
 
 .search-nav .delete {
 	position: absolute;
-	left: 410px;
+	left: 420px;
 	color: var(--color-light);
 	font-size: 10px;
 }

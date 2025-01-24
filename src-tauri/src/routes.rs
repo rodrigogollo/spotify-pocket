@@ -1,11 +1,9 @@
 use crate::spotify::handle_spotify_callback;
 use crate::spotify::handle_spotify_token;
-use axum::extract::State;
 use axum::{routing::get, Router};
 use std::net::SocketAddr;
 use std::sync::Arc;
 use tauri::AppHandle;
-use tauri::Emitter;
 use tokio::net::TcpListener;
 
 pub async fn backend_server(app_handle: Arc<AppHandle>) -> Result<(), Box<dyn std::error::Error>> {

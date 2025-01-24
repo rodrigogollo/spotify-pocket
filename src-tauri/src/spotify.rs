@@ -10,7 +10,7 @@ use tauri::utils::acl::Number;
 use std::collections::HashMap;
 use std::env;
 use std::sync::Arc;
-use tauri::{AppHandle, Emitter, Manager, WindowEvent};
+use tauri::{AppHandle, Emitter};
 use tauri_plugin_shell::ShellExt;
 use tauri_plugin_store::StoreBuilder;
 
@@ -376,11 +376,11 @@ pub async fn get_playlist_tracks(access_token: String, offset: i32, limit: i32, 
 
 
 #[tauri::command]
-pub async fn search(access_token: String, offset: i32, limit: i32, query: String) -> String {
+pub async fn search(access_token: String, offset: i32, limit: i32, query: String, media_type: String) -> String {
     let url = format!("https://api.spotify.com/v1/search");
     let authorization = format!("Bearer {}", access_token);
 
-    let media_type: String = "album,track".to_string();
+    //let media_type: String = "album,track".to_string();
 
     let mut params = HashMap::new();
     params.insert("q", query);

@@ -42,7 +42,7 @@ export const Spotify = () => {
 
         const player = new window.Spotify.Player({
           name: "Spotify Pocket",
-          getOAuthToken: async (cb) => { 
+          getOAuthToken: async (cb) => {
             const newToken = await handleRefreshToken();
             cb(newToken);
           },
@@ -83,7 +83,7 @@ export const Spotify = () => {
         if (success) {
           useSpotifyStore.setState({ player: player });
           console.log('The Web Playback SDK successfully connected to Spotify!');
-        } 
+        }
       };
     }
 
@@ -93,7 +93,7 @@ export const Spotify = () => {
       console.log("cleanup spotify");
       const iframes = document.querySelectorAll('iframe[src*="sdk.scdn"]');
       iframes.forEach(iframe => iframe.remove());
-      
+
       const scripts = document.querySelectorAll('script[src*="spotify-player"]');
       scripts.forEach(script => script.remove());
     };

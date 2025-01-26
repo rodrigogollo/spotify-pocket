@@ -29,8 +29,8 @@ Also I used this app to improve my skills in Rust and React.
 ## TODOS:
 
 ### Fixes:
-- [ ] Fix on song start playing seek counter buggy (on start 0.1 resets to 0.0 for no reason, and on song ending does 1 sec more).
-- [ ] Fix Login behaviour.
+- [x] Fix on song start playing seek counter buggy (on start 0.1 resets to 0.0 for no reason, and on song ending does 1 sec more).
+- [x] Fix Login behaviour.
 - [ ] Fix on idle app stop working (token expired).
 - [ ] Fix playlist name scrolling-text.
 - [ ] Fix volume bubble dynamic left
@@ -40,7 +40,6 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Fix App on build (get songs and player not working).
 - [x] Make No data found component to show on data null.
 - [ ] Follow rules for publishing (https://developer.spotify.com/documentation/design#using-our-content).
-
 
 ### Design:
 - [ ] Design SettingsPage
@@ -56,12 +55,17 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Background Image inside User Options.
 
 ### New Features:
+- [ ] Searched songs check if already liked (https://developer.spotify.com/documentation/web-api/reference/check-users-saved-tracks).
+- [ ] Get user profile info (https://developer.spotify.com/documentation/web-api/reference/get-users-profile).
+- [ ] Get user top items (https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks).
 - [ ] Add song to liked/playlist.
 - [ ] Make player custom buttons on hover windows taskbar.
 - [ ] Remove song to liked/playlist.
 - [ ] Search albums/playlists/podcasts.
 - [ ] Filter button (search inside liked songs).
 - [ ] Play specific searched albums/playlists/podcasts.
+- [ ] Get recommendations (https://developer.spotify.com/documentation/web-api/reference/get-recommendations).
+- [ ] Follow Playlist/Artist.
 
 ### Done
 - [x] Spotify Authentication (API).

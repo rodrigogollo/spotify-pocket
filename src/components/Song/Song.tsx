@@ -17,7 +17,7 @@ const Song = ({ className, idx, song, songs }: SongProps) => {
     setSong(uri, songs);
   }
 
-  let classname = `song ${className} ${!song.track.is_playable && !song?.track.track ? "invalid" : ""}`
+  let classname = `song ${className} ${!song.track.is_playable && !song?.track.track ? "invalid" : ""} ${song.isLiked ? "liked" : ""}`
 
   return (
     <div onClick={() => handleClick(song.track.uri)} className={classname} >

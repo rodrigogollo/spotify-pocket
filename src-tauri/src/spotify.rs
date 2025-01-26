@@ -195,13 +195,36 @@ pub async fn user_log_out() -> bool {
     let cleared_preferences = load_preferences();
     println!("Cleared Preferences: {:?}", cleared_preferences);
 
-    //println!("REFRESH_TOKEN has been removed from the store.");
-
     true
 }
 
 #[tauri::command]
-pub async fn refresh_token(app_handle: AppHandle) -> String {
+pub async fn check_user_saved_tracks(access_token: String, ids: Vec<String>) -> String {
+    let url = "https://api.spotify.com/v1/me/tracks/contains".to_owned();
+    let authorization = format!("Bearer {}", access_token);
+
+    let mut params = HashMap::new();
+    params.insert("ids", ids.join(","));
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
+
+#[tauri::command]
+pub async fn refresh_token() -> String {
     dotenv().ok();
     println!("refreshing token");
     let url = "https://accounts.spotify.com/api/token".to_owned();

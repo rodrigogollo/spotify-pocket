@@ -49,3 +49,7 @@
   color: gray;
   pointer-events:none;
 }
+
+.liked { 
+  color: red;
+}

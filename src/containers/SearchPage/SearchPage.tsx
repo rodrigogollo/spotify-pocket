@@ -51,8 +51,6 @@ const SearchPage = () => {
     setQuery(event.target.value);
   }
 
-  console.log("data", data);
-
   return (
     <form onSubmit={handleSearchSubmit} className="search-page">
       <div className="search-nav">

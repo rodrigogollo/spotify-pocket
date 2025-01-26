@@ -6,6 +6,15 @@ const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async 
   const query = queryKey[2];
   const mediaType = queryKey[3]
 
+
+  const checkSongs = async (ids) => {
+    const response = await invoke("check_user_saved_tracks", {
+      accessToken: token,
+      ids: ids,
+    });
+    return JSON.parse(response);
+  }
+
   const fetchSongs = async (offset: number) => {
     const apiRes: string = await invoke("search",
       {
@@ -25,11 +34,14 @@ const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async 
 
     if (data.tracks) {
       data.tracks.items = data.tracks.items.map(item => ({ track: item }));
+      const ids = data.tracks.items.map((track) => track.track.id)
+      const arrayOfLiked = await checkSongs(ids);
+      console.log(arrayOfLiked)
+      data.tracks.items = data.tracks.items.map((item, idx) => ({ ...item, isLiked: arrayOfLiked[idx] }));
       return data.tracks;
     } else if (data.albums) {
       return data.albums
     }
-
   }
 
   const [page1, page2, page3] = await Promise.all([
@@ -37,7 +49,6 @@ const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async 
     fetchSongs(pageParam + 50),
     fetchSongs(pageParam + 100),
   ]);
-
 
   if (page1.items) {
     let allItems = [...page1.items, ...page2.items, ...page3.items];
@@ -55,7 +66,6 @@ const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async 
   }
 
   return null;
-
-
 }
+
 export default fetchPage;

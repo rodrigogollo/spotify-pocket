@@ -13,6 +13,14 @@
   padding: 5px;
 }
 
+.song-index svg {
+  color: var(--color-light); 
+}
+
+.song-index svg.active {
+  color: var(--color-green); 
+}
+
 .text-container {
 	display: inline-block;
 	flex-grow: 1;

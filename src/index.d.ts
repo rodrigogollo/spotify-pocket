@@ -54,7 +54,8 @@ declare global {
       duration_ms: number,
       id: string,
       is_playable: boolean
-    }
+    },
+    isLiked: boolean
   }
   interface Playlist {
     id: string,

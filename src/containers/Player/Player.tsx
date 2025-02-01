@@ -13,7 +13,7 @@ const Player = () => {
   return (
     <div className="player">
       <div className="track-container">
-        <ScrollingText text={currentTrack} className={"current-track"} />
+        <ScrollingText text={currentTrack} className={"current-track main"} />
       </div>
       <div className="times">
         <Seek />

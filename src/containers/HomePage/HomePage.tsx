@@ -5,7 +5,7 @@ import LikedSongs from "../LikedSongs/LikedSongs";
 
 const HomePage = () => {
   const isPlayerReady = useSpotifyStore((state) => state.isPlayerReady);
-  console.log("HOME PAGE");
+
   return (
     <>
       {!isPlayerReady ?

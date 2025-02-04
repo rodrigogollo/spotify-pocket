@@ -31,7 +31,7 @@ Also I used this app to improve my skills in Rust and React.
 ### Fixes:
 - [x] Fix on song start playing seek counter buggy (on start 0.1 resets to 0.0 for no reason, and on song ending does 1 sec more).
 - [x] Fix Login behaviour.
-- [ ] Fix scroll search tags.
+- [x] Fix scroll search tags.
 - [ ] Fix on idle app stop working (token expired).
 - [ ] Fix playlist name scrolling-text.
 - [ ] Fix volume bubble dynamic left

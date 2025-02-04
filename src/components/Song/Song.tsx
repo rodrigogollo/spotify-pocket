@@ -12,7 +12,7 @@ type SongProps = {
   songs: Song[]
 }
 
-const Song = ({ className, idx, song, songs }: SongProps) => {
+const Song = ({ className, song, songs }: SongProps) => {
   const setSong = useSpotifyStore((state) => state.setSong);
 
   const handleClick = (uri: string) => {
@@ -21,9 +21,14 @@ const Song = ({ className, idx, song, songs }: SongProps) => {
 
   let classname = `song ${className} ${!song.track.is_playable && !song?.track.track ? "invalid" : ""}`
 
+  //let artists = song.track.artists.map((artist) => artist.name).join(", ");
+  //
+
+  console.log(song);
+
   return (
     <div onClick={() => handleClick(song.track.uri)} className={classname} >
-      <span className="song-index">{/* idx ? idx + ". " : null */}
+      <span className="song-index">
         <FontAwesomeIcon className={song.isLiked ? "active" : ""} icon={song.isLiked ? faCircleCheck : faPlus} size="sm" />
       </span>
       <div className="text-container">

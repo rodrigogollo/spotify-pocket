@@ -375,8 +375,9 @@ pub async fn get_user_top_items(access_token: String) -> String {
     let authorization = format!("Bearer {}", access_token);
 
     let mut params = HashMap::new();
-    params.insert("offset", 0);
-    params.insert("limit", 10);
+    params.insert("offset", 0.to_string());
+    params.insert("limit", 10.to_string());
+    params.insert("market", "US".to_string());
 
     let http_client = Client::new();
     let response = http_client
@@ -402,9 +403,9 @@ pub async fn get_user_saved_tracks(access_token: String, offset: i32, limit: i32
     let authorization = format!("Bearer {}", access_token);
 
     let mut params = HashMap::new();
-    // params.insert("market", "ES");
-    params.insert("offset", offset);
-    params.insert("limit", limit);
+    params.insert("offset", offset.to_string());
+    params.insert("limit", limit.to_string());
+    params.insert("market", "US".to_string());
 
     let http_client = Client::new();
     let response = http_client
@@ -429,9 +430,9 @@ pub async fn get_playlist_tracks(access_token: String, offset: i32, limit: i32, 
     let authorization = format!("Bearer {}", access_token);
 
     let mut params = HashMap::new();
-    // params.insert("market", "ES");
-    params.insert("offset", offset);
-    params.insert("limit", limit);
+    params.insert("offset", offset.to_string());
+    params.insert("limit", limit.to_string());
+    params.insert("market", "US".to_string());
 
     let http_client = Client::new();
     let response = http_client

@@ -141,7 +141,7 @@ export const useSpotifyStore = create<SpotifyStore>()(
         const stateUri = stateTrack?.uri;
 
         if (stateTrack && get().currentUri !== stateUri) {
-          const uri = stateTrack.linked_from.uri ? stateTrack.linked_from.uri : stateTrack.uri;
+          const uri = stateTrack.linked_from.uri != null ? stateTrack.linked_from.uri : stateTrack.uri;
           set({
             maxSeek: stateTrack.duration_ms,
             currentUri: uri,

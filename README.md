@@ -32,6 +32,8 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Fix on song start playing seek counter buggy (on start 0.1 resets to 0.0 for no reason, and on song ending does 1 sec more).
 - [x] Fix Login behaviour.
 - [x] Fix scroll search tags.
+- [ ] Fix Playlist sticky header and outside scrolling.
+- [ ] Fix playlist when return album and tracks instead (ex: best of FKA twigs.).
 - [ ] Fix on idle app stop working (token expired).
 - [ ] Fix playlist name scrolling-text.
 - [ ] Fix volume bubble dynamic left
@@ -61,8 +63,9 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Get user profile info (https://developer.spotify.com/documentation/web-api/reference/get-users-profile).
 - [ ] Get user top items (https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks).
 - [ ] Add song to liked/playlist.
+- [ ] Remove song from liked/playlist.
+- [ ] Alert Component (like/unlike song).
 - [ ] Make player custom buttons on hover windows taskbar.
-- [ ] Remove song to liked/playlist.
 - [x] Search songs.
 - [x] Search playlists.
 - [ ] Search albums.

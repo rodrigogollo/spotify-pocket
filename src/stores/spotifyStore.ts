@@ -17,6 +17,7 @@ type SpotifyStore = {
   isDeviceConnected: boolean;
   isPlaying: boolean;
   currentPlaylist: any | null;
+  currentAlbum: any | null;
   search: string;
   searchData: any[] | null;
   backgroundImage: File | null;
@@ -25,7 +26,10 @@ type SpotifyStore = {
   transferDevice: (device_id: { device_id: string }) => Promise<void>;
   updateState: (state: any) => void;
   setSong: (uri: string, songs: any[]) => Promise<boolean>;
+  likeSongs: (uris: string[]) => Promise<boolean>;
+  unlikeSongs: (uris: string[]) => Promise<boolean>;
   getPlaylist: (playlistId: string | undefined) => void;
+  getAlbum: (albumId: string | undefined) => void;
   reset: () => void;
 }
 
@@ -43,6 +47,7 @@ const initialState = {
   isDeviceConnected: false,
   isPlaying: false,
   currentPlaylist: null,
+  currentAlbum: null,
   search: "",
   searchData: null,
   backgroundImage: null,
@@ -70,9 +75,23 @@ export const useSpotifyStore = create<SpotifyStore>()(
           set(() => ({ currentPlaylist: null }));
         }
       },
+      getAlbum: async (albumId) => {
+        if (albumId) {
+          const token = useAuthStore.getState().token;
+          const response = await invoke<string>("get_album", {
+            accessToken: token,
+            albumId: albumId
+          });
+          const album = JSON.parse(response);
+
+          set(() => ({ currentAlbum: album }));
+        } else {
+          set(() => ({ currentAlbum: null }));
+        }
+      },
       setSong: async (uri, songs) => {
         const token = useAuthStore.getState().token;
-        const uris = songs.flatMap(song => song.track.uri)
+        const uris = songs.flatMap(song => song?.track?.uri || song?.uri)
         const offset = uris.indexOf(uri);
 
         try {
@@ -95,6 +114,50 @@ export const useSpotifyStore = create<SpotifyStore>()(
           }
         } catch (err) {
           console.log("error changing song", err);
+          return false;
+        }
+      },
+      likeSongs: async (ids) => {
+        const token = useAuthStore.getState().token;
+
+        try {
+          const isLiked = await invoke<boolean>("like_songs", {
+            accessToken: token,
+            ids: ids,
+          });
+
+          if (isLiked) {
+            console.log("tracks saved");
+            return true;
+          } else {
+            console.log("tracks not saved");
+            return false;
+          }
+
+        } catch (err) {
+          console.log("error liking the song", err);
+          return false;
+        }
+      },
+      unlikeSongs: async (ids) => {
+        const token = useAuthStore.getState().token;
+
+        try {
+          const isUnliked = await invoke<boolean>("unlike_songs", {
+            accessToken: token,
+            ids: ids,
+          });
+
+          if (isUnliked) {
+            console.log("tracks removed");
+            return true;
+          } else {
+            console.log("tracks not removed");
+            return false;
+          }
+
+        } catch (err) {
+          console.log("error unliking the song", err);
           return false;
         }
       },

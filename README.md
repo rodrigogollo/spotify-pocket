@@ -62,6 +62,7 @@ Also I used this app to improve my skills in Rust and React.
 - [x] Playlist songs check if already liked.
 - [ ] Get user profile info (https://developer.spotify.com/documentation/web-api/reference/get-users-profile).
 - [ ] Get user top items (https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks).
+- [ ] Create context menu (right click button).
 - [ ] Add song to liked/playlist.
 - [ ] Remove song from liked/playlist.
 - [ ] Alert Component (like/unlike song).

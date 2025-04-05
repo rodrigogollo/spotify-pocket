@@ -14,6 +14,7 @@ import PlaylistSongList from "./containers/PlaylistSongList/PlaylistSongList";
 import SearchPage from "./containers/SearchPage/SearchPage";
 import ChartPage from "./containers/ChartPage/ChartPage";
 import SettingsPage from "./containers/SettingsPage/SettingsPage";
+import AlbumSongList from "./containers/AlbumsSongList/AlbumSongList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
             <Route path="/playlist/:playlistId" element={<PlaylistSongList />} />
+            <Route path="/album/:albumId" element={<AlbumSongList />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/chart" element={<ChartPage />} />
             <Route path="/settings" element={<SettingsPage />} />

@@ -22,7 +22,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost http://localhost:3000 https://api.spotify.com https://accounts.spotify.com https://sdk.scdn.co; script-src 'self' https://sdk.scdn.co 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.scdn.co https://image-cdn-ak.spotifycdn.com https://image-cdn-fa.spotifycdn.com data: blob:; frame-src 'self' https://sdk.scdn.co;",
+      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost http://localhost:3000 https://api.spotify.com https://accounts.spotify.com https://sdk.scdn.co; script-src 'self' https://sdk.scdn.co 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.scdn.co https://image-cdn-ak.spotifycdn.com https://image-cdn-fa.spotifycdn.com data: blob:; frame-src 'self' https://sdk.scdn.co https://accounts.spotify.com;",
       "headers": {
         "X-Content-Type-Options": "nosniff"
       }

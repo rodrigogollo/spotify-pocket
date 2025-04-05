@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 import { QueryFunction } from '@tanstack/react-query';
 import checkSongs from '../../utils/checkSongs';
+import { useSpotifyStore } from '../../stores/spotifyStore';
 
 const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async ({ queryKey, pageParam = 0 }: { queryKey: string[], pageParam: number }) => {
   const token = queryKey[1];
@@ -20,6 +21,7 @@ const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async 
 
     const data = JSON.parse(apiRes);
 
+    console.log(data);
     if (!data) {
       throw new Error(`Liked songs offset : ${offset} not ok`);
     }

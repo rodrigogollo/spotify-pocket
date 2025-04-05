@@ -8,7 +8,7 @@ use serde_json::{json, Value};
 use tauri::utils::acl::Number;
 use std::collections::HashMap;
 use std::env;
-use dotenv::dotenv;
+use dotenv;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_shell::ShellExt;
@@ -64,11 +64,10 @@ mod pref {
 
 #[tauri::command]
 pub fn initiate_spotify_auth(app_handle: AppHandle) {
-    dotenv().ok();
     let client_id = env::var("SPOTIFY_CLIENT_ID").unwrap();
     let redirect_uri = "http://localhost:3000/callback";
     let state = generate_random_state();
-    let scope_list: [&str; 9] = [
+    let scope_list: [&str; 10] = [
         "user-read-private", 
         "user-read-email", 
         "user-modify-playback-state", 
@@ -77,7 +76,8 @@ pub fn initiate_spotify_auth(app_handle: AppHandle) {
         "user-library-read", 
         "playlist-read-private",
         "playlist-read-collaborative",
-        "user-top-read"
+        "user-top-read",
+        "user-library-modify",
     ];
     
     let scope = scope_list.join(" ");
@@ -85,12 +85,11 @@ pub fn initiate_spotify_auth(app_handle: AppHandle) {
     let auth_url = format!(
       "https://accounts.spotify.com/authorize?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}",
       client_id, redirect_uri, scope, state
-  );
+    );
 
-    app_handle
-        .shell()
-        .open(&auth_url, None)
-        .expect("Failed to open authorization URL");
+    if let Err(e) = app_handle.shell().open(&auth_url, None) {
+        eprintln!("Failed to open authorization URL.");
+    }
 }
 
 #[derive(Clone, serde::Serialize)]
@@ -104,7 +103,7 @@ pub async fn handle_spotify_callback(
     Query(params): Query<HashMap<String, String>>,
 ) -> Result<String, String> {
     println!("handle_spotify_callback");
-    dotenv().ok();
+    dotenv::load().ok();
 
     let code = params.get("code");
     let state = params.get("state");
@@ -218,7 +217,7 @@ pub async fn check_user_saved_tracks(access_token: String, ids: Vec<String>) -> 
 #[tauri::command]
 pub async fn refresh_token() -> String {
     println!("refreshing token");
-    dotenv().ok();
+    dotenv::load().ok();
 
     let url = "https://accounts.spotify.com/api/token".to_owned();
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not found in .env");
@@ -295,7 +294,6 @@ pub async fn transfer_playback(access_token: String, device_id: String) -> bool 
         }
     }
 }
-
 
 #[tauri::command]
 pub async fn toggle_shuffle(access_token: String, state: bool) -> bool {
@@ -451,6 +449,32 @@ pub async fn get_playlist_tracks(access_token: String, offset: i32, limit: i32, 
     return json.to_string();
 }
 
+#[tauri::command]
+pub async fn get_album_tracks(access_token: String, offset: i32, limit: i32, album_id: String) -> String {
+    let url = format!("https://api.spotify.com/v1/albums/{}/tracks", album_id);
+    let authorization = format!("Bearer {}", access_token);
+
+    let mut params = HashMap::new();
+    params.insert("offset", offset.to_string());
+    params.insert("limit", limit.to_string());
+    params.insert("market", "US".to_string());
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
 
 #[tauri::command]
 pub async fn search(access_token: String, offset: i32, limit: i32, query: String, media_type: String) -> String {
@@ -509,6 +533,32 @@ pub async fn get_playlist(access_token: String, playlist_id: String) -> String {
     return json.to_string();
 }
 
+#[tauri::command]
+pub async fn get_album(access_token: String, album_id: String) -> String {
+    let url = format!("https://api.spotify.com/v1/albums/{}", album_id);
+    let authorization = format!("Bearer {}", access_token);
+
+    // let mut params = HashMap::new();
+    // // params.insert("market", "ES");
+    // params.insert("offset", offset);
+    // params.insert("limit", limit);
+
+    let http_client = Client::new();
+    let response = http_client
+        .get(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        // .query(&params)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+
+    let json: Value = serde_json::from_str(&response).expect("Failed to parse JSON");
+    return json.to_string();
+}
 
 #[tauri::command]
 pub async fn get_user_playlists(access_token: String, offset: i32, limit: i32) -> String {
@@ -536,6 +586,71 @@ pub async fn get_user_playlists(access_token: String, offset: i32, limit: i32) -
     return json.to_string();
 }
 
+#[tauri::command]
+pub async fn like_songs(access_token: String, ids: Vec<String>) -> bool {
+    println!("token: {}, tracks: {:?}", access_token, ids);
+
+    let url = "https://api.spotify.com/v1/me/tracks";
+    let authorization = format!("Bearer {}", access_token);
+
+    let payload = json!({
+      "ids": ids
+    });
+
+    let http_client = Client::new();
+    let response = http_client
+        .put(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .json(&payload)
+        .send()
+        .await
+        .unwrap();
+
+    match response.error_for_status() {
+        Ok(_response) => {
+            println!("Track successfully saved");
+            true
+        }
+        Err(err) => {
+            println!("Error saving tracks {:?}: {}", ids, err);
+            false
+        }
+    }
+}
+
+#[tauri::command]
+pub async fn unlike_songs(access_token: String, ids: Vec<String>) -> bool {
+    println!("token: {}, tracks: {:?}", access_token, ids);
+
+    let url = "https://api.spotify.com/v1/me/tracks";
+    let authorization = format!("Bearer {}", access_token);
+
+    let payload = json!({
+      "ids": ids
+    });
+
+    let http_client = Client::new();
+    let response = http_client
+        .delete(url)
+        .header("Authorization", authorization)
+        .header("Content-Type", "application/json")
+        .json(&payload)
+        .send()
+        .await
+        .unwrap();
+
+    match response.error_for_status() {
+        Ok(_response) => {
+            println!("Track successfully saved");
+            true
+        }
+        Err(err) => {
+            println!("Error saving tracks {:?}: {}", ids, err);
+            false
+        }
+    }
+}
 
 #[tauri::command]
 pub async fn set_playback(access_token: String, uris: Vec<String>, offset: Number) -> bool {

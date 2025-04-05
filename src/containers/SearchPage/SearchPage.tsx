@@ -11,6 +11,8 @@ import fetchPage from "./fetchSearch";
 import { useSpotifyStore } from "../../stores/spotifyStore";
 import Tags from "../../components/Tags/Tags";
 import PlaylistList from "../PlaylistList/PlaylistList";
+import AlbumsList from "../AlbumsList/AlbumsList";
+
 
 const SearchPage = () => {
   const token = useAuthStore((state) => state.token);
@@ -80,15 +82,21 @@ const SearchPage = () => {
                     key={`${page.id}-${pageIndex}`}
                     data={page}
                   />
+                } else if (page.type == "albums") {
+                  return <AlbumsList
+                    key={`${page.id}-${pageIndex}`}
+                    data={page}
+                  />
+
                 }
               })
             ) : error ? (
               <p>Error: {error.message}</p>
             ) : search === '' ? (
               <p>Start searching for songs</p>
-            ) : data && data.pages.length === 0(
+            ) : data && data.pages.length === 0 ? (
               <p>No songs found.</p>
-            )
+            ) : null
           )
         }
         {search ? <div ref={ref}></div> : null}

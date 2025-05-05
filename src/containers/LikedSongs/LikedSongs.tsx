@@ -11,9 +11,9 @@ const LikedSongs = () => {
   const token = useAuthStore((state) => state.token)
 
   const { isLoading, isFetchingNextPage, data, error, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["liked-songs", token], 
+    queryKey: ["liked-songs", token],
     queryFn: fetchPage,
-    // getNextPageParam: (lastPage)  => lastPage.next,
+    //getNextPageParam: (lastPage) => lastPage.next,
     getNextPageParam: (lastPage) => lastPage.hasNextPage ? lastPage.nextPage : undefined,
   });
 
@@ -29,21 +29,21 @@ const LikedSongs = () => {
     return <>{error.message}</>
   }
 
-   return (
-      <div className="liked-songs">
-        { isLoading || !data || !data.pages ?
-          <Loading /> :
-          data.pages.map((page, pageIndex) => {
-            return <SongList 
-              key={`${pageIndex}-${1 + page.nextPage -150}`}
-              page={page}
-              pageIndex={pageIndex}
-            />
-          })
-        }
-        <div ref={ref}></div>
-        {isFetchingNextPage ? <Loading /> : null} 
-      </div>
+  return (
+    <div className="liked-songs">
+      {isLoading || !data || !data.pages ?
+        <Loading /> :
+        data.pages.map((page, pageIndex) => {
+          return <SongList
+            key={`${pageIndex}-${1 + page.nextPage - 50}`}
+            page={page}
+            pageIndex={pageIndex}
+          />
+        })
+      }
+      <div ref={ref}></div>
+      {isFetchingNextPage ? <Loading /> : null}
+    </div>
   );
 };
 

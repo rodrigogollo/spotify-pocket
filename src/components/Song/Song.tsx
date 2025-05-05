@@ -23,18 +23,18 @@ const Song = ({ className, song, songs, query }: SongProps) => {
   const unlikeSongs = useSpotifyStore((state) => state.unlikeSongs);
   const [isLiked, setIsLiked] = useState(song.isLiked);
 
-  const handleClick = (uri: string) => {
-    console.log("handle uri", uri, songs);
-    setSong(uri, songs);
-  }
-
   const isPlayable = !song?.track?.is_playable || !song?.is_playable;
-  const artist = song?.track?.artists[0]?.name || song?.artists[0]?.name;
+  const artist = song?.track?.artists[0]?.name;
   const track = song?.track?.name || song?.name;
   const uri = song?.track?.uri || song?.uri;
   const duration = song?.track?.duration_ms || song?.duration_ms;
+  const fullname = artist ? artist + " - " + track : track;
 
   let classname = `song ${className} ${!isPlayable && !track ? "invalid" : ""}`
+
+  const handleClick = (uri: string) => {
+    setSong(uri, songs);
+  }
 
   //let artists = song.track.artists.map((artist) => artist.name).join(", ");
 
@@ -71,15 +71,16 @@ const Song = ({ className, song, songs, query }: SongProps) => {
   //)
 
   const handleLikeClick = async (song: Song) => {
-    //let change;
-    //if (song.isLiked) {
-    //  console.log("unlike")
-    //  change = await unlikeSongs([song.track.id]);
-    //} else {
-    //  console.log("like");
-    //  change = await likeSongs([song.track.id]);
-    //}
-    //setIsLiked(change);
+    let change;
+    let id = song?.track?.id || song?.id
+    if (song.isLiked) {
+      //  console.log("unlike")
+      //  change = await unlikeSongs([song.track.id]);
+    } else {
+      console.log("like");
+      change = await likeSongs([id]);
+    }
+    setIsLiked(change);
   }
 
   return (
@@ -87,10 +88,10 @@ const Song = ({ className, song, songs, query }: SongProps) => {
       <span className="song-index" title={isLiked ? "Unlike" : "Like"} onClick={() => handleLikeClick(song)}>
         <FontAwesomeIcon className={song.isLiked ? "active" : ""} icon={song.isLiked ? faCircleCheck : faPlus} size="sm" />
       </span>
-      <div onClick={() => handleClick(uri)} className="text-container">
-        <ScrollingText className="song-text" text={artist + " - " + track} />
+      <div onMouseDown={() => handleClick(uri)} className="text-container">
+        <ScrollingText className="song-text" text={fullname} />
       </div>
-      <span onClick={() => handleClick(uri)} className="song-duration">{msToTime(duration)}</span>
+      <span onMouseDown={() => handleClick(uri)} className="song-duration">{msToTime(duration)}</span>
     </div>
   )
 }

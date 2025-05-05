@@ -105,11 +105,7 @@ export const useSpotifyStore = create<SpotifyStore>()(
             console.log("song changed");
             return true;
           } else {
-            console.log("offset", offset)
-            console.log("uri", uri);
-            console.log("uris", uris);
             console.log("Failed to change song");
-            // useAuthStore.getState().handleRefreshToken();
             return false;
           }
         } catch (err) {

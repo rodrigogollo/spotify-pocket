@@ -23,22 +23,17 @@ const fetchPage: QueryFunction<any, ["liked-songs", string]> = async ({ queryKey
     return songs;
   }
 
-  const [page1, page2, page3] = await Promise.all([
-    fetchSongs(pageParam),
-    fetchSongs(pageParam + 50),
-    fetchSongs(pageParam + 100),
-  ]);
+  const page1 = await fetchSongs(pageParam);
 
   if (page1.items) {
     return {
-      items: [...page1.items, ...page2.items, ...page3.items],
-      nextPage: pageParam + 150,
-      hasNextPage: page3.items.length > 0,
+      items: page1.items,
+      nextPage: pageParam + 50,
+      hasNextPage: page1.items.length > 0,
     }
   }
 
   return null;
-
-
 }
+
 export default fetchPage;

@@ -42,14 +42,10 @@ const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async 
     }
   }
 
-  const [page1, page2, page3] = await Promise.all([
-    fetchSongs(pageParam),
-    fetchSongs(pageParam + 50),
-    fetchSongs(pageParam + 100),
-  ]);
+  const page1 = await fetchSongs(pageParam);
 
   if (page1.items) {
-    let allItems = [...page1.items, ...page2.items, ...page3.items];
+    let allItems = page1.items;
 
     let deduped;
     if (type == "tracks") {
@@ -69,7 +65,7 @@ const fetchPage: QueryFunction<any, ["searched-songs", string, string]> = async 
     return {
       items: deduped,
       nextPage: pageParam + 150,
-      hasNextPage: page3.items.length > 0,
+      hasNextPage: page1.items.length > 0,
       type: type,
     }
   }

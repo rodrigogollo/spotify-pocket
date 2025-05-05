@@ -1,4 +1,5 @@
 .albums-list { 
+  background-color: var(--color-dark);
 	width: 100%;
 }
 

@@ -19,7 +19,7 @@ const Seek = () => {
       try {
         await player?.seek(event.target.value);
         useSpotifyStore.setState({ seek: event.target.value });
-        console.log('Changed song position!', msToTime(seek));
+        console.log('Changed song position!', msToTime(parseInt(seek)));
       } catch (err) {
         console.log("Error changing seek", err);
       }
@@ -29,12 +29,12 @@ const Seek = () => {
   return (
     <div className="seek">
       <p>{msToTime(seek)}</p>
-      <input 
+      <input
         style={{ "background": color }}
-        type="range" 
-        min="0" 
-        max={maxSeek} 
-        onChange={handleSeek} 
+        type="range"
+        min="0"
+        max={maxSeek}
+        onChange={handleSeek}
         value={seek}
       />
       <p>{msToTime(maxSeek)}</p>

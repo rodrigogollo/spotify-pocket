@@ -54,22 +54,22 @@ const Controller = () => {
     await invoke<string>("toggle_repeat", { accessToken: token, state: state });
   };
 
-  return ( 
+  return (
     <div className="controls">
-      <button onClick={handleShuffle}>
-        <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active": ""} size="lg"/>
+      <button onMouseDown={handleShuffle}>
+        <FontAwesomeIcon icon={faShuffle} className={shuffle ? "active" : ""} size="lg" />
       </button>
-      <button id="next" onClick={handlePrev}>
+      <button id="next" onMouseDown={handlePrev}>
         <FontAwesomeIcon icon={faBackwardStep} size="xl" />
       </button>
-      <button id="play" onClick={handleToggle}>
-        <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay } size="2xl" />
+      <button id="play" onMouseDown={handleToggle}>
+        <FontAwesomeIcon icon={isPlaying ? faCirclePause : faCirclePlay} size="2xl" />
       </button>
-      <button id="next" onClick={handleNext}>
-        <FontAwesomeIcon icon={faForwardStep} size="xl"/>
+      <button id="next" onMouseDown={handleNext}>
+        <FontAwesomeIcon icon={faForwardStep} size="xl" />
       </button>
-      <button onClick={handleRepeat}>
-        <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2": ""} size="lg"/>
+      <button onMouseDown={handleRepeat}>
+        <FontAwesomeIcon icon={faRepeat} className={repeat == 1 ? "active" : repeat == 2 ? "active2" : ""} size="lg" />
       </button>
     </div>
   )

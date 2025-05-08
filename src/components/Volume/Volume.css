@@ -10,6 +10,13 @@
 	max-width: 20px;
 	min-width: 20px;
 	cursor: pointer;
+	color: var(--color-light);
+	filter: brightness(80%);
+}
+
+.volume .icon:hover {
+	cursor: pointer;
+	filter: brightness(120%);
 }
 
 .volume > input {

@@ -29,8 +29,11 @@ Also I used this app to improve my skills in Rust and React.
 ## TODOS:
 
 ### Fixes:
-- [ ] Fix on song start playing seek counter buggy (on start 0.1 resets to 0.0 for no reason, and on song ending does 1 sec more).
-- [ ] Fix Login behaviour.
+- [x] Fix on song start playing seek counter buggy (on start 0.1 resets to 0.0 for no reason, and on song ending does 1 sec more).
+- [x] Fix Login behaviour.
+- [x] Fix scroll search tags.
+- [ ] Fix Playlist sticky header and outside scrolling.
+- [ ] Fix playlist when return album and tracks instead (ex: best of FKA twigs.).
 - [ ] Fix on idle app stop working (token expired).
 - [ ] Fix playlist name scrolling-text.
 - [ ] Fix volume bubble dynamic left
@@ -39,9 +42,9 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Fix TypeScript/Rust errors for build.
 - [ ] Fix App on build (get songs and player not working).
 - [x] Make No data found component to show on data null.
+- [ ] Follow rules for publishing (https://developer.spotify.com/documentation/design#using-our-content).
 
 ### Design:
-
 - [ ] Design SettingsPage
 - [ ] Design Log out button
 
@@ -55,12 +58,24 @@ Also I used this app to improve my skills in Rust and React.
 - [ ] Background Image inside User Options.
 
 ### New Features:
+- [x] Searched songs check if already liked (https://developer.spotify.com/documentation/web-api/reference/check-users-saved-tracks).
+- [x] Playlist songs check if already liked.
+- [ ] Get user profile info (https://developer.spotify.com/documentation/web-api/reference/get-users-profile).
+- [ ] Get user top items (https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks).
+- [ ] Create context menu (right click button).
 - [ ] Add song to liked/playlist.
+- [ ] Remove song from liked/playlist.
+- [ ] Alert Component (like/unlike song).
 - [ ] Make player custom buttons on hover windows taskbar.
-- [ ] Remove song to liked/playlist.
-- [ ] Search albums/playlists/podcasts.
+- [x] Search songs.
+- [x] Search playlists.
+- [ ] Search albums.
+- [ ] Search podcasts.
+- [ ] Search episodes.
 - [ ] Filter button (search inside liked songs).
 - [ ] Play specific searched albums/playlists/podcasts.
+- [ ] Get recommendations (https://developer.spotify.com/documentation/web-api/reference/get-recommendations).
+- [ ] Follow Playlist/Artist.
 
 ### Done
 - [x] Spotify Authentication (API).

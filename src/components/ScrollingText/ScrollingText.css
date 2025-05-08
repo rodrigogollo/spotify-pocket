@@ -16,7 +16,15 @@
 }
 
 .needs-scroll:hover {
-  animation: scroll 5s linear infinite;
+  animation: scroll 10s linear infinite;
+}
+
+.needs-scroll.main .scrolling-text {
+  display: inline-block;
+}
+
+.needs-scroll.main {
+  animation: scroll 10s linear infinite;
 }
 
 .main {

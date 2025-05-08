@@ -1,12 +1,5 @@
 .playlists {
 	display: flex;
 	flex-direction: column;
-	max-height: 475px;
-	min-height: 475px;
-	background-color: var(--color-dark);
-	color: var(--color-light);
-	overflow-y: auto;
-	overflow-x: hidden;
-	--scrollbar-width: calc(100vw - 100%);
+  min-height: 475px;
 }
-

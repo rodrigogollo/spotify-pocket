@@ -1,4 +1,4 @@
-.liked-songs {
+.album-songs {
   display: flex;
   flex-direction: column;
   background-color: var(--color-dark);
@@ -10,15 +10,35 @@
   min-height: 475px;
 }
 
-.liked-songs::-webkit-scrollbar {
+.album-songs::-webkit-scrollbar {
   width: 6px;
 }
 
-.liked-songs::-webkit-scrollbar-track {
+.album-songs::-webkit-scrollbar-track {
   background: var(--color-dark);        /* color of the tracking area */
 }
 
-.liked-songs::-webkit-scrollbar-thumb {
+.album-songs::-webkit-scrollbar-thumb {
   background-color: var(--color-green);    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
+}
+
+.album-header {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  max-height: 100px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+}
+
+.album-header img {
+  width: 40px;
+  height: 40px;
+}
+
+.album-header .icon:hover {
+    cursor: pointer;
+	filter: brightness(80%);
 }

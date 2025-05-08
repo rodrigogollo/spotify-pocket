@@ -16,8 +16,8 @@ const Tags = () => {
       <span id="album" className={filter == "album" ? "active" : ""} onClick={handleFilterClick}>Albums</span>
       <span id="playlist" className={filter == "playlist" ? "active" : ""} onClick={handleFilterClick}>Playlists</span>
       <span id="show" className={filter == "show" ? "active" : ""} onClick={handleFilterClick}>Shows</span>
-      <span id="episode" className={filter == "episode" ? "active" : ""} onClick={handleFilterClick}>episode</span>
-      <span id="audiobook" className={filter == "audiobook" ? "active" : ""} onClick={handleFilterClick}>audiobook</span>
+      <span id="episode" className={filter == "episode" ? "active" : ""} onClick={handleFilterClick}>Episodes</span>
+      <span id="audiobook" className={filter == "audiobook" ? "active" : ""} onClick={handleFilterClick}>Audiobooks</span>
     </div>
   )
 }
